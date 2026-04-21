@@ -1,0 +1,20 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "r1-hMGuyPIMht3Wp1TAw8"
+uri = "file://artifacts/dayli-website/src/assets/images/hero.png"
+type = "image"
+title = "Woman checking phone outdoors heat"
+
+[[generated]]
+id = "vqut7WBWyfepRCJGeybNI"
+uri = "file://artifacts/dayli-website/src/assets/images/clinic.png"
+type = "image"
+title = "Clinic setting patient doctor"
+
+[[generated]]
+id = "HcBGGt8OGAc-coIf3-9-J"
+uri = "file://artifacts/dayli-website/src/assets/images/pharma.png"
+type = "image"
+title = "Pharma patient adherence outdoors"
