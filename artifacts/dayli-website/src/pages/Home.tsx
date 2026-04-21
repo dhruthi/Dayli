@@ -4,6 +4,7 @@ import { Link } from "wouter";
 import { ArrowRight, ThermometerSun, ShieldCheck, HeartPulse, CheckCircle2, Clock, Globe, Droplets, MapPin } from "lucide-react";
 import { AnimatedReveal, StaggeredList } from "@/components/ui/animated-reveal";
 import { WhatsAppChatPreview } from "@/components/ui/whatsapp-chat";
+import heroImage from "@/assets/images/hero.png";
 
 export default function Home() {
   return (
@@ -44,7 +45,7 @@ export default function Home() {
             <AnimatedReveal direction="left" delay={200} className="relative">
               <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3] max-w-md mx-auto lg:max-w-none">
                 <img 
-                  src="/src/assets/images/hero.png" 
+                  src={heroImage} 
                   alt="Woman checking phone outdoors in heat" 
                   className="object-cover w-full h-full"
                 />

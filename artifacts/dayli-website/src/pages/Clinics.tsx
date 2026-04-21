@@ -6,6 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { AnimatedReveal, StaggeredList } from "@/components/ui/animated-reveal";
 import { Users, CalendarCheck, TrendingUp, Send } from "lucide-react";
 import { useState } from "react";
+import clinicImage from "@/assets/images/clinic.png";
 
 export default function Clinics() {
   const { toast } = useToast();
@@ -31,7 +32,7 @@ export default function Clinics() {
       {/* HEADER */}
       <section className="relative pt-24 pb-32 overflow-hidden bg-primary text-primary-foreground">
         <div className="absolute inset-0 z-0 opacity-10">
-          <img src="/src/assets/images/clinic.png" alt="Clinic background" className="w-full h-full object-cover" />
+          <img src={clinicImage} alt="Clinic background" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-primary mix-blend-multiply"></div>
         </div>
         <div className="container px-4 md:px-6 mx-auto relative z-10 text-center max-w-4xl">

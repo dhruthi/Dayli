@@ -6,6 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { AnimatedReveal } from "@/components/ui/animated-reveal";
 import { Pill, Baby, Activity, Send, AlertTriangle, CheckCircle } from "lucide-react";
 import { useState } from "react";
+import pharmaImage from "@/assets/images/pharma.png";
 
 export default function Pharma() {
   const { toast } = useToast();
@@ -47,7 +48,7 @@ export default function Pharma() {
             <AnimatedReveal delay={200} direction="left" className="relative hidden lg:block">
               <div className="rounded-2xl overflow-hidden shadow-2xl aspect-[4/3]">
                 <img 
-                  src="/src/assets/images/pharma.png" 
+                  src={pharmaImage} 
                   alt="Outdoor health and adherence" 
                   className="object-cover w-full h-full"
                 />
