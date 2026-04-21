@@ -4,7 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { AnimatedReveal } from "@/components/ui/animated-reveal";
-import { Pill, Baby, Activity, Send, AlertTriangle, CheckCircle } from "lucide-react";
+import { Pill, Baby, Activity, Send, AlertTriangle, CheckCircle, Clock } from "lucide-react";
 import { useState } from "react";
 import pharmaImage from "@/assets/images/pharma.png";
 
@@ -15,13 +15,12 @@ export default function Pharma() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simulate API call
+
     setTimeout(() => {
       setIsSubmitting(false);
       toast({
         title: "Thank you for your interest!",
-        description: "Our partnership team will contact you soon.",
+        description: "Our partnership team will reach out within 2 working days.",
       });
       (e.target as HTMLFormElement).reset();
     }, 1000);
@@ -44,12 +43,12 @@ export default function Pharma() {
                 Patients often drop adherence during heatwaves and environmental stress. dayli ensures continuous engagement when patients need it most.
               </p>
             </AnimatedReveal>
-            
+
             <AnimatedReveal delay={200} direction="left" className="relative hidden lg:block">
               <div className="rounded-2xl overflow-hidden shadow-2xl aspect-[4/3]">
-                <img 
-                  src={pharmaImage} 
-                  alt="Outdoor health and adherence" 
+                <img
+                  src={pharmaImage}
+                  alt="Outdoor health and adherence"
                   className="object-cover w-full h-full"
                 />
               </div>
@@ -119,7 +118,7 @@ export default function Pharma() {
           <AnimatedReveal>
             <h2 className="text-3xl font-serif font-bold mb-12">Core Use Cases</h2>
           </AnimatedReveal>
-          
+
           <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
             <AnimatedReveal delay={100}>
               <div className="p-6">
@@ -154,24 +153,51 @@ export default function Pharma() {
         <div className="container px-4 md:px-6 mx-auto">
           <AnimatedReveal className="max-w-xl mx-auto bg-card rounded-2xl p-8 md:p-10 shadow-lg border border-border">
             <h2 className="text-3xl font-serif font-bold mb-2 text-center">Partner with us</h2>
-            <p className="text-muted-foreground text-center mb-8">Discuss adherence solutions for your portfolios.</p>
-            
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <p className="text-muted-foreground text-center mb-6">Discuss adherence solutions for your portfolios.</p>
+
+            <div className="flex items-center justify-center gap-2 text-xs text-foreground/70 bg-primary/5 border border-primary/10 rounded-lg p-3 mb-8">
+              <Clock size={14} className="text-primary shrink-0" />
+              <span>We respond within 2 working days with a tailored intro call.</span>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-6" noValidate>
               <div className="space-y-2">
-                <Label htmlFor="name">Full Name</Label>
-                <Input id="name" required placeholder="John Smith" className="bg-background" />
+                <Label htmlFor="name">
+                  Full Name <span className="text-destructive" aria-hidden="true">*</span>
+                </Label>
+                <Input id="name" name="name" required placeholder="John Smith" autoComplete="name" className="bg-background" />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="company">Company Name</Label>
-                <Input id="company" required placeholder="PharmaCorp Inc." className="bg-background" />
+                <Label htmlFor="company">
+                  Company Name <span className="text-destructive" aria-hidden="true">*</span>
+                </Label>
+                <Input id="company" name="company" required placeholder="PharmaCorp Inc." autoComplete="organization" className="bg-background" />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="email">Work Email</Label>
-                <Input id="email" type="email" required placeholder="john@pharmacorp.com" className="bg-background" />
+                <Label htmlFor="therapeutic">Therapeutic Area</Label>
+                <select
+                  id="therapeutic"
+                  name="therapeutic"
+                  defaultValue=""
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                >
+                  <option value="" disabled>Select an area</option>
+                  <option>Maternal &amp; women's health</option>
+                  <option>Pediatrics</option>
+                  <option>Cardiometabolic</option>
+                  <option>Respiratory</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="email">
+                  Work Email <span className="text-destructive" aria-hidden="true">*</span>
+                </Label>
+                <Input id="email" name="email" type="email" required placeholder="john@pharmacorp.com" autoComplete="email" className="bg-background" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="message">Message (Optional)</Label>
-                <Textarea id="message" placeholder="Tell us about your therapeutic areas of interest" className="bg-background resize-none h-24" />
+                <Textarea id="message" name="message" placeholder="Tell us about your therapeutic areas of interest" className="bg-background resize-none h-24" />
               </div>
               <Button type="submit" className="w-full h-12 text-lg rounded-xl shadow-md" disabled={isSubmitting}>
                 {isSubmitting ? "Sending..." : (
@@ -181,6 +207,9 @@ export default function Pharma() {
                   </>
                 )}
               </Button>
+              <p className="text-xs text-muted-foreground text-center">
+                By submitting, you agree to be contacted about a dayli partnership. We never share your details.
+              </p>
             </form>
           </AnimatedReveal>
         </div>

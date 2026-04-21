@@ -3,9 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Menu, X, Sun } from "lucide-react";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
+import { WHATSAPP_URL } from "@/lib/site";
 
 const NAV_LINKS = [
-  { href: "/product", label: "How it Works" },
+  { href: "/product", label: "Product" },
   { href: "/clinics", label: "For Clinics" },
   { href: "/pharma", label: "For Pharma" },
   { href: "/about", label: "About" },
@@ -48,7 +49,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             </Link>
 
             {/* Desktop Nav */}
-            <nav className="hidden md:flex items-center gap-8">
+            <nav className="hidden md:flex items-center gap-8" aria-label="Primary">
               {NAV_LINKS.map((link) => (
                 <Link
                   key={link.href}
@@ -64,7 +65,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             </nav>
 
             <div className="hidden md:flex items-center gap-4">
-              <a href="https://wa.me/" target="_blank" rel="noopener noreferrer">
+              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
                 <Button className="rounded-full shadow-md hover:shadow-lg transition-all active:scale-95">
                   Start on WhatsApp
                 </Button>
@@ -73,8 +74,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
             {/* Mobile Toggle */}
             <button
+              type="button"
               className="md:hidden p-2 -mr-2 text-foreground"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-nav"
             >
               {mobileMenuOpen ? <X /> : <Menu />}
             </button>
@@ -83,7 +88,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
         {/* Mobile Nav */}
         {mobileMenuOpen && (
-          <div className="md:hidden absolute top-full left-0 right-0 bg-background border-b border-border shadow-lg py-4 px-4 flex flex-col gap-4 animate-in slide-in-from-top-2">
+          <div
+            id="mobile-nav"
+            className="md:hidden absolute top-full left-0 right-0 bg-background border-b border-border shadow-lg py-4 px-4 flex flex-col gap-4 animate-in slide-in-from-top-2"
+          >
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.href}
@@ -97,7 +105,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               </Link>
             ))}
             <div className="px-4 pt-2 pb-1">
-              <a href="https://wa.me/" target="_blank" rel="noopener noreferrer" className="block w-full">
+              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="block w-full">
                 <Button className="w-full rounded-full">Start on WhatsApp</Button>
               </a>
             </div>
@@ -123,35 +131,34 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 A daily decision layer for health in a changing climate.
               </p>
             </div>
-            
+
             <div>
               <h4 className="font-semibold mb-4 text-foreground">Solutions</h4>
               <ul className="space-y-3">
-                <li><Link href="/product" className="text-sm text-muted-foreground hover:text-primary transition-colors">How it Works</Link></li>
+                <li><Link href="/product" className="text-sm text-muted-foreground hover:text-primary transition-colors">Product</Link></li>
                 <li><Link href="/clinics" className="text-sm text-muted-foreground hover:text-primary transition-colors">For Clinics</Link></li>
                 <li><Link href="/pharma" className="text-sm text-muted-foreground hover:text-primary transition-colors">For Pharma</Link></li>
               </ul>
             </div>
-            
+
             <div>
               <h4 className="font-semibold mb-4 text-foreground">Company</h4>
               <ul className="space-y-3">
                 <li><Link href="/about" className="text-sm text-muted-foreground hover:text-primary transition-colors">About Us</Link></li>
-                <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Contact</a></li>
-                <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Privacy Policy</a></li>
+                <li><Link href="/privacy" className="text-sm text-muted-foreground hover:text-primary transition-colors">Privacy</Link></li>
               </ul>
             </div>
-            
+
             <div>
               <h4 className="font-semibold mb-4 text-foreground">Get Started</h4>
-              <a href="https://wa.me/" target="_blank" rel="noopener noreferrer" className="inline-block">
+              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="inline-block">
                 <Button variant="outline" className="rounded-full w-full justify-start text-primary border-primary/20 hover:bg-primary/5">
                   Connect on WhatsApp
                 </Button>
               </a>
             </div>
           </div>
-          
+
           <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-muted-foreground">
               © {new Date().getFullYear()} dayli.ai. All rights reserved.

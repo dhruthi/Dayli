@@ -11,6 +11,7 @@ import Product from "@/pages/Product";
 import Clinics from "@/pages/Clinics";
 import Pharma from "@/pages/Pharma";
 import About from "@/pages/About";
+import Privacy from "@/pages/Privacy";
 
 const queryClient = new QueryClient();
 
@@ -22,6 +23,7 @@ function Router() {
       <Route path="/clinics" component={Clinics} />
       <Route path="/pharma" component={Pharma} />
       <Route path="/about" component={About} />
+      <Route path="/privacy" component={Privacy} />
       <Route component={NotFound} />
     </Switch>
   );
