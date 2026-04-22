@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --config vite.config.ts",
-    "build": "node scripts/check-seo-titles.mjs && vite build --config vite.config.ts && vite build --config vite.config.ts --ssr src/entry-server.tsx --outDir dist/server && node scripts/prerender.mjs",
+    "build": "node scripts/check-seo-titles.mjs && vite build --config vite.config.ts && vite build --config vite.config.ts --ssr src/entry-server.tsx --outDir dist/server && node scripts/prerender.mjs && node scripts/verify-prerendered-seo.mjs",
     "check:seo": "node scripts/check-seo-titles.mjs",
     "serve": "node server/serve.mjs",
     "typecheck": "tsc -p tsconfig.json --noEmit"
