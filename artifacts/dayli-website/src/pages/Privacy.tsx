@@ -1,9 +1,12 @@
 import { AnimatedReveal } from "@/components/ui/animated-reveal";
 import { ShieldCheck } from "lucide-react";
+import { SEO } from "@/components/SEO";
+import { PAGE_SEO } from "@/lib/seo";
 
 export default function Privacy() {
   return (
     <div className="flex flex-col min-h-screen">
+      <SEO seo={PAGE_SEO.privacy} />
       <section className="pt-20 pb-16 bg-gradient-to-b from-primary/5 to-background border-b border-border">
         <div className="container px-4 md:px-6 mx-auto max-w-3xl">
           <AnimatedReveal>

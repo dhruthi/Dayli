@@ -1,4 +1,4 @@
-export const WHATSAPP_NUMBER = "";
+export const WHATSAPP_NUMBER: string = "";
 
 const PREFILLED_MESSAGE = encodeURIComponent(
   "Hi dayli, I'd like to start receiving daily climate-aware health guidance."

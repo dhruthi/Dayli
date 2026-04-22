@@ -8,6 +8,8 @@ import { Pill, Baby, Activity, Send, AlertTriangle, CheckCircle, Clock } from "l
 import { useState } from "react";
 import pharmaImage from "@/assets/images/pharma.png";
 import { submitLead } from "@/lib/site";
+import { SEO } from "@/components/SEO";
+import { PAGE_SEO } from "@/lib/seo";
 
 export default function Pharma() {
   const { toast } = useToast();
@@ -37,6 +39,7 @@ export default function Pharma() {
 
   return (
     <div className="flex flex-col min-h-screen">
+      <SEO seo={PAGE_SEO.pharma} />
       {/* HEADER */}
       <section className="relative pt-24 pb-32 overflow-hidden bg-gradient-to-br from-card to-muted border-b border-border">
         <div className="container px-4 md:px-6 mx-auto relative z-10">

@@ -6,10 +6,14 @@ import { AnimatedReveal, StaggeredList } from "@/components/ui/animated-reveal";
 import { WhatsAppChatPreview } from "@/components/ui/whatsapp-chat";
 import heroImage from "@/assets/images/hero.png";
 import { WHATSAPP_URL, CTA_MICROCOPY } from "@/lib/site";
+import { SEO } from "@/components/SEO";
+import { FAQSection } from "@/components/FAQSection";
+import { PAGE_SEO } from "@/lib/seo";
 
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
+      <SEO seo={PAGE_SEO.home} />
       {/* HERO SECTION */}
       <section className="relative pt-20 pb-32 overflow-hidden bg-gradient-to-b from-sun/10 to-background">
         <div className="container px-4 md:px-6 mx-auto relative z-10">
@@ -83,6 +87,30 @@ export default function Home() {
             <span className="hidden md:inline">·</span>
             <span>Built on WhatsApp Business API</span>
           </div>
+        </div>
+      </section>
+
+      {/* DEFINITION — quotable, plain-prose answer for crawlers and AI engines */}
+      <section
+        aria-labelledby="what-is-dayli"
+        className="py-16 bg-background border-b border-border"
+      >
+        <div className="container px-4 md:px-6 mx-auto max-w-3xl">
+          <h2
+            id="what-is-dayli"
+            className="text-2xl md:text-3xl font-serif font-bold text-foreground mb-4"
+          >
+            What is dayli?
+          </h2>
+          <p className="text-lg text-foreground/80 leading-relaxed">
+            <strong>dayli</strong> is an AI-powered Climate Health Copilot for
+            women and children. It combines local climate data, health knowledge,
+            and AI personalization to deliver real-time, actionable guidance on
+            WhatsApp — helping pregnant women, mothers, and caregivers stay safe
+            during heatwaves and other climate-driven health risks. dayli is
+            free, requires no app download, and supports English, Hindi, Telugu,
+            and Arabic.
+          </p>
         </div>
       </section>
 
@@ -344,6 +372,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <FAQSection />
 
       {/* CTA */}
       <section className="py-24 bg-primary text-primary-foreground text-center">

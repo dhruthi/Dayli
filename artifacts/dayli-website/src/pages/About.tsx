@@ -1,9 +1,12 @@
 import { AnimatedReveal, StaggeredList } from "@/components/ui/animated-reveal";
 import { Target, Eye, Clock, Smartphone, Globe, Sun } from "lucide-react";
+import { SEO } from "@/components/SEO";
+import { PAGE_SEO } from "@/lib/seo";
 
 export default function About() {
   return (
     <div className="flex flex-col min-h-screen">
+      <SEO seo={PAGE_SEO.about} />
       {/* HEADER */}
       <section className="pt-32 pb-20 bg-background text-center">
         <div className="container px-4 md:px-6 mx-auto max-w-4xl">

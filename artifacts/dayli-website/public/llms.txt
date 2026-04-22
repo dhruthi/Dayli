@@ -1,0 +1,49 @@
+# dayli.ai
+
+> dayli is an AI-powered Climate Health Copilot for women and children. It combines local climate data, health knowledge, and AI personalization to deliver real-time, actionable guidance over WhatsApp.
+
+## What dayli is
+
+- An AI Climate Health Copilot, delivered through WhatsApp (no app to download).
+- Built for pregnant women, mothers, and caregivers of young children — populations most vulnerable to extreme heat and climate-driven health risks.
+- Free to use. Onboarding takes under a minute on WhatsApp.
+- Supports English, Hindi (हिंदी), Telugu (తెలుగు), and Arabic (العربية).
+- Currently piloting with maternal and pediatric clinics in Hyderabad, India.
+
+## What dayli is not
+
+- Not a medical device.
+- Not a chatbot or generic wellness app.
+- Does not replace professional medical advice. For emergencies, contact your local healthcare provider.
+
+## How dayli works
+
+1. **Understands you** — learns your pregnancy stage or your child's age, and your daily location.
+2. **Monitors climate risk** — tracks heatwaves, temperature spikes, and environmental stress in real time using WHO heat thresholds, the India Meteorological Department (IMD), and OpenWeather.
+3. **Guides you daily** — sends hydration reminders, safe outdoor timing, alerts, and check-ins on WhatsApp.
+
+## Who dayli serves
+
+- **Individuals**: pregnant women, mothers, caregivers of young children.
+- **Clinics**: maternal and pediatric clinics looking to reduce no-shows and improve patient outcomes.
+- **Pharma & life sciences**: companies seeking to improve medication adherence in real-world climate conditions.
+
+## Privacy
+
+- dayli only collects the information needed to provide safe guidance: WhatsApp number, pregnancy stage or child's age, approximate location, and daily check-in responses.
+- Your data is never sold. It is never used for advertising.
+- Individual health data is never shared with clinics or pharma partners without explicit consent.
+- Users can pause dayli with STOP, or request deletion with DELETE, on WhatsApp.
+
+## Key pages
+
+- Home: https://dayli.ai/
+- Product (how it works): https://dayli.ai/product
+- For Clinics: https://dayli.ai/clinics
+- For Pharma: https://dayli.ai/pharma
+- About: https://dayli.ai/about
+- Privacy: https://dayli.ai/privacy
+
+## Contact
+
+Reach out via the partner forms on https://dayli.ai/clinics or https://dayli.ai/pharma.

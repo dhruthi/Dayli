@@ -2,10 +2,13 @@ import { Button } from "@/components/ui/button";
 import { AnimatedReveal, StaggeredList } from "@/components/ui/animated-reveal";
 import { WhatsAppChatPreview } from "@/components/ui/whatsapp-chat";
 import { ThermometerSun, HeartPulse, BrainCircuit, ArrowRight } from "lucide-react";
+import { SEO } from "@/components/SEO";
+import { PAGE_SEO } from "@/lib/seo";
 
 export default function Product() {
   return (
     <div className="flex flex-col min-h-screen">
+      <SEO seo={PAGE_SEO.product} />
       {/* HEADER */}
       <section className="pt-24 pb-16 bg-card border-b border-border">
         <div className="container px-4 md:px-6 mx-auto text-center max-w-3xl">

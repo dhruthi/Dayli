@@ -8,6 +8,8 @@ import { Users, CalendarCheck, TrendingUp, Send, Clock } from "lucide-react";
 import { useState } from "react";
 import clinicImage from "@/assets/images/clinic.png";
 import { submitLead } from "@/lib/site";
+import { SEO } from "@/components/SEO";
+import { PAGE_SEO } from "@/lib/seo";
 
 export default function Clinics() {
   const { toast } = useToast();
@@ -37,6 +39,7 @@ export default function Clinics() {
 
   return (
     <div className="flex flex-col min-h-screen">
+      <SEO seo={PAGE_SEO.clinics} />
       {/* HEADER */}
       <section className="relative pt-24 pb-32 overflow-hidden bg-primary text-primary-foreground">
         <div className="absolute inset-0 z-0 opacity-10" aria-hidden="true">
