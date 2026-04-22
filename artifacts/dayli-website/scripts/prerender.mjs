@@ -36,24 +36,17 @@ async function loadServerRender() {
 }
 
 async function loadSeo() {
-  // Import the source seo.ts via tsx-less trick: we read it as text and
-  // evaluate the simple constants we need. To keep things robust without
-  // a TS runtime, we instead parse the per-route data from a JSON sidecar
-  // generated alongside the build. If absent, we fall back to a static map
-  // mirroring src/lib/seo.ts (kept in sync manually).
-  const sidecar = path.join(ROOT, "scripts", "seo-data.mjs");
-  try {
-    await fs.access(sidecar);
-    const mod = await import(pathToFileURL(sidecar).href);
-    return mod.default ?? mod;
-  } catch {
-    throw new Error(
-      `Missing seo sidecar at ${sidecar}. Generate it before running prerender.`,
-    );
-  }
+  // Single source of truth: src/lib/seo-data.mjs is also imported by
+  // src/lib/seo.ts at runtime, so per-route metadata cannot drift between
+  // the served HTML and the React app's hydrated head.
+  const dataModule = path.join(ROOT, "src", "lib", "seo-data.mjs");
+  const { buildSeoData } = await import(pathToFileURL(dataModule).href);
+  const siteUrl =
+    process.env.VITE_SITE_URL || process.env.SITE_URL || "https://dayli.ai";
+  return buildSeoData(siteUrl);
 }
 
-function renderHead({ title, description, canonical, ogImage, noindex, jsonLd }) {
+function renderHead({ title, description, canonical, ogImage, noindex, jsonLd, siteName }) {
   const robots = noindex
     ? "noindex, nofollow"
     : "index, follow, max-image-preview:large";
@@ -64,7 +57,7 @@ function renderHead({ title, description, canonical, ogImage, noindex, jsonLd })
     `<link ${m} rel="canonical" href="${escapeAttr(canonical)}" />`,
     `<meta ${m} name="robots" content="${robots}" />`,
     `<meta ${m} property="og:type" content="website" />`,
-    `<meta ${m} property="og:site_name" content="dayli.ai" />`,
+    `<meta ${m} property="og:site_name" content="${escapeAttr(siteName)}" />`,
     `<meta ${m} property="og:title" content="${escapeAttr(title)}" />`,
     `<meta ${m} property="og:description" content="${escapeAttr(description)}" />`,
     `<meta ${m} property="og:url" content="${escapeAttr(canonical)}" />`,
@@ -115,10 +108,11 @@ function injectBody(template, bodyHtml) {
 
 async function main() {
   const template = await fs.readFile(TEMPLATE_PATH, "utf8");
-  const { SITE_URL, DEFAULT_OG_IMAGE, PAGES } = await loadSeo();
+  const { SITE_URL, DEFAULT_OG_IMAGE, PAGES, SITE_NAME } = await loadSeo();
   const render = await loadServerRender();
 
-  for (const page of PAGES) {
+  for (const page of Object.values(PAGES)) {
+    if (page.noindex) continue;
     const canonical = `${SITE_URL}${page.path === "/" ? "/" : page.path}`;
     const headHtml = renderHead({
       title: page.title,
@@ -126,6 +120,7 @@ async function main() {
       canonical,
       ogImage: page.ogImage ?? DEFAULT_OG_IMAGE,
       noindex: page.noindex,
+      siteName: SITE_NAME,
       jsonLd: page.jsonLd
         ? JSON.stringify({ "@context": "https://schema.org", "@graph": page.jsonLd })
         : null,
