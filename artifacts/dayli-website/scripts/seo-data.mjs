@@ -184,4 +184,18 @@ for (const locale of LOCALES) {
   }
 }
 
+PAGES.push({
+  pageKey: "notFound",
+  locale: DEFAULT_LOCALE,
+  htmlLang: LOCALE_META[DEFAULT_LOCALE].htmlLang,
+  dir: LOCALE_META[DEFAULT_LOCALE].dir,
+  basePath: "/404",
+  path: "/404",
+  title: "Page not found — dayli.ai",
+  description: "The page you were looking for doesn't exist. Return to dayli.ai to learn how our AI Climate Health Copilot supports women and children.",
+  noindex: true,
+  alternates: undefined,
+  jsonLd: undefined,
+});
+
 export default { SITE_URL, DEFAULT_OG_IMAGE, PAGES, LOCALES, LOCALE_META, DEFAULT_LOCALE };
