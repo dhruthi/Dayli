@@ -1,39 +1,268 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://dayli.ai/</loc>
     <lastmod>2026-04-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+      <xhtml:link rel="alternate" hreflang="en" href="https://dayli.ai/" />
+      <xhtml:link rel="alternate" hreflang="hi-IN" href="https://dayli.ai/hi" />
+      <xhtml:link rel="alternate" hreflang="te-IN" href="https://dayli.ai/te" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://dayli.ai/ar" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://dayli.ai/" />
   </url>
   <url>
     <loc>https://dayli.ai/product</loc>
     <lastmod>2026-04-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
+      <xhtml:link rel="alternate" hreflang="en" href="https://dayli.ai/product" />
+      <xhtml:link rel="alternate" hreflang="hi-IN" href="https://dayli.ai/hi/product" />
+      <xhtml:link rel="alternate" hreflang="te-IN" href="https://dayli.ai/te/product" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://dayli.ai/ar/product" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://dayli.ai/product" />
   </url>
   <url>
     <loc>https://dayli.ai/clinics</loc>
     <lastmod>2026-04-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+      <xhtml:link rel="alternate" hreflang="en" href="https://dayli.ai/clinics" />
+      <xhtml:link rel="alternate" hreflang="hi-IN" href="https://dayli.ai/hi/clinics" />
+      <xhtml:link rel="alternate" hreflang="te-IN" href="https://dayli.ai/te/clinics" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://dayli.ai/ar/clinics" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://dayli.ai/clinics" />
   </url>
   <url>
     <loc>https://dayli.ai/pharma</loc>
     <lastmod>2026-04-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+      <xhtml:link rel="alternate" hreflang="en" href="https://dayli.ai/pharma" />
+      <xhtml:link rel="alternate" hreflang="hi-IN" href="https://dayli.ai/hi/pharma" />
+      <xhtml:link rel="alternate" hreflang="te-IN" href="https://dayli.ai/te/pharma" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://dayli.ai/ar/pharma" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://dayli.ai/pharma" />
   </url>
   <url>
     <loc>https://dayli.ai/about</loc>
     <lastmod>2026-04-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+      <xhtml:link rel="alternate" hreflang="en" href="https://dayli.ai/about" />
+      <xhtml:link rel="alternate" hreflang="hi-IN" href="https://dayli.ai/hi/about" />
+      <xhtml:link rel="alternate" hreflang="te-IN" href="https://dayli.ai/te/about" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://dayli.ai/ar/about" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://dayli.ai/about" />
   </url>
   <url>
     <loc>https://dayli.ai/privacy</loc>
     <lastmod>2026-04-22</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
+      <xhtml:link rel="alternate" hreflang="en" href="https://dayli.ai/privacy" />
+      <xhtml:link rel="alternate" hreflang="hi-IN" href="https://dayli.ai/hi/privacy" />
+      <xhtml:link rel="alternate" hreflang="te-IN" href="https://dayli.ai/te/privacy" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://dayli.ai/ar/privacy" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://dayli.ai/privacy" />
+  </url>
+  <url>
+    <loc>https://dayli.ai/hi</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+      <xhtml:link rel="alternate" hreflang="en" href="https://dayli.ai/" />
+      <xhtml:link rel="alternate" hreflang="hi-IN" href="https://dayli.ai/hi" />
+      <xhtml:link rel="alternate" hreflang="te-IN" href="https://dayli.ai/te" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://dayli.ai/ar" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://dayli.ai/" />
+  </url>
+  <url>
+    <loc>https://dayli.ai/hi/product</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+      <xhtml:link rel="alternate" hreflang="en" href="https://dayli.ai/product" />
+      <xhtml:link rel="alternate" hreflang="hi-IN" href="https://dayli.ai/hi/product" />
+      <xhtml:link rel="alternate" hreflang="te-IN" href="https://dayli.ai/te/product" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://dayli.ai/ar/product" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://dayli.ai/product" />
+  </url>
+  <url>
+    <loc>https://dayli.ai/hi/clinics</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+      <xhtml:link rel="alternate" hreflang="en" href="https://dayli.ai/clinics" />
+      <xhtml:link rel="alternate" hreflang="hi-IN" href="https://dayli.ai/hi/clinics" />
+      <xhtml:link rel="alternate" hreflang="te-IN" href="https://dayli.ai/te/clinics" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://dayli.ai/ar/clinics" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://dayli.ai/clinics" />
+  </url>
+  <url>
+    <loc>https://dayli.ai/hi/pharma</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+      <xhtml:link rel="alternate" hreflang="en" href="https://dayli.ai/pharma" />
+      <xhtml:link rel="alternate" hreflang="hi-IN" href="https://dayli.ai/hi/pharma" />
+      <xhtml:link rel="alternate" hreflang="te-IN" href="https://dayli.ai/te/pharma" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://dayli.ai/ar/pharma" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://dayli.ai/pharma" />
+  </url>
+  <url>
+    <loc>https://dayli.ai/hi/about</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+      <xhtml:link rel="alternate" hreflang="en" href="https://dayli.ai/about" />
+      <xhtml:link rel="alternate" hreflang="hi-IN" href="https://dayli.ai/hi/about" />
+      <xhtml:link rel="alternate" hreflang="te-IN" href="https://dayli.ai/te/about" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://dayli.ai/ar/about" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://dayli.ai/about" />
+  </url>
+  <url>
+    <loc>https://dayli.ai/hi/privacy</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+      <xhtml:link rel="alternate" hreflang="en" href="https://dayli.ai/privacy" />
+      <xhtml:link rel="alternate" hreflang="hi-IN" href="https://dayli.ai/hi/privacy" />
+      <xhtml:link rel="alternate" hreflang="te-IN" href="https://dayli.ai/te/privacy" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://dayli.ai/ar/privacy" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://dayli.ai/privacy" />
+  </url>
+  <url>
+    <loc>https://dayli.ai/te</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+      <xhtml:link rel="alternate" hreflang="en" href="https://dayli.ai/" />
+      <xhtml:link rel="alternate" hreflang="hi-IN" href="https://dayli.ai/hi" />
+      <xhtml:link rel="alternate" hreflang="te-IN" href="https://dayli.ai/te" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://dayli.ai/ar" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://dayli.ai/" />
+  </url>
+  <url>
+    <loc>https://dayli.ai/te/product</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+      <xhtml:link rel="alternate" hreflang="en" href="https://dayli.ai/product" />
+      <xhtml:link rel="alternate" hreflang="hi-IN" href="https://dayli.ai/hi/product" />
+      <xhtml:link rel="alternate" hreflang="te-IN" href="https://dayli.ai/te/product" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://dayli.ai/ar/product" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://dayli.ai/product" />
+  </url>
+  <url>
+    <loc>https://dayli.ai/te/clinics</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+      <xhtml:link rel="alternate" hreflang="en" href="https://dayli.ai/clinics" />
+      <xhtml:link rel="alternate" hreflang="hi-IN" href="https://dayli.ai/hi/clinics" />
+      <xhtml:link rel="alternate" hreflang="te-IN" href="https://dayli.ai/te/clinics" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://dayli.ai/ar/clinics" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://dayli.ai/clinics" />
+  </url>
+  <url>
+    <loc>https://dayli.ai/te/pharma</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+      <xhtml:link rel="alternate" hreflang="en" href="https://dayli.ai/pharma" />
+      <xhtml:link rel="alternate" hreflang="hi-IN" href="https://dayli.ai/hi/pharma" />
+      <xhtml:link rel="alternate" hreflang="te-IN" href="https://dayli.ai/te/pharma" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://dayli.ai/ar/pharma" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://dayli.ai/pharma" />
+  </url>
+  <url>
+    <loc>https://dayli.ai/te/about</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+      <xhtml:link rel="alternate" hreflang="en" href="https://dayli.ai/about" />
+      <xhtml:link rel="alternate" hreflang="hi-IN" href="https://dayli.ai/hi/about" />
+      <xhtml:link rel="alternate" hreflang="te-IN" href="https://dayli.ai/te/about" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://dayli.ai/ar/about" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://dayli.ai/about" />
+  </url>
+  <url>
+    <loc>https://dayli.ai/te/privacy</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+      <xhtml:link rel="alternate" hreflang="en" href="https://dayli.ai/privacy" />
+      <xhtml:link rel="alternate" hreflang="hi-IN" href="https://dayli.ai/hi/privacy" />
+      <xhtml:link rel="alternate" hreflang="te-IN" href="https://dayli.ai/te/privacy" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://dayli.ai/ar/privacy" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://dayli.ai/privacy" />
+  </url>
+  <url>
+    <loc>https://dayli.ai/ar</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+      <xhtml:link rel="alternate" hreflang="en" href="https://dayli.ai/" />
+      <xhtml:link rel="alternate" hreflang="hi-IN" href="https://dayli.ai/hi" />
+      <xhtml:link rel="alternate" hreflang="te-IN" href="https://dayli.ai/te" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://dayli.ai/ar" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://dayli.ai/" />
+  </url>
+  <url>
+    <loc>https://dayli.ai/ar/product</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+      <xhtml:link rel="alternate" hreflang="en" href="https://dayli.ai/product" />
+      <xhtml:link rel="alternate" hreflang="hi-IN" href="https://dayli.ai/hi/product" />
+      <xhtml:link rel="alternate" hreflang="te-IN" href="https://dayli.ai/te/product" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://dayli.ai/ar/product" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://dayli.ai/product" />
+  </url>
+  <url>
+    <loc>https://dayli.ai/ar/clinics</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+      <xhtml:link rel="alternate" hreflang="en" href="https://dayli.ai/clinics" />
+      <xhtml:link rel="alternate" hreflang="hi-IN" href="https://dayli.ai/hi/clinics" />
+      <xhtml:link rel="alternate" hreflang="te-IN" href="https://dayli.ai/te/clinics" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://dayli.ai/ar/clinics" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://dayli.ai/clinics" />
+  </url>
+  <url>
+    <loc>https://dayli.ai/ar/pharma</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+      <xhtml:link rel="alternate" hreflang="en" href="https://dayli.ai/pharma" />
+      <xhtml:link rel="alternate" hreflang="hi-IN" href="https://dayli.ai/hi/pharma" />
+      <xhtml:link rel="alternate" hreflang="te-IN" href="https://dayli.ai/te/pharma" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://dayli.ai/ar/pharma" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://dayli.ai/pharma" />
+  </url>
+  <url>
+    <loc>https://dayli.ai/ar/about</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+      <xhtml:link rel="alternate" hreflang="en" href="https://dayli.ai/about" />
+      <xhtml:link rel="alternate" hreflang="hi-IN" href="https://dayli.ai/hi/about" />
+      <xhtml:link rel="alternate" hreflang="te-IN" href="https://dayli.ai/te/about" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://dayli.ai/ar/about" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://dayli.ai/about" />
+  </url>
+  <url>
+    <loc>https://dayli.ai/ar/privacy</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+      <xhtml:link rel="alternate" hreflang="en" href="https://dayli.ai/privacy" />
+      <xhtml:link rel="alternate" hreflang="hi-IN" href="https://dayli.ai/hi/privacy" />
+      <xhtml:link rel="alternate" hreflang="te-IN" href="https://dayli.ai/te/privacy" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://dayli.ai/ar/privacy" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://dayli.ai/privacy" />
   </url>
 </urlset>

@@ -7,7 +7,6 @@
 - An AI Climate Health Copilot, delivered through WhatsApp (no app to download).
 - Built for pregnant women, mothers, and caregivers of young children — populations most vulnerable to extreme heat and climate-driven health risks.
 - Free to use. Onboarding takes under a minute on WhatsApp.
-- Supports English, Hindi (हिंदी), Telugu (తెలుగు), and Arabic (العربية).
 - Currently piloting with maternal and pediatric clinics in Hyderabad, India.
 
 ## What dayli is not
@@ -35,7 +34,18 @@
 - Individual health data is never shared with clinics or pharma partners without explicit consent.
 - Users can pause dayli with STOP, or request deletion with DELETE, on WhatsApp.
 
+## Languages
+
+dayli's website and product guidance are fully translated into four languages. Each page below is published as four URL variants, one per language. English is served at the root; other languages are served at a path prefix that matches their ISO 639-1 code. Page-level `hreflang` alternates and JSON-LD `inLanguage` declarations are emitted on every variant.
+
+- English (en) — served at `/` (default; also referenced as `x-default` in alternates)
+- Hindi / हिंदी (hi, hreflang `hi-IN`) — served under `/hi`
+- Telugu / తెలుగు (te, hreflang `te-IN`) — served under `/te`
+- Arabic / العربية (ar, right-to-left) — served under `/ar`
+
 ## Key pages
+
+### English (default)
 
 - Home: https://dayli.ai/
 - Product (how it works): https://dayli.ai/product
@@ -44,6 +54,33 @@
 - About: https://dayli.ai/about
 - Privacy: https://dayli.ai/privacy
 
+### Hindi (हिंदी)
+
+- Home: https://dayli.ai/hi
+- Product: https://dayli.ai/hi/product
+- For Clinics: https://dayli.ai/hi/clinics
+- For Pharma: https://dayli.ai/hi/pharma
+- About: https://dayli.ai/hi/about
+- Privacy: https://dayli.ai/hi/privacy
+
+### Telugu (తెలుగు)
+
+- Home: https://dayli.ai/te
+- Product: https://dayli.ai/te/product
+- For Clinics: https://dayli.ai/te/clinics
+- For Pharma: https://dayli.ai/te/pharma
+- About: https://dayli.ai/te/about
+- Privacy: https://dayli.ai/te/privacy
+
+### Arabic (العربية)
+
+- Home: https://dayli.ai/ar
+- Product: https://dayli.ai/ar/product
+- For Clinics: https://dayli.ai/ar/clinics
+- For Pharma: https://dayli.ai/ar/pharma
+- About: https://dayli.ai/ar/about
+- Privacy: https://dayli.ai/ar/privacy
+
 ## Contact
 
-Reach out via the partner forms on https://dayli.ai/clinics or https://dayli.ai/pharma.
+Reach out via the partner forms on https://dayli.ai/clinics or https://dayli.ai/pharma (also available in each translated locale).

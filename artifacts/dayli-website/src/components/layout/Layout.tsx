@@ -1,38 +1,65 @@
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Sun } from "lucide-react";
+import { Menu, X, Sun, Globe } from "lucide-react";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { WHATSAPP_URL } from "@/lib/site";
-
-const NAV_LINKS = [
-  { href: "/product", label: "Product" },
-  { href: "/clinics", label: "For Clinics" },
-  { href: "/pharma", label: "For Pharma" },
-  { href: "/about", label: "About" },
-];
+import { useLocale } from "@/hooks/use-locale";
+import { LOCALES, LOCALE_META, localizedPath, parseLocaleFromPath } from "@/lib/i18n";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const [location] = useLocation();
+  const [location, navigate] = useLocation();
+  const { locale, basePath, t, href } = useLocale();
+  const meta = LOCALE_META[locale];
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  const NAV_LINKS = [
+    { basePath: "/product", label: t.layout.nav.product },
+    { basePath: "/clinics", label: t.layout.nav.clinics },
+    { basePath: "/pharma", label: t.layout.nav.pharma },
+    { basePath: "/about", label: t.layout.nav.about },
+  ];
+
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile menu when location changes
   useEffect(() => {
     setMobileMenuOpen(false);
     window.scrollTo(0, 0);
   }, [location]);
 
+  // Keep <html lang/dir> in sync as a safety net (SEO component does this too,
+  // but Layout runs even on routes without an explicit SEO config).
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      document.documentElement.lang = meta.htmlLang;
+      document.documentElement.dir = meta.dir;
+    }
+  }, [meta.htmlLang, meta.dir]);
+
+  function isActive(linkBase: string) {
+    return basePath === linkBase;
+  }
+
+  function switchLocale(targetLocale: typeof locale) {
+    const { basePath: currentBase } = parseLocaleFromPath(location || "/");
+    navigate(localizedPath(targetLocale, currentBase));
+  }
+
   return (
-    <div className="min-h-[100dvh] flex flex-col selection:bg-primary/20">
+    <div className="min-h-[100dvh] flex flex-col selection:bg-primary/20" dir={meta.dir}>
       <header
         className={cn(
           "fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out border-b border-transparent",
@@ -41,22 +68,21 @@ export function Layout({ children }: { children: React.ReactNode }) {
       >
         <div className="container mx-auto px-4 md:px-6">
           <div className="flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-2 group">
+            <Link href={href("/")} className="flex items-center gap-2 group">
               <div className="w-8 h-8 rounded-lg bg-primary text-primary-foreground flex items-center justify-center transition-transform group-hover:rotate-12">
                 <Sun size={18} />
               </div>
               <span className="font-bold text-xl tracking-tight text-foreground">dayli.ai</span>
             </Link>
 
-            {/* Desktop Nav */}
             <nav className="hidden md:flex items-center gap-8" aria-label="Primary">
               {NAV_LINKS.map((link) => (
                 <Link
-                  key={link.href}
-                  href={link.href}
+                  key={link.basePath}
+                  href={href(link.basePath)}
                   className={cn(
                     "text-sm font-medium transition-colors hover:text-primary",
-                    location === link.href ? "text-primary" : "text-muted-foreground"
+                    isActive(link.basePath) ? "text-primary" : "text-muted-foreground"
                   )}
                 >
                   {link.label}
@@ -64,15 +90,41 @@ export function Layout({ children }: { children: React.ReactNode }) {
               ))}
             </nav>
 
-            <div className="hidden md:flex items-center gap-4">
+            <div className="hidden md:flex items-center gap-3">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="gap-2 text-muted-foreground hover:text-foreground"
+                    aria-label={t.layout.languageMenuLabel}
+                  >
+                    <Globe size={16} />
+                    <span>{meta.nativeLabel}</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>{t.layout.languageMenuLabel}</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  {LOCALES.map((l) => (
+                    <DropdownMenuItem
+                      key={l}
+                      onSelect={() => switchLocale(l)}
+                      className={cn("cursor-pointer", l === locale && "font-semibold text-primary")}
+                    >
+                      {LOCALE_META[l].nativeLabel}
+                      <span className="ml-2 text-xs text-muted-foreground">{LOCALE_META[l].label}</span>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
               <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
                 <Button className="rounded-full shadow-md hover:shadow-lg transition-all active:scale-95">
-                  Start on WhatsApp
+                  {t.layout.ctaWhatsapp}
                 </Button>
               </a>
             </div>
 
-            {/* Mobile Toggle */}
             <button
               type="button"
               className="md:hidden p-2 -mr-2 text-foreground"
@@ -86,7 +138,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
           </div>
         </div>
 
-        {/* Mobile Nav */}
         {mobileMenuOpen && (
           <div
             id="mobile-nav"
@@ -94,66 +145,86 @@ export function Layout({ children }: { children: React.ReactNode }) {
           >
             {NAV_LINKS.map((link) => (
               <Link
-                key={link.href}
-                href={link.href}
+                key={link.basePath}
+                href={href(link.basePath)}
                 className={cn(
                   "px-4 py-3 rounded-md text-base font-medium transition-colors",
-                  location === link.href ? "bg-primary/10 text-primary" : "text-foreground hover:bg-muted"
+                  isActive(link.basePath) ? "bg-primary/10 text-primary" : "text-foreground hover:bg-muted"
                 )}
               >
                 {link.label}
               </Link>
             ))}
+            <div className="px-4 pt-2 border-t border-border">
+              <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">
+                {t.layout.languageMenuLabel}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {LOCALES.map((l) => (
+                  <button
+                    key={l}
+                    type="button"
+                    onClick={() => switchLocale(l)}
+                    className={cn(
+                      "text-sm px-3 py-1.5 rounded-full border transition-colors",
+                      l === locale
+                        ? "bg-primary text-primary-foreground border-primary"
+                        : "bg-background border-border text-foreground hover:bg-muted",
+                    )}
+                  >
+                    {LOCALE_META[l].nativeLabel}
+                  </button>
+                ))}
+              </div>
+            </div>
             <div className="px-4 pt-2 pb-1">
               <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="block w-full">
-                <Button className="w-full rounded-full">Start on WhatsApp</Button>
+                <Button className="w-full rounded-full">{t.layout.ctaWhatsapp}</Button>
               </a>
             </div>
           </div>
         )}
       </header>
 
-      <main className="flex-1 pt-[72px] md:pt-[84px]">
-        {children}
-      </main>
+      <main className="flex-1 pt-[72px] md:pt-[84px]">{children}</main>
 
       <footer className="bg-card border-t border-border py-12 md:py-16 mt-auto">
         <div className="container mx-auto px-4 md:px-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
             <div className="md:col-span-1">
-              <Link href="/" className="flex items-center gap-2 mb-4">
+              <Link href={href("/")} className="flex items-center gap-2 mb-4">
                 <div className="w-6 h-6 rounded-md bg-primary text-primary-foreground flex items-center justify-center">
                   <Sun size={14} />
                 </div>
                 <span className="font-bold text-lg tracking-tight">dayli.ai</span>
               </Link>
               <p className="text-muted-foreground text-sm leading-relaxed max-w-xs">
-                A daily decision layer for health in a changing climate.
+                {t.layout.footer.tagline}
               </p>
             </div>
 
             <div>
-              <h4 className="font-semibold mb-4 text-foreground">Solutions</h4>
+              <h4 className="font-semibold mb-4 text-foreground">{t.layout.footer.solutions}</h4>
               <ul className="space-y-3">
-                <li><Link href="/product" className="text-sm text-muted-foreground hover:text-primary transition-colors">Product</Link></li>
-                <li><Link href="/clinics" className="text-sm text-muted-foreground hover:text-primary transition-colors">For Clinics</Link></li>
-                <li><Link href="/pharma" className="text-sm text-muted-foreground hover:text-primary transition-colors">For Pharma</Link></li>
+                <li><Link href={href("/product")} className="text-sm text-muted-foreground hover:text-primary transition-colors">{t.layout.footer.product}</Link></li>
+                <li><Link href={href("/clinics")} className="text-sm text-muted-foreground hover:text-primary transition-colors">{t.layout.footer.clinics}</Link></li>
+                <li><Link href={href("/pharma")} className="text-sm text-muted-foreground hover:text-primary transition-colors">{t.layout.footer.pharma}</Link></li>
               </ul>
             </div>
 
             <div>
-              <h4 className="font-semibold mb-4 text-foreground">Company</h4>
+              <h4 className="font-semibold mb-4 text-foreground">{t.layout.footer.company}</h4>
               <ul className="space-y-3">
-                <li><Link href="/about" className="text-sm text-muted-foreground hover:text-primary transition-colors">About Us</Link></li>
-                <li><Link href="/privacy" className="text-sm text-muted-foreground hover:text-primary transition-colors">Privacy</Link></li>
+                <li><Link href={href("/about")} className="text-sm text-muted-foreground hover:text-primary transition-colors">{t.layout.footer.about}</Link></li>
+                <li><Link href={href("/privacy")} className="text-sm text-muted-foreground hover:text-primary transition-colors">{t.layout.footer.privacy}</Link></li>
               </ul>
             </div>
 
             <div>
-              <h4 className="font-semibold mb-4 text-foreground">Get Started</h4>
+              <h4 className="font-semibold mb-4 text-foreground">{t.layout.footer.getStarted}</h4>
               <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="inline-block">
                 <Button variant="outline" className="rounded-full w-full justify-start text-primary border-primary/20 hover:bg-primary/5">
-                  Connect on WhatsApp
+                  {t.layout.footer.connect}
                 </Button>
               </a>
             </div>
@@ -161,10 +232,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
           <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} dayli.ai. All rights reserved.
+              {t.layout.footer.copyright(new Date().getFullYear())}
             </p>
             <p className="text-xs text-muted-foreground">
-              Not a medical device. Always consult a healthcare professional for medical emergencies.
+              {t.layout.footer.disclaimer}
             </p>
           </div>
         </div>

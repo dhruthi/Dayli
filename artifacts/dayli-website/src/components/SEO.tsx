@@ -1,13 +1,15 @@
 import { useEffect } from "react";
-import { SITE_URL, DEFAULT_OG_IMAGE, SITE_NAME, buildJsonLdGraph, type PageSeo } from "@/lib/seo";
+import {
+  SITE_URL,
+  DEFAULT_OG_IMAGE,
+  SITE_NAME,
+  buildJsonLdGraph,
+  type PageSeo,
+} from "@/lib/seo";
+import { LOCALE_META } from "@/lib/i18n";
 
 const MANAGED_ATTR = "data-seo-managed";
 
-/**
- * Update an existing meta tag (regardless of who created it) or create a new
- * one. Prerendered tags from scripts/prerender.mjs are reused so we never
- * end up with duplicate canonicals, descriptions, or OG tags after hydration.
- */
 function setMeta(attr: "name" | "property", key: string, content: string) {
   const selector = `meta[${attr}="${cssEscape(key)}"]`;
   let el = document.head.querySelector<HTMLMetaElement>(selector);
@@ -20,12 +22,15 @@ function setMeta(attr: "name" | "property", key: string, content: string) {
   el.setAttribute("content", content);
 }
 
-function setLink(rel: string, href: string) {
-  const selector = `link[rel="${cssEscape(rel)}"]`;
+function setLink(rel: string, href: string, hreflang?: string) {
+  const selector = hreflang
+    ? `link[rel="${rel}"][hreflang="${cssEscape(hreflang)}"]`
+    : `link[rel="${rel}"]:not([hreflang])`;
   let el = document.head.querySelector<HTMLLinkElement>(selector);
   if (!el) {
     el = document.createElement("link");
     el.setAttribute("rel", rel);
+    if (hreflang) el.setAttribute("hreflang", hreflang);
     el.setAttribute(MANAGED_ATTR, "true");
     document.head.appendChild(el);
   }
@@ -33,7 +38,6 @@ function setLink(rel: string, href: string) {
 }
 
 function cssEscape(s: string) {
-  // Minimal CSS attribute-value escape — handles the keys we use.
   return s.replace(/(["\\])/g, "\\$1");
 }
 
@@ -41,8 +45,12 @@ export function SEO({ seo }: { seo: PageSeo }) {
   useEffect(() => {
     const canonical = `${SITE_URL}${seo.path === "/" ? "/" : seo.path}`;
     const og = seo.ogImage ?? DEFAULT_OG_IMAGE;
+    const meta = LOCALE_META[seo.locale];
 
     document.title = seo.title;
+    document.documentElement.lang = meta.htmlLang;
+    document.documentElement.dir = meta.dir;
+
     setMeta("name", "description", seo.description);
     setLink("canonical", canonical);
 
@@ -52,6 +60,7 @@ export function SEO({ seo }: { seo: PageSeo }) {
     setMeta("property", "og:type", "website");
     setMeta("property", "og:site_name", SITE_NAME);
     setMeta("property", "og:image", og);
+    setMeta("property", "og:locale", meta.htmlLang);
 
     setMeta("name", "twitter:card", "summary_large_image");
     setMeta("name", "twitter:title", seo.title);
@@ -64,11 +73,20 @@ export function SEO({ seo }: { seo: PageSeo }) {
       seo.noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large",
     );
 
-    // JSON-LD is fully owned by this app: remove any existing ld+json blocks
-    // (whether prerendered or previously injected) and emit a fresh graph for
-    // the active route. This keeps structured data unambiguous after hydration.
-    document
-      .head
+    // Replace all hreflang alternates each render so old tags can't drift.
+    document.head
+      .querySelectorAll('link[rel="alternate"][hreflang]')
+      .forEach((el) => el.remove());
+    for (const alt of seo.alternates) {
+      const link = document.createElement("link");
+      link.setAttribute("rel", "alternate");
+      link.setAttribute("hreflang", alt.hreflang);
+      link.setAttribute("href", alt.href);
+      link.setAttribute(MANAGED_ATTR, "true");
+      document.head.appendChild(link);
+    }
+
+    document.head
       .querySelectorAll('script[type="application/ld+json"]')
       .forEach((el) => el.remove());
 

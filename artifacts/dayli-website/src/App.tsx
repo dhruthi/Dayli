@@ -5,25 +5,37 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { Layout } from "@/components/layout/Layout";
 import NotFound from "@/pages/not-found";
 
-// Import pages
 import Home from "@/pages/Home";
 import Product from "@/pages/Product";
 import Clinics from "@/pages/Clinics";
 import Pharma from "@/pages/Pharma";
 import About from "@/pages/About";
 import Privacy from "@/pages/Privacy";
+import { LOCALES, DEFAULT_LOCALE } from "@/lib/i18n";
 
 const queryClient = new QueryClient();
+
+const PAGE_ROUTES: { path: string; component: React.ComponentType }[] = [
+  { path: "/", component: Home },
+  { path: "/product", component: Product },
+  { path: "/clinics", component: Clinics },
+  { path: "/pharma", component: Pharma },
+  { path: "/about", component: About },
+  { path: "/privacy", component: Privacy },
+];
 
 function Router() {
   return (
     <Switch>
-      <Route path="/" component={Home} />
-      <Route path="/product" component={Product} />
-      <Route path="/clinics" component={Clinics} />
-      <Route path="/pharma" component={Pharma} />
-      <Route path="/about" component={About} />
-      <Route path="/privacy" component={Privacy} />
+      {PAGE_ROUTES.map((r) => (
+        <Route key={`en-${r.path}`} path={r.path} component={r.component} />
+      ))}
+      {LOCALES.filter((l) => l !== DEFAULT_LOCALE).flatMap((locale) =>
+        PAGE_ROUTES.map((r) => {
+          const path = r.path === "/" ? `/${locale}` : `/${locale}${r.path}`;
+          return <Route key={`${locale}-${r.path}`} path={path} component={r.component} />;
+        }),
+      )}
       <Route component={NotFound} />
     </Switch>
   );
