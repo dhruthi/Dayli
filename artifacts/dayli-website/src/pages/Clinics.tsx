@@ -7,23 +7,32 @@ import { AnimatedReveal, StaggeredList } from "@/components/ui/animated-reveal";
 import { Users, CalendarCheck, TrendingUp, Send, Clock } from "lucide-react";
 import { useState } from "react";
 import clinicImage from "@/assets/images/clinic.png";
+import { submitLead } from "@/lib/site";
 
 export default function Clinics() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const form = e.target as HTMLFormElement;
     setIsSubmitting(true);
-
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      await submitLead("clinic", form);
       toast({
         title: "Thank you for your interest!",
         description: "We'll respond within 2 working days with a 20-minute intro call.",
       });
-      (e.target as HTMLFormElement).reset();
-    }, 1000);
+      form.reset();
+    } catch {
+      toast({
+        title: "Something went wrong",
+        description: "Please try again, or email us directly.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

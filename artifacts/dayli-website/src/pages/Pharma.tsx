@@ -7,23 +7,32 @@ import { AnimatedReveal } from "@/components/ui/animated-reveal";
 import { Pill, Baby, Activity, Send, AlertTriangle, CheckCircle, Clock } from "lucide-react";
 import { useState } from "react";
 import pharmaImage from "@/assets/images/pharma.png";
+import { submitLead } from "@/lib/site";
 
 export default function Pharma() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const form = e.target as HTMLFormElement;
     setIsSubmitting(true);
-
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      await submitLead("pharma", form);
       toast({
         title: "Thank you for your interest!",
         description: "Our partnership team will reach out within 2 working days.",
       });
-      (e.target as HTMLFormElement).reset();
-    }, 1000);
+      form.reset();
+    } catch {
+      toast({
+        title: "Something went wrong",
+        description: "Please try again, or email us directly.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

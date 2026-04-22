@@ -18,3 +18,9 @@ id = "HcBGGt8OGAc-coIf3-9-J"
 uri = "file://artifacts/dayli-website/src/assets/images/pharma.png"
 type = "image"
 title = "Pharma patient adherence outdoors"
+
+[[generated]]
+id = "I94uxIye7nVeZxqx-MzmX"
+uri = "file://artifacts/dayli-website/public/opengraph.png"
+type = "image"
+title = "dayli og image"
