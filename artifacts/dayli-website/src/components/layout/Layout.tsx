@@ -63,7 +63,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-[100dvh] flex flex-col selection:bg-primary/20" dir={meta.dir}>
+    <div
+      className="min-h-[100dvh] flex flex-col selection:bg-primary/20"
+      dir={meta.dir}
+      // Reserve space at the very bottom of the page when the language
+      // suggestion banner is visible, so the footer and any in-page CTAs
+      // (e.g. clinic/pharma form submit buttons) aren't obscured by the
+      // fixed banner — particularly important on narrow phones where long
+      // translations cause the banner to wrap to multiple lines.
+      style={{ paddingBottom: "var(--lang-banner-h, 0px)" }}
+    >
       <header
         className={cn(
           "fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out border-b border-transparent",
