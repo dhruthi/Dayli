@@ -112,7 +112,6 @@ async function main() {
   const render = await loadServerRender();
 
   for (const page of Object.values(PAGES)) {
-    if (page.noindex) continue;
     const canonical = `${SITE_URL}${page.path === "/" ? "/" : page.path}`;
     const headHtml = renderHead({
       title: page.title,
@@ -139,6 +138,14 @@ async function main() {
 
     if (page.path === "/") {
       await fs.writeFile(TEMPLATE_PATH, html, "utf8");
+    } else if (page.path === "/404") {
+      // The 404 page must live at /404.html so the static host serves it
+      // (with an HTTP 404 status) for any URL that does not match a real
+      // file or prerendered route. We deliberately do NOT write it as a
+      // routable /<slug>.html or /<slug>/index.html — that would expose
+      // it as a real 200 page and reintroduce the SPA-fallback masking
+      // problem this prerender is meant to prevent.
+      await fs.writeFile(path.join(DIST, "404.html"), html, "utf8");
     } else {
       // Write both forms so that whatever the upstream static server's
       // try-files / rewrite behavior is, /<route>, /<route>/, and

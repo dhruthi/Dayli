@@ -22,10 +22,6 @@ build = [ "pnpm", "--filter", "@workspace/dayli-website", "run", "build" ]
 publicDir = "artifacts/dayli-website/dist/public"
 serve = "static"
 
-[[services.production.rewrites]]
-from = "/*"
-to = "/index.html"
-
 [services.env]
 PORT = "22304"
 BASE_PATH = "/"
