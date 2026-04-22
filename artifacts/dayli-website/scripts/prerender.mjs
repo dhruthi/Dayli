@@ -20,6 +20,20 @@ const __dirname = path.dirname(__filename);
 const ROOT = path.resolve(__dirname, "..");
 const DIST = path.join(ROOT, "dist", "public");
 const TEMPLATE_PATH = path.join(DIST, "index.html");
+const SERVER_ENTRY = path.join(ROOT, "dist", "server", "entry-server.js");
+
+async function loadServerRender() {
+  try {
+    await fs.access(SERVER_ENTRY);
+    const mod = await import(pathToFileURL(SERVER_ENTRY).href);
+    return mod.render;
+  } catch {
+    console.warn(
+      `[prerender] No SSR bundle at ${SERVER_ENTRY}; head will be injected but body will remain empty.`,
+    );
+    return null;
+  }
+}
 
 async function loadSeo() {
   // Import the source seo.ts via tsx-less trick: we read it as text and
@@ -91,9 +105,18 @@ function injectHead(template, headHtml) {
   return out.replace(/<\/head>/i, `    ${headHtml}\n  </head>`);
 }
 
+function injectBody(template, bodyHtml) {
+  if (!bodyHtml) return template;
+  return template.replace(
+    /<div id="root">\s*<\/div>/i,
+    `<div id="root">${bodyHtml}</div>`,
+  );
+}
+
 async function main() {
   const template = await fs.readFile(TEMPLATE_PATH, "utf8");
   const { SITE_URL, DEFAULT_OG_IMAGE, PAGES } = await loadSeo();
+  const render = await loadServerRender();
 
   for (const page of PAGES) {
     const canonical = `${SITE_URL}${page.path === "/" ? "/" : page.path}`;
@@ -107,7 +130,17 @@ async function main() {
         ? JSON.stringify({ "@context": "https://schema.org", "@graph": page.jsonLd })
         : null,
     });
-    const html = injectHead(template, headHtml);
+
+    let bodyHtml = "";
+    if (render) {
+      try {
+        bodyHtml = render(page.path);
+      } catch (err) {
+        console.warn(`[prerender] SSR failed for ${page.path}:`, err?.message ?? err);
+      }
+    }
+
+    const html = injectBody(injectHead(template, headHtml), bodyHtml);
 
     if (page.path === "/") {
       await fs.writeFile(TEMPLATE_PATH, html, "utf8");
@@ -117,7 +150,7 @@ async function main() {
       await fs.writeFile(path.join(dir, "index.html"), html, "utf8");
     }
     // eslint-disable-next-line no-console
-    console.log(`prerendered ${page.path}`);
+    console.log(`prerendered ${page.path}${bodyHtml ? " (with body)" : ""}`);
   }
 }
 
