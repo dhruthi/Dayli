@@ -1,7 +1,67 @@
 import { AnimatedReveal, StaggeredList } from "@/components/ui/animated-reveal";
-import { Target, Eye, Clock, Smartphone, Globe, Sun } from "lucide-react";
+import { Target, Eye, Clock, Smartphone, Globe, Sun, GraduationCap, Code2, Baby, Sparkles } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { PAGE_SEO } from "@/lib/seo";
+
+// TODO: Replace this placeholder with Dhruthi's photo when provided.
+// Drop the image into `src/assets/`, import it, and pass the imported
+// src to <FounderPortrait imageSrc={...} />.
+const FOUNDER_PHOTO_SRC: string | null = null;
+
+function FounderPortrait({ imageSrc }: { imageSrc?: string | null }) {
+  if (imageSrc) {
+    return (
+      <div className="relative aspect-square w-full max-w-md mx-auto">
+        <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-br from-sun/30 via-primary/20 to-heat/20 blur-2xl" aria-hidden="true" />
+        <img
+          src={imageSrc}
+          alt="Dhruthi Kuram, founder and CEO of dayli"
+          className="relative w-full h-full object-cover rounded-[2rem] border border-border shadow-xl"
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className="relative aspect-square w-full max-w-md mx-auto founder-portrait"
+      role="img"
+      aria-label="Animated portrait placeholder for Dhruthi Kuram"
+    >
+      <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-br from-sun/40 via-primary/30 to-heat/25 blur-3xl founder-glow" aria-hidden="true" />
+
+      <div className="relative w-full h-full rounded-[2rem] overflow-hidden border border-border shadow-xl bg-gradient-to-br from-secondary via-background to-accent">
+        <div className="absolute inset-0 founder-orbit" aria-hidden="true">
+          <div className="absolute top-8 left-8 w-3 h-3 rounded-full bg-sun/70" />
+          <div className="absolute top-12 right-12 w-2 h-2 rounded-full bg-primary/60" />
+          <div className="absolute bottom-16 left-16 w-2.5 h-2.5 rounded-full bg-heat/60" />
+          <div className="absolute bottom-10 right-10 w-2 h-2 rounded-full bg-primary/50" />
+        </div>
+
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-8">
+          <div className="relative mb-6">
+            <div className="absolute -inset-6 rounded-full bg-sun/30 blur-2xl founder-pulse" aria-hidden="true" />
+            <div className="relative w-28 h-28 rounded-full bg-gradient-to-br from-sun via-primary to-heat shadow-lg flex items-center justify-center">
+              <span className="text-5xl font-serif font-bold text-primary-foreground select-none">
+                DK
+              </span>
+            </div>
+          </div>
+          <p className="font-serif text-2xl font-bold text-foreground">
+            Dhruthi Kuram
+          </p>
+          <p className="text-sm text-muted-foreground mt-1 tracking-wide uppercase">
+            Founder &amp; CEO
+          </p>
+          <div className="mt-6 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-background/70 backdrop-blur border border-border text-xs text-muted-foreground">
+            <Sparkles size={12} className="text-sun" />
+            Photo coming soon
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function About() {
   return (
@@ -53,6 +113,116 @@ export default function About() {
                 <p className="text-xl leading-relaxed text-foreground font-medium">
                   "A world where every individual has access to real-time health guidance based on their environment."
                 </p>
+              </div>
+            </AnimatedReveal>
+          </div>
+        </div>
+      </section>
+
+      {/* MEET THE FOUNDER */}
+      <section className="py-24 bg-background">
+        <div className="container px-4 md:px-6 mx-auto max-w-6xl">
+          <AnimatedReveal>
+            <div className="text-center mb-16">
+              <p className="text-sm font-semibold tracking-widest uppercase text-primary mb-3">
+                Meet the Founder
+              </p>
+              <h2 className="text-3xl md:text-4xl font-serif font-bold">
+                Built by an engineer who has spent her career protecting children's health
+              </h2>
+            </div>
+          </AnimatedReveal>
+
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            <AnimatedReveal direction="right">
+              <FounderPortrait imageSrc={FOUNDER_PHOTO_SRC} />
+            </AnimatedReveal>
+
+            <AnimatedReveal delay={150}>
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-2xl md:text-3xl font-serif font-bold text-foreground mb-2">
+                    Dhruthi Kuram
+                  </h3>
+                  <p className="text-base text-muted-foreground">
+                    Founder &amp; CEO, dayli
+                  </p>
+                </div>
+
+                <p className="text-lg leading-relaxed text-foreground">
+                  Dhruthi is a software engineer turned founder who has spent her
+                  career building tools that help families make better decisions
+                  about the people they love most. She holds a Master's degree in
+                  Computer Science from <strong>San José State University</strong> in
+                  the Bay Area, where she trained alongside engineers shipping
+                  consumer products at the world's largest technology companies.
+                </p>
+
+                <p className="text-lg leading-relaxed text-foreground">
+                  Before dayli, Dhruthi created <strong>BabyBoo</strong>, a growth
+                  and developmental milestone tracker that helps parents understand
+                  whether their child is on track week by week. Tens of thousands of
+                  families used BabyBoo to catch concerns earlier, ask better
+                  questions at pediatric visits, and feel less alone in the
+                  uncertainty of the first years of life.
+                </p>
+
+                <p className="text-lg leading-relaxed text-foreground">
+                  With dayli, she is taking that same instinct &mdash; meet families
+                  where they already are, with guidance they can actually use
+                  &mdash; and turning it on the most underestimated health threat of
+                  our generation: a changing climate. dayli combines climate
+                  intelligence, medical knowledge, and real-time AI personalization,
+                  delivered through WhatsApp, so women and children get the right
+                  guidance on the right day, in the language they already speak.
+                </p>
+
+                <ul className="grid sm:grid-cols-2 gap-4 pt-4">
+                  <li className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
+                      <Code2 size={20} />
+                    </div>
+                    <div>
+                      <p className="font-semibold text-foreground">Engineer first</p>
+                      <p className="text-sm text-muted-foreground">
+                        A decade shipping production software for consumers.
+                      </p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-sun/10 text-sun flex items-center justify-center flex-shrink-0">
+                      <GraduationCap size={20} />
+                    </div>
+                    <div>
+                      <p className="font-semibold text-foreground">SJSU, Bay Area</p>
+                      <p className="text-sm text-muted-foreground">
+                        Master's in Computer Science.
+                      </p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-heat/10 text-heat flex items-center justify-center flex-shrink-0">
+                      <Baby size={20} />
+                    </div>
+                    <div>
+                      <p className="font-semibold text-foreground">BabyBoo</p>
+                      <p className="text-sm text-muted-foreground">
+                        Milestone tracker trusted by tens of thousands of parents.
+                      </p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
+                      <Sun size={20} />
+                    </div>
+                    <div>
+                      <p className="font-semibold text-foreground">dayli</p>
+                      <p className="text-sm text-muted-foreground">
+                        Real-time climate-health guidance for women &amp; children.
+                      </p>
+                    </div>
+                  </li>
+                </ul>
               </div>
             </AnimatedReveal>
           </div>
