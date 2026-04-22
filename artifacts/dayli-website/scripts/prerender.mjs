@@ -140,7 +140,14 @@ async function main() {
     if (page.path === "/") {
       await fs.writeFile(TEMPLATE_PATH, html, "utf8");
     } else {
-      const dir = path.join(DIST, page.path.replace(/^\//, ""));
+      // Write both forms so that whatever the upstream static server's
+      // try-files / rewrite behavior is, /<route>, /<route>/, and
+      // /<route>/index.html all resolve to the prerendered HTML and
+      // never fall through to the SPA-fallback root index.html.
+      const slug = page.path.replace(/^\//, "");
+      const flatPath = path.join(DIST, `${slug}.html`);
+      const dir = path.join(DIST, slug);
+      await fs.writeFile(flatPath, html, "utf8");
       await fs.mkdir(dir, { recursive: true });
       await fs.writeFile(path.join(dir, "index.html"), html, "utf8");
     }
