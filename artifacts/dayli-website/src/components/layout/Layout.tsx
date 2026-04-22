@@ -5,7 +5,8 @@ import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { WHATSAPP_URL } from "@/lib/site";
 import { useLocale } from "@/hooks/use-locale";
-import { LOCALES, LOCALE_META, localizedPath, parseLocaleFromPath } from "@/lib/i18n";
+import { LOCALES, LOCALE_META, localizedPath, parseLocaleFromPath, setStoredLocalePref } from "@/lib/i18n";
+import { LanguageBanner } from "@/components/layout/LanguageBanner";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -55,6 +56,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
   function switchLocale(targetLocale: typeof locale) {
     const { basePath: currentBase } = parseLocaleFromPath(location || "/");
+    // Record the explicit choice so the auto-detect banner doesn't second-
+    // guess them on a future visit.
+    setStoredLocalePref(targetLocale);
     navigate(localizedPath(targetLocale, currentBase));
   }
 
@@ -187,6 +191,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </header>
 
       <main className="flex-1 pt-[72px] md:pt-[84px]">{children}</main>
+
+      <LanguageBanner />
 
       <footer className="bg-card border-t border-border py-12 md:py-16 mt-auto">
         <div className="container mx-auto px-4 md:px-6">

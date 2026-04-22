@@ -6,6 +6,7 @@ export interface PageContent {
     nav: { product: string; clinics: string; pharma: string; about: string };
     ctaWhatsapp: string;
     languageMenuLabel: string;
+    languageBanner: { prompt: string; accept: string; dismiss: string };
     footer: {
       tagline: string;
       solutions: string;
@@ -174,6 +175,11 @@ const en: PageContent = {
     nav: { product: "Product", clinics: "For Clinics", pharma: "For Pharma", about: "About" },
     ctaWhatsapp: "Start on WhatsApp",
     languageMenuLabel: "Language",
+    languageBanner: {
+      prompt: "Would you prefer to view this site in English?",
+      accept: "Continue in English",
+      dismiss: "No thanks",
+    },
     footer: {
       tagline: "A daily decision layer for health in a changing climate.",
       solutions: "Solutions",
@@ -439,6 +445,11 @@ const hi: PageContent = {
     nav: { product: "उत्पाद", clinics: "क्लिनिकों के लिए", pharma: "फार्मा के लिए", about: "हमारे बारे में" },
     ctaWhatsapp: "WhatsApp पर शुरू करें",
     languageMenuLabel: "भाषा",
+    languageBanner: {
+      prompt: "क्या आप यह साइट हिंदी में देखना पसंद करेंगे?",
+      accept: "हिंदी में देखें",
+      dismiss: "नहीं, धन्यवाद",
+    },
     footer: {
       tagline: "बदलती जलवायु में स्वास्थ्य के लिए एक दैनिक निर्णय परत।",
       solutions: "समाधान",
@@ -704,6 +715,11 @@ const te: PageContent = {
     nav: { product: "ఉత్పత్తి", clinics: "క్లినిక్‌ల కోసం", pharma: "ఫార్మా కోసం", about: "మా గురించి" },
     ctaWhatsapp: "WhatsAppలో మొదలుపెట్టండి",
     languageMenuLabel: "భాష",
+    languageBanner: {
+      prompt: "మీరు ఈ సైట్‌ను తెలుగులో చూడాలనుకుంటున్నారా?",
+      accept: "తెలుగులో చూడండి",
+      dismiss: "వద్దు, ధన్యవాదాలు",
+    },
     footer: {
       tagline: "మారుతున్న వాతావరణంలో ఆరోగ్యానికి ఒక రోజువారీ నిర్ణయ పొర.",
       solutions: "సొల్యూషన్స్",
@@ -969,6 +985,11 @@ const ar: PageContent = {
     nav: { product: "المنتج", clinics: "للعيادات", pharma: "لشركات الأدوية", about: "من نحن" },
     ctaWhatsapp: "ابدأ على واتساب",
     languageMenuLabel: "اللغة",
+    languageBanner: {
+      prompt: "هل تفضّل عرض هذا الموقع باللغة العربية؟",
+      accept: "تابع بالعربية",
+      dismiss: "لا، شكرًا",
+    },
     footer: {
       tagline: "طبقة قرار يومية للصحة في مناخ متغيّر.",
       solutions: "الحلول",
