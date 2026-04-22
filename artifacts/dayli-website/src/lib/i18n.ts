@@ -90,6 +90,19 @@ export function localizedPath(locale: Locale, basePath: string): string {
  */
 export const LOCALE_PREF_STORAGE_KEY = "dayli:locale-pref";
 
+/**
+ * Cookie name mirrored to the server. The production HTTP server
+ * (server/serve.mjs) reads this cookie to decide whether a first-time
+ * visitor on a canonical English URL should be 302-redirected to a localized
+ * variant based on their Accept-Language header. Once the cookie is
+ * present (any value), the server stops auto-redirecting — that's how an
+ * explicit choice from the in-page switcher overrides the server hint.
+ *
+ * Cookie names cannot contain ":" so we use an underscore variant; the
+ * localStorage key keeps the original ":" form for backward compatibility.
+ */
+export const LOCALE_PREF_COOKIE = "dayli_locale_pref";
+
 export function getStoredLocalePref(): string | null {
   if (typeof window === "undefined") return null;
   try {
@@ -105,6 +118,19 @@ export function setStoredLocalePref(value: Locale | "dismissed"): void {
     window.localStorage.setItem(LOCALE_PREF_STORAGE_KEY, value);
   } catch {
     /* ignore quota/private mode errors */
+  }
+  // Mirror to a cookie so the server-side language hint respects the
+  // visitor's explicit choice on every subsequent navigation. 1-year expiry
+  // matches the "remember forever" semantics of the localStorage entry.
+  try {
+    if (typeof document === "undefined") return;
+    const oneYear = 60 * 60 * 24 * 365;
+    const secure = window.location.protocol === "https:" ? "; Secure" : "";
+    document.cookie =
+      `${LOCALE_PREF_COOKIE}=${encodeURIComponent(value)}` +
+      `; Path=/; Max-Age=${oneYear}; SameSite=Lax${secure}`;
+  } catch {
+    /* ignore — cookies blocked is not fatal */
   }
 }
 
