@@ -4,6 +4,8 @@ import { Target, Eye, Clock, Smartphone, Globe, Sun, GraduationCap, Code2, Baby,
 import { SEO } from "@/components/SEO";
 import { getPageSeo } from "@/lib/seo";
 import { useLocale } from "@/hooks/use-locale";
+import ashaWorkerPhoto from "@/assets/images/pilot-asha-worker.png";
+import governmentPartnershipPhoto from "@/assets/images/pilot-government-partnership.png";
 
 // TODO: Replace this placeholder with Dhruthi's photo when provided.
 // Drop the image into `src/assets/`, import it, and pass the imported
@@ -267,6 +269,21 @@ export default function About() {
             </p>
           </AnimatedReveal>
 
+          {/* AI placeholder pending real, consented WCD-Telangana ASHA-worker photography. */}
+          <AnimatedReveal delay={50}>
+            <div className="rounded-3xl overflow-hidden border border-border/40 shadow-sm mb-12 max-w-4xl mx-auto">
+              <img
+                src={ashaWorkerPhoto}
+                alt={t.imagery.ashaWorker}
+                width={1024}
+                height={768}
+                loading="lazy"
+                decoding="async"
+                className="w-full h-auto block"
+              />
+            </div>
+          </AnimatedReveal>
+
           <StaggeredList className="grid md:grid-cols-2 gap-5 md:gap-6 mb-10">
             {c.pilot.blocks.map((block) => (
               <div
@@ -281,7 +298,7 @@ export default function About() {
             ))}
           </StaggeredList>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-12">
             {c.pilot.metrics.map((m, i) => {
               const tones = [
                 "bg-marigold/15",
@@ -304,6 +321,21 @@ export default function About() {
               );
             })}
           </div>
+
+          {/* AI placeholder pending real, consented WCD-Telangana partnership photography. */}
+          <AnimatedReveal>
+            <div className="rounded-3xl overflow-hidden border border-border/40 shadow-sm max-w-4xl mx-auto">
+              <img
+                src={governmentPartnershipPhoto}
+                alt={t.imagery.governmentPartnership}
+                width={1280}
+                height={720}
+                loading="lazy"
+                decoding="async"
+                className="w-full h-auto block"
+              />
+            </div>
+          </AnimatedReveal>
         </div>
       </section>
 

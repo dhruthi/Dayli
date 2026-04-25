@@ -24,3 +24,45 @@ id = "I94uxIye7nVeZxqx-MzmX"
 uri = "file://artifacts/dayli-website/public/opengraph.png"
 type = "image"
 title = "dayli og image"
+
+[[generated]]
+id = "uBDmATN2FWCLVcHAuKP5-"
+uri = "file://artifacts/dayli-website/src/assets/images/hero-mother-whatsapp.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "Sm6t15miJllG7ISvgjbC7"
+uri = "file://artifacts/dayli-website/src/assets/images/pilot-asha-worker.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "1dIOnjOHdgDibU4W726Pm"
+uri = "file://artifacts/dayli-website/src/assets/images/problem-heat-mother-toddler.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "KwO-GKrhe4k8TDnUCSlci"
+uri = "file://artifacts/dayli-website/src/assets/images/solution-hands-phone.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "sK5cHbEQhTED1rtJhIXpc"
+uri = "file://artifacts/dayli-website/src/assets/images/clinic-doctor.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "BscgRanl0M8zPpfjNZp5_"
+uri = "file://artifacts/dayli-website/src/assets/images/pilot-telugu-grandmother.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "nMQbaUfXPT6Bblf_Wf2ZT"
+uri = "file://artifacts/dayli-website/src/assets/images/pilot-government-partnership.png"
+type = "image"
+title = "generated_image"

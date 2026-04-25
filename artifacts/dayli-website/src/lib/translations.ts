@@ -209,6 +209,18 @@ export interface PageContent {
     body: string;
     cta: string;
   };
+
+  // Alt text for editorial photography across Home / About / Clinics.
+  // Keep these descriptive (what the photo shows) — not editorial.
+  imagery: {
+    heroMother: string;
+    problemHeat: string;
+    solutionHands: string;
+    pilotGrandmother: string;
+    ashaWorker: string;
+    governmentPartnership: string;
+    clinicDoctor: string;
+  };
 }
 
 const en: PageContent = {
@@ -546,6 +558,15 @@ const en: PageContent = {
       { heading: "Important notice", body: "dayli is not a medical device and does not replace professional medical advice. For any medical emergency, contact your local healthcare provider or emergency services immediately." },
     ],
     note: "This page describes our commitments. A complete legal privacy policy is being prepared and will replace this summary.",
+  },
+  imagery: {
+    heroMother: "A young pregnant woman seated on a doorstep reads a WhatsApp message in Telugu on her phone in the morning light.",
+    problemHeat: "A mother shielding her toddler with an umbrella as they walk through a hot Indian street in the midday sun.",
+    solutionHands: "A woman's hands holding a smartphone showing a WhatsApp conversation in Telugu.",
+    pilotGrandmother: "An elderly grandmother in a village home reads a WhatsApp message in Telugu on a basic Android phone.",
+    ashaWorker: "An ASHA health worker in a pink saree sitting beside a pregnant woman, showing her a WhatsApp message on a phone.",
+    governmentPartnership: "An ASHA worker, a Women and Child Welfare Department officer, and a young pregnant woman standing together outside a district health office in Telangana.",
+    clinicDoctor: "A clinician in a community health clinic in Telangana checking her phone while a young mother and infant wait across the table.",
   },
   notFound: {
     seoTitle: "Page not found — dayli.ai",
@@ -893,6 +914,15 @@ const hi: PageContent = {
     ],
     note: "यह पृष्ठ हमारी प्रतिबद्धताओं का वर्णन करता है। एक संपूर्ण कानूनी गोपनीयता नीति तैयार की जा रही है जो इस सारांश की जगह लेगी।",
   },
+  imagery: {
+    heroMother: "एक युवा गर्भवती महिला अपने घर की देहरी पर बैठकर सुबह की रोशनी में फ़ोन पर तेलुगु में WhatsApp संदेश पढ़ रही है।",
+    problemHeat: "तेज़ धूप वाली भारतीय सड़क पर एक माँ छाते से अपने नन्हे बच्चे को छाँव दे रही है।",
+    solutionHands: "एक महिला के हाथों में स्मार्टफ़ोन, स्क्रीन पर तेलुगु में WhatsApp बातचीत दिख रही है।",
+    pilotGrandmother: "गाँव के घर में एक बुज़ुर्ग दादी एक साधारण एंड्रॉयड फ़ोन पर तेलुगु में WhatsApp संदेश पढ़ रही हैं।",
+    ashaWorker: "गुलाबी साड़ी में एक ASHA कार्यकर्ता एक गर्भवती महिला के साथ बैठकर उन्हें फ़ोन पर WhatsApp संदेश दिखा रही हैं।",
+    governmentPartnership: "एक ASHA कार्यकर्ता, महिला एवं बाल कल्याण विभाग की अधिकारी और एक युवा गर्भवती महिला तेलंगाना के ज़िला स्वास्थ्य कार्यालय के बाहर साथ खड़ी हैं।",
+    clinicDoctor: "तेलंगाना के एक सामुदायिक स्वास्थ्य क्लिनिक में एक चिकित्सक अपना फ़ोन देख रही हैं, सामने एक माँ और शिशु प्रतीक्षा में हैं।",
+  },
   notFound: {
     seoTitle: "पृष्ठ नहीं मिला — dayli.ai",
     seoDescription: "जिस पृष्ठ की आप तलाश कर रहे थे वह मौजूद नहीं है।",
@@ -1239,6 +1269,15 @@ const te: PageContent = {
     ],
     note: "ఈ పేజీ మా నిబద్ధతలను వివరిస్తుంది. పూర్తి చట్టపరమైన గోప్యతా విధానం సిద్ధం అవుతోంది మరియు ఈ సారాంశాన్ని భర్తీ చేస్తుంది.",
   },
+  imagery: {
+    heroMother: "ఒక యువ గర్భిణీ తన ఇంటి గడప మీద కూర్చొని ఉదయపు వెలుతురులో ఫోన్‌లో తెలుగులో WhatsApp సందేశం చదువుతోంది.",
+    problemHeat: "మండుతున్న భారతీయ రోడ్డు మీద ఒక తల్లి గొడుగుతో తన పసిబిడ్డకు నీడ ఇస్తూ నడుస్తోంది.",
+    solutionHands: "ఒక మహిళ చేతుల్లో స్మార్ట్‌ఫోన్, తెరమీద తెలుగులో WhatsApp సంభాషణ కనిపిస్తోంది.",
+    pilotGrandmother: "ఒక గ్రామీణ ఇంట్లో ఒక వృద్ధ అమ్మమ్మ సాధారణ ఆండ్రాయిడ్ ఫోన్‌లో తెలుగులో WhatsApp సందేశం చదువుతోంది.",
+    ashaWorker: "గులాబీ చీరలో ఉన్న ఒక ASHA ఆరోగ్య కార్యకర్త ఒక గర్భిణీ పక్కన కూర్చొని ఫోన్‌లో WhatsApp సందేశం చూపిస్తోంది.",
+    governmentPartnership: "ఒక ASHA కార్యకర్త, స్త్రీ శిశు సంక్షేమ శాఖ అధికారి, మరియు ఒక యువ గర్భిణీ కలిసి తెలంగాణ జిల్లా ఆరోగ్య కార్యాలయం ముందు నిలబడి ఉన్నారు.",
+    clinicDoctor: "తెలంగాణలోని ఒక సమాజ ఆరోగ్య క్లినిక్‌లో డాక్టర్ తన ఫోన్ చూస్తోంది, ఎదురుగా ఒక యువ తల్లి మరియు శిశువు వేచి ఉన్నారు.",
+  },
   notFound: {
     seoTitle: "పేజీ కనుగొనబడలేదు — dayli.ai",
     seoDescription: "మీరు వెతుకుతున్న పేజీ లేదు.",
@@ -1584,6 +1623,15 @@ const ar: PageContent = {
       { heading: "تنبيه مهم", body: "dayli ليس جهازًا طبيًا ولا يحلّ محل المشورة الطبية المتخصصة. في أي حالة طارئة تواصل فورًا مع مقدّم الرعاية المحلي أو خدمات الطوارئ." },
     ],
     note: "تصف هذه الصفحة التزاماتنا. يجري إعداد سياسة خصوصية قانونية كاملة ستحلّ محل هذا الملخّص.",
+  },
+  imagery: {
+    heroMother: "امرأة حامل شابة تجلس على عتبة منزلها وتقرأ رسالة واتساب باللغة التيلوغوية على هاتفها في ضوء الصباح.",
+    problemHeat: "أم تحمي طفلها الصغير بمظلة وهما يسيران في شارع هندي حار تحت شمس الظهيرة.",
+    solutionHands: "يدا امرأة تحملان هاتفًا ذكيًا تظهر على شاشته محادثة واتساب باللغة التيلوغوية.",
+    pilotGrandmother: "جدة مسنّة في منزل قروي تقرأ رسالة واتساب باللغة التيلوغوية على هاتف أندرويد بسيط.",
+    ashaWorker: "عاملة صحية من شبكة ASHA بساري وردي تجلس بجانب امرأة حامل وتعرض لها رسالة واتساب على الهاتف.",
+    governmentPartnership: "عاملة ASHA، ومسؤولة من إدارة رعاية المرأة والطفل، وامرأة حامل شابة يقفن معًا أمام مكتب صحي محلي في إقليم تيلانغانا.",
+    clinicDoctor: "طبيبة في عيادة صحية مجتمعية في تيلانغانا تتفقّد هاتفها بينما تنتظر أم شابة ورضيعها أمامها.",
   },
   notFound: {
     seoTitle: "الصفحة غير موجودة — dayli.ai",

@@ -7,6 +7,7 @@ import { AnimatedReveal, StaggeredList } from "@/components/ui/animated-reveal";
 import { Users, CalendarCheck, TrendingUp, Send, Clock, CheckCircle2 } from "lucide-react";
 import { useState } from "react";
 import clinicImage from "@/assets/images/clinic.png";
+import clinicDoctorPhoto from "@/assets/images/clinic-doctor.png";
 import { submitLead } from "@/lib/site";
 import { SEO } from "@/components/SEO";
 import { getPageSeo } from "@/lib/seo";
@@ -56,6 +57,26 @@ export default function Clinics() {
               <span>{c.pilotChip}</span>
             </div>
           </AnimatedReveal>
+        </div>
+      </section>
+
+      {/* CLINIC PHOTO BAND
+          Documentary photograph of a community-clinic clinician using dayli on
+          her phone — gives the page a human anchor right after the hero. */}
+      {/* AI placeholder pending real, consented WCD-Telangana clinician photography. */}
+      <section className="bg-background pt-12 md:pt-16">
+        <div className="container px-4 md:px-6 mx-auto">
+          <div className="max-w-5xl mx-auto rounded-3xl overflow-hidden border border-border/40 shadow-sm -mt-24 md:-mt-28 relative z-20">
+            <img
+              src={clinicDoctorPhoto}
+              alt={t.imagery.clinicDoctor}
+              width={1280}
+              height={720}
+              loading="lazy"
+              decoding="async"
+              className="w-full h-auto block"
+            />
+          </div>
         </div>
       </section>
 

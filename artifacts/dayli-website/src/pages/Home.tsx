@@ -6,7 +6,10 @@ import { AnimatedReveal, StaggeredList } from "@/components/ui/animated-reveal";
 import { WhatsAppChatPreview } from "@/components/ui/whatsapp-chat";
 import { WhatsAppCTA } from "@/components/ui/whatsapp-cta";
 import { ChatDemo } from "@/components/chat/ChatDemo";
-import heroImage from "@/assets/images/hero.png";
+import heroMotherPhoto from "@/assets/images/hero-mother-whatsapp.png";
+import problemHeatPhoto from "@/assets/images/problem-heat-mother-toddler.png";
+import solutionHandsPhoto from "@/assets/images/solution-hands-phone.png";
+import pilotGrandmotherPhoto from "@/assets/images/pilot-telugu-grandmother.png";
 import { SEO } from "@/components/SEO";
 import { FAQSection } from "@/components/FAQSection";
 import { getPageSeo } from "@/lib/seo";
@@ -68,6 +71,28 @@ export default function Home() {
                 <ChatDemo />
               </div>
             </AnimatedReveal>
+          </div>
+        </div>
+      </section>
+
+      {/* HERO PHOTO BAND
+          Documentary photograph that anchors the page in the lived reality of
+          the women dayli serves. Sits directly under the hero so it's visible
+          on the first scroll on every viewport. fetchpriority="high" because
+          this is the LCP image once the user scrolls past the hero text. */}
+      <section aria-hidden="false" className="bg-brand-sunrise pb-16 md:pb-20">
+        <div className="container px-4 md:px-6 mx-auto">
+          <div className="max-w-5xl mx-auto rounded-3xl overflow-hidden border border-border/40 shadow-sm">
+            <img
+              src={heroMotherPhoto}
+              alt={t.imagery.heroMother}
+              width={1280}
+              height={720}
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
+              className="w-full h-auto block"
+            />
           </div>
         </div>
       </section>
@@ -151,14 +176,28 @@ export default function Home() {
             </StaggeredList>
 
             <AnimatedReveal delay={300}>
-              <blockquote className="max-w-3xl mx-auto text-center">
-                <p className="text-lg md:text-xl font-serif italic text-foreground/85 leading-relaxed">
-                  &ldquo;{c.pilot.quote.text}&rdquo;
-                </p>
-                <footer className="mt-4 text-sm text-muted-foreground">
-                  &mdash; {c.pilot.quote.attribution}
-                </footer>
-              </blockquote>
+              <div className="grid md:grid-cols-5 gap-8 md:gap-10 items-center max-w-4xl mx-auto">
+                {/* AI placeholder pending real, consented WCD-Telangana pilot photography. */}
+                <div className="md:col-span-2 rounded-2xl overflow-hidden border border-border/40 shadow-sm aspect-[3/4] max-w-xs mx-auto md:mx-0">
+                  <img
+                    src={pilotGrandmotherPhoto}
+                    alt={t.imagery.pilotGrandmother}
+                    width={720}
+                    height={960}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover block"
+                  />
+                </div>
+                <blockquote className="md:col-span-3 text-center md:text-start">
+                  <p className="text-lg md:text-xl font-serif italic text-foreground/85 leading-relaxed">
+                    &ldquo;{c.pilot.quote.text}&rdquo;
+                  </p>
+                  <footer className="mt-4 text-sm text-muted-foreground">
+                    &mdash; {c.pilot.quote.attribution}
+                  </footer>
+                </blockquote>
+              </div>
             </AnimatedReveal>
 
             <div className="text-center mt-10">
@@ -201,7 +240,20 @@ export default function Home() {
             <p className="text-lg text-muted-foreground">{c.problem.intro}</p>
           </AnimatedReveal>
 
-          <div className="max-w-3xl mx-auto">
+          <div className="max-w-5xl mx-auto grid lg:grid-cols-2 gap-8 lg:gap-10 items-center">
+            <AnimatedReveal direction="right">
+              <div className="rounded-2xl overflow-hidden border border-border/40 shadow-sm">
+                <img
+                  src={problemHeatPhoto}
+                  alt={t.imagery.problemHeat}
+                  width={1024}
+                  height={768}
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full h-auto block"
+                />
+              </div>
+            </AnimatedReveal>
             <AnimatedReveal delay={100} direction="up">
               <Card className="bg-card border-none shadow-md">
                 <CardContent className="p-8">
@@ -238,12 +290,25 @@ export default function Home() {
             <p className="text-lg text-muted-foreground">{c.solution.intro}</p>
           </AnimatedReveal>
 
-          <div className="max-w-4xl mx-auto">
-            <AnimatedReveal delay={100}>
+          <div className="max-w-5xl mx-auto grid lg:grid-cols-5 gap-8 lg:gap-10 items-center">
+            <AnimatedReveal direction="right" className="lg:col-span-2">
+              <div className="rounded-2xl overflow-hidden border border-border/40 shadow-sm aspect-square max-w-md mx-auto">
+                <img
+                  src={solutionHandsPhoto}
+                  alt={t.imagery.solutionHands}
+                  width={1024}
+                  height={1024}
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full h-full object-cover block"
+                />
+              </div>
+            </AnimatedReveal>
+            <AnimatedReveal delay={100} className="lg:col-span-3">
               <Card className="bg-primary text-primary-foreground border-none shadow-xl">
                 <CardContent className="p-8 md:p-10">
                   <HeartPulse size={48} className="mb-6 opacity-80" />
-                  <ul className="grid md:grid-cols-3 gap-6 text-base">
+                  <ul className="grid md:grid-cols-2 gap-6 text-base">
                     {c.solution.bullets.map((b) => (
                       <li key={b} className="flex items-start gap-3">
                         <CheckCircle2 size={20} className="shrink-0 mt-0.5" />

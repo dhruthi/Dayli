@@ -268,3 +268,93 @@ test.describe("Telangana pilot impact — Arabic (/ar) — RTL", () => {
     expect(["right", "start"]).toContain(align);
   });
 });
+
+/**
+ * E2E coverage for Task #39 — editorial photography wired across Home,
+ * About (#pilot-story), and Clinics. Asserts that every wired photo:
+ *  - is mounted in the DOM as an <img>,
+ *  - has a non-empty alt attribute (i.e. translations.imagery.* resolved),
+ *  - is reachable in at least one non-default locale (Telugu) so we know
+ *    the imagery key block exists across the four-locale contract.
+ *
+ * We deliberately do NOT assert exact alt copy here — the alt strings live
+ * in translations.ts and may be tightened later. Empty-alt would mean a
+ * missing locale key (regression we want to catch).
+ */
+
+const HOME_PHOTO_FILES = [
+  "hero-mother-whatsapp",
+  "problem-heat-mother-toddler",
+  "solution-hands-phone",
+  "pilot-telugu-grandmother",
+] as const;
+
+const ABOUT_PHOTO_FILES = [
+  "pilot-asha-worker",
+  "pilot-government-partnership",
+] as const;
+
+async function expectPhotoWithAlt(page: import("@playwright/test").Page, filenameStem: string) {
+  // Vite hashes asset URLs (e.g. /assets/hero-mother-whatsapp-abc123.png) so
+  // match by filename stem prefix, which is stable across builds.
+  const img = page.locator(`img[src*="${filenameStem}"]`).first();
+  await expect(img, `expected <img> for ${filenameStem} to be attached`).toBeAttached();
+  const alt = await img.getAttribute("alt");
+  expect(alt, `expected non-empty alt for ${filenameStem}`).toBeTruthy();
+  expect((alt ?? "").trim().length).toBeGreaterThan(0);
+}
+
+test.describe("Editorial photography — alt text + locale coverage", () => {
+  test("Home: hero + problem + solution + pilot photos all have non-empty alt", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    for (const stem of HOME_PHOTO_FILES) {
+      await expectPhotoWithAlt(page, stem);
+    }
+    // Hero photo specifically should be the one flagged for fast LCP fetching.
+    const hero = page.locator(`img[src*="hero-mother-whatsapp"]`).first();
+    await expect(hero).toHaveAttribute("fetchpriority", "high");
+  });
+
+  test("About #pilot-story: ASHA worker + government-partnership photos have non-empty alt", async ({
+    page,
+  }) => {
+    await page.goto("/about#pilot-story");
+    const story = page.locator("#pilot-story");
+    await expect(story).toBeAttached();
+    for (const stem of ABOUT_PHOTO_FILES) {
+      const img = story.locator(`img[src*="${stem}"]`).first();
+      await expect(img, `expected <img> for ${stem} inside #pilot-story`).toBeAttached();
+      const alt = await img.getAttribute("alt");
+      expect((alt ?? "").trim().length).toBeGreaterThan(0);
+    }
+  });
+
+  test("Clinics: clinician photo has non-empty alt", async ({ page }) => {
+    await page.goto("/clinics");
+    await expectPhotoWithAlt(page, "clinic-doctor");
+  });
+
+  test("Telugu locale: home hero + about pilot photos resolve a non-English alt", async ({
+    page,
+  }) => {
+    await page.goto("/te");
+    const heroAlt = await page
+      .locator(`img[src*="hero-mother-whatsapp"]`)
+      .first()
+      .getAttribute("alt");
+    expect((heroAlt ?? "").trim().length).toBeGreaterThan(0);
+    // The Telugu alt should not be the English copy — sanity check that the
+    // imagery key block actually renders the localized string.
+    expect(heroAlt).not.toMatch(/young pregnant woman/i);
+
+    await page.goto("/te/about#pilot-story");
+    const ashaAlt = await page
+      .locator(`img[src*="pilot-asha-worker"]`)
+      .first()
+      .getAttribute("alt");
+    expect((ashaAlt ?? "").trim().length).toBeGreaterThan(0);
+    expect(ashaAlt).not.toMatch(/ASHA health worker in a pink saree/i);
+  });
+});
