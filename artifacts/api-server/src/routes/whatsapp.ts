@@ -15,15 +15,19 @@
  *      attacker who has stolen one phone number) from melting our AI
  *      bill.
  *   4. Onboarding state machine:
- *        new                → ack + ask for city/pincode (free-form, since
- *                             template approval is async on Meta's side
- *                             and we still want the integration to work
- *                             end-to-end inside the 24h window opened by
- *                             the user's inbound message)
+ *        new                → ack + ask for city/pincode via the
+ *                             approved Meta TEMPLATE message
+ *                             (`META_WHATSAPP_ONBOARDING_TEMPLATE`).
+ *                             If the template is not yet approved we
+ *                             log a warning and fall back to a
+ *                             free-form text reply so the user is
+ *                             never ignored.
  *        awaiting_location  → parse reply with the geocoder, store
  *                             location, transition to `ready`
+ *                             (free-form reply, inside the 24h window)
  *        ready              → fetch real-time conditions for stored
  *                             location → run the dayli copilot → reply
+ *                             (free-form reply, inside the 24h window)
  *   5. Persists the rolling history (last ~20 turns) so multi-turn
  *      replies stay context-aware.
  *
@@ -45,6 +49,7 @@ import {
 import {
   hashPhoneNumber,
   loadWhatsappConfig,
+  sendWhatsappTemplate,
   sendWhatsappText,
   verifyMetaSignature,
   type WhatsappConfig,
@@ -242,6 +247,26 @@ interface IncomingPayload {
   entry?: IncomingEntry[];
 }
 
+/**
+ * Public read-only status endpoint the website calls to decide whether
+ * to enable WhatsApp CTAs. We expose only `{ enabled, number }` —
+ * never any secret values. The website prefers this endpoint over the
+ * build-time `VITE_WHATSAPP_NUMBER` so that CTAs are NEVER shown when
+ * the backend integration is missing required Meta secrets (i.e. when
+ * the webhook would 503 anyway). The phone number itself comes from
+ * the env var because Meta does not expose it via the same secrets we
+ * already require, and because the same display number is used across
+ * all locales.
+ */
+router.get("/whatsapp/status", (_req, res) => {
+  const config = loadWhatsappConfig();
+  const number = process.env.WHATSAPP_DISPLAY_NUMBER?.trim() || "";
+  res.status(200).json({
+    enabled: Boolean(config) && number.length > 0,
+    number,
+  });
+});
+
 router.get("/whatsapp/webhook", (req, res) => {
   const config = loadWhatsappConfig();
   if (!config) {
@@ -416,7 +441,22 @@ async function processClaimedMessage(opts: {
 
   // Onboarding state machine.
   if (conv.onboardingState === "new") {
-    const sent = await safeSendBool(config, fromPhone, ONBOARDING_GREETING[locale]);
+    // First-touch onboarding MUST go out as an approved Meta template
+    // message. Even though the user just messaged us (so we are inside
+    // their 24h customer-service window and free-form would technically
+    // be allowed), the product spec requires the approved template so
+    // the very first interaction is policy-compliant and consistent.
+    // If the template send fails (template not yet approved, name typo,
+    // etc.) we fall back to a free-form text reply so the user is never
+    // ignored — the founder runbook explains this trade-off.
+    let sent = await safeSendTemplateBool(config, fromPhone);
+    if (!sent) {
+      logger.warn(
+        { phoneHash, template: config.onboardingTemplateName },
+        "whatsapp onboarding template send failed; falling back to free-form text",
+      );
+      sent = await safeSendBool(config, fromPhone, ONBOARDING_GREETING[locale]);
+    }
     if (!sent) return false;
     // Post-send persistence is best-effort: if it throws we still
     // return true so the outer wrapper KEEPS the dedup row, otherwise
@@ -653,6 +693,26 @@ async function safeSendBool(config: WhatsappConfig, to: string, body: string): P
     return true;
   } catch (err) {
     logger.error({ err }, "whatsapp send failed (non-suppressed)");
+    return false;
+  }
+}
+
+/**
+ * Send the configured onboarding template message and report whether
+ * Meta accepted it. Used for first-touch onboarding; the caller falls
+ * back to a free-form text reply if this returns false.
+ */
+async function safeSendTemplateBool(config: WhatsappConfig, to: string): Promise<boolean> {
+  try {
+    await sendWhatsappTemplate({
+      config,
+      to,
+      templateName: config.onboardingTemplateName,
+      languageCode: config.onboardingTemplateLanguage,
+    });
+    return true;
+  } catch (err) {
+    logger.error({ err }, "whatsapp template send failed (non-suppressed)");
     return false;
   }
 }

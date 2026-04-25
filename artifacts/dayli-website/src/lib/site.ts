@@ -1,17 +1,45 @@
 import type { Locale } from "./i18n";
 
-export const WHATSAPP_NUMBER: string =
-  (import.meta.env.VITE_WHATSAPP_NUMBER as string | undefined)?.trim() ?? "";
-
 const PREFILLED_MESSAGE = encodeURIComponent(
   "Hi dayli, I'd like to start receiving daily climate-aware health guidance.",
 );
 
-export const WHATSAPP_ENABLED = WHATSAPP_NUMBER.length > 0;
+/**
+ * Build-time fallback for the WhatsApp number. Kept so that local dev
+ * setups without the api-server reachable can still render the wa.me
+ * link, but it is NEVER used to decide whether the CTA is enabled —
+ * the CTA's enabled state is driven by the api-server's runtime
+ * `/whatsapp/status` endpoint so we cannot accidentally show users a
+ * working CTA while the backend is feature-flag-disabled (and the
+ * webhook would 503).
+ */
+const BUILD_TIME_NUMBER: string =
+  (import.meta.env.VITE_WHATSAPP_NUMBER as string | undefined)?.trim() ?? "";
 
-export const WHATSAPP_URL = WHATSAPP_ENABLED
-  ? `https://wa.me/${WHATSAPP_NUMBER.replace(/\D/g, "")}?text=${PREFILLED_MESSAGE}`
-  : "";
+export type WhatsappStatus = {
+  enabled: boolean;
+  number: string;
+  url: string;
+};
+
+export function buildWhatsappUrl(number: string): string {
+  const digits = number.replace(/\D/g, "");
+  if (digits.length === 0) return "";
+  return `https://wa.me/${digits}?text=${PREFILLED_MESSAGE}`;
+}
+
+/**
+ * Initial CTA state used during the very first render before the
+ * status fetch completes. We default to DISABLED so users never see a
+ * working CTA that would silently fail; once the status endpoint
+ * resolves the hook flips it on if (and only if) the backend is
+ * actually wired up.
+ */
+export const INITIAL_WHATSAPP_STATUS: WhatsappStatus = {
+  enabled: false,
+  number: BUILD_TIME_NUMBER,
+  url: buildWhatsappUrl(BUILD_TIME_NUMBER),
+};
 
 export const CTA_MICROCOPY =
   "Free · No app to download · Onboard in under a minute · Your data stays private.";

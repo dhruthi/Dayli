@@ -19,6 +19,7 @@ the secrets below is what flips the whole thing on.
 | `META_WHATSAPP_VERIFY_TOKEN` | Any random string YOU pick. Meta will echo it back during the webhook handshake to prove the URL belongs to you. | Generate it yourself (`openssl rand -hex 32` is fine). Paste the same value into Meta's webhook config and into Replit Secrets. |
 | `META_WHATSAPP_APP_SECRET` | App secret of the Meta App that owns the WhatsApp product. Used to verify every incoming webhook POST via HMAC-SHA256. | Meta App → Settings → Basic → "App secret" → Show. |
 | `META_WHATSAPP_HASH_SALT` | Random salt used to HMAC-SHA256 every user's phone number before persisting it to our DB. We never store raw E.164 numbers. | Generate it yourself (`openssl rand -hex 32`). DO NOT rotate casually — rotating it orphans every existing conversation row. |
+| `WHATSAPP_DISPLAY_NUMBER` | Public dialable WhatsApp number (international form, **digits only, no `+`**). The api-server's `/api/whatsapp/status` endpoint uses this to tell the website whether to enable the "Start on WhatsApp" CTAs. | Same number you claimed in step 3, formatted as digits only (e.g. `919999999999`). |
 
 Optional secrets (sane defaults shipped):
 
@@ -95,35 +96,55 @@ Generate a permanent system-user token instead:
    rotating it orphans existing conversation rows because the new salt
    produces different hashes.
 
-### 7. Onboarding template (optional, for outbound-first DMs)
+### 7. Onboarding template (REQUIRED for first-touch greeting)
 
-For *inbound-first* conversations (a user texts us first), no template is
-needed — we have a 24h "service window" in which we can reply with any
-free text. The MVP relies on this and will work end-to-end without a
-template approved.
+dayli's first reply to any new user is sent as an approved Meta
+template message. This is a hard product requirement — until the
+template below is approved in your WhatsApp Manager, the first message
+that reaches a brand-new user will fall back to a free-form text reply
+(the api-server will log a warning and you should treat this as a
+high-priority issue, not a steady state).
 
-For outbound-first messages (you want to start the conversation from
-dayli's side, e.g. a daily heat advisory) Meta requires a pre-approved
-template:
+For *return* users (anyone past the onboarding step) we reply with
+free-form text inside Meta's 24h "service window", which does not
+require a template. For *outbound-first* messages (e.g. you want to
+push a heat advisory to a user who has not messaged us in 24h) Meta
+also requires a template, and the same approved template can be reused.
+
+To get the template approved:
 
 1. WhatsApp Manager → Message templates → Create template.
 2. Category: `UTILITY`. Name: `dayli_onboarding_v1` (must match
    `META_WHATSAPP_ONBOARDING_TEMPLATE`).
-3. Language: English. Body: a plain "Welcome to dayli — please reply with
-   your city or pincode" prompt.
-4. Submit. Approval typically takes a few hours.
-5. Once approved, the `sendWhatsappTemplate(...)` helper in
-   `artifacts/api-server/src/lib/whatsapp.ts` will send it. Localizing
-   the template into Hindi / Telugu / Arabic is a per-locale Meta
-   approval — out of scope for the MVP.
+3. Language: English (must match `META_WHATSAPP_ONBOARDING_LANGUAGE`,
+   default `en`).
+4. Body: a plain "Welcome to dayli — please reply with your city or
+   pincode" prompt. No variables.
+5. Submit. Approval typically takes a few hours.
+6. Once approved, the api-server will automatically use the template
+   on every first-touch interaction; no code change needed.
+
+Localizing the template into Hindi / Telugu / Arabic is a per-locale
+Meta approval — out of scope for this task. The free-form fallback in
+locale-aware text covers those users until the localized templates
+exist.
 
 ## Wiring the website CTAs
 
-`VITE_WHATSAPP_NUMBER` controls the "Start on WhatsApp" buttons across
-the marketing site. Set it to the international form of the verified
-number, **digits only, no `+`** (for example: `919999999999`). With
-that set, the CTAs will deep-link to `https://wa.me/<number>?text=...`
-and the "setup in progress" disabled state goes away.
+There are TWO env vars involved in the website CTAs and they must be
+set together:
+
+| Variable | Where | Purpose |
+|---|---|---|
+| `WHATSAPP_DISPLAY_NUMBER` | api-server (Replit Secrets) | International form, **digits only, no `+`** (e.g. `919999999999`). The api-server's public `/api/whatsapp/status` endpoint reads this and tells the website. |
+| `VITE_WHATSAPP_NUMBER` | dayli-website (Replit Secrets, prefix `VITE_`) | Same value as `WHATSAPP_DISPLAY_NUMBER`. Build-time fallback used only if the website cannot reach the api-server's status endpoint. |
+
+The CTA enabled state is **driven by the api-server**, not by the
+build-time env var: even if `VITE_WHATSAPP_NUMBER` is set, the CTA will
+stay in the "setup in progress" state unless ALL FIVE Meta secrets
+above are also set (i.e. unless the webhook would actually accept
+calls). This prevents users from being deep-linked into a WhatsApp
+chat whose webhook would 503.
 
 ## Verifying the integration end-to-end
 

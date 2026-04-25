@@ -4,7 +4,7 @@ import { Menu, X, Sun, Globe } from "lucide-react";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { WhatsAppCTA } from "@/components/ui/whatsapp-cta";
-import { WHATSAPP_ENABLED } from "@/lib/site";
+import { useWhatsappStatus } from "@/lib/use-whatsapp-status";
 import { useLocale } from "@/hooks/use-locale";
 import { LOCALES, LOCALE_META, localizedPath, parseLocaleFromPath, setStoredLocalePref } from "@/lib/i18n";
 import { LanguageBanner } from "@/components/layout/LanguageBanner";
@@ -23,6 +23,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const meta = LOCALE_META[locale];
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { enabled: whatsappEnabled } = useWhatsappStatus();
 
   const NAV_LINKS = [
     { basePath: "/product", label: t.layout.nav.product },
@@ -245,7 +246,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 variant="outline"
                 className="rounded-full justify-start text-primary border-primary/20 hover:bg-primary/5"
               />
-              {!WHATSAPP_ENABLED && (
+              {!whatsappEnabled && (
                 <p className="mt-2 text-xs text-muted-foreground">
                   {t.layout.whatsappPending}
                 </p>

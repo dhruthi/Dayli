@@ -1,7 +1,7 @@
 import { Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { WHATSAPP_ENABLED, WHATSAPP_URL } from "@/lib/site";
+import { useWhatsappStatus } from "@/lib/use-whatsapp-status";
 import { useLocale } from "@/hooks/use-locale";
 
 type ButtonProps = React.ComponentProps<typeof Button>;
@@ -14,10 +14,12 @@ interface WhatsAppCTAProps extends Omit<ButtonProps, "asChild"> {
 }
 
 /**
- * Renders a WhatsApp call-to-action that becomes an anchor link when a
- * VITE_WHATSAPP_NUMBER is configured, and a clearly-labelled disabled button
- * with a "setup in progress" notice when it is not. This avoids ever sending
- * visitors to wa.me without a destination number.
+ * Renders a WhatsApp call-to-action that becomes an anchor link when
+ * the api-server reports the WhatsApp Business integration is wired up
+ * (all five Meta secrets present + a display number configured), and a
+ * clearly-labelled disabled button with a "setup in progress" notice
+ * when it is not. This avoids ever sending visitors to a wa.me link
+ * pointing at a number whose webhook would 503.
  */
 export function WhatsAppCTA({
   label,
@@ -31,8 +33,9 @@ export function WhatsAppCTA({
 }: WhatsAppCTAProps) {
   const { t } = useLocale();
   const widthCls = block ? "w-full" : "";
+  const { enabled, url } = useWhatsappStatus();
 
-  if (!WHATSAPP_ENABLED) {
+  if (!enabled) {
     const pendingLabel = t.layout.whatsappPending;
     return (
       <div className={cn(block && "w-full")}>
@@ -67,7 +70,7 @@ export function WhatsAppCTA({
 
   return (
     <a
-      href={WHATSAPP_URL}
+      href={url}
       target="_blank"
       rel="noopener noreferrer"
       className={cn(block && "block w-full")}
