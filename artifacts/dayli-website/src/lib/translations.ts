@@ -73,6 +73,15 @@ export interface PageContent {
     how: { heading: string; intro: string; steps: { title: string; body: string }[] };
     useCase: { tagline: string; quote: string; body: string; disclaimer: string; pullQuote: string; chat: { intro: string; checkin: string; options: string[]; reply: string; clinic: string } };
     features: { heading: string; items: { title: string; body: string }[]; trustHeading: string; trustItems: { title: string; sub?: string }[]; privacyLink: string };
+    pilot: {
+      eyebrow: string;
+      heading: string;
+      partner: string;
+      anchor: { value: string; label: string };
+      tiles: { value: string; label: string }[];
+      quote: { text: string; attribution: string };
+      cta: string;
+    };
     cta: { heading: string; sub: string; button: string };
   };
 
@@ -99,6 +108,7 @@ export interface PageContent {
     badge: string;
     h1: string;
     intro: string;
+    pilotChip: string;
     howHeading: string;
     steps: { title: string; body: string }[];
     benefitsHeading: string;
@@ -168,6 +178,13 @@ export interface PageContent {
     mission: string;
     visionHeading: string;
     vision: string;
+    pilot: {
+      eyebrow: string;
+      heading: string;
+      partner: string;
+      blocks: { title: string; body: string }[];
+      metrics: { value: string; label: string }[];
+    };
     whyNowHeading: string;
     whyNow: { title: string; body: string }[];
   };
@@ -291,7 +308,6 @@ const en: PageContent = {
       label: "Built with climate and health expertise",
       items: [
         "Climate data: WHO heat thresholds, IMD & OpenWeather",
-        "Piloting with maternal & pediatric clinics in Hyderabad",
         "Built on WhatsApp Business API",
       ],
     },
@@ -359,6 +375,23 @@ const en: PageContent = {
       ],
       privacyLink: "Read our approach",
     },
+    pilot: {
+      eyebrow: "Proof in the field",
+      heading: "Validated at government scale",
+      partner: "Pilot partner: Women Development & Child Welfare Department, Government of Telangana · Apr–Sep 2025",
+      anchor: { value: "1,800+", label: "women supported in their language, on WhatsApp" },
+      tiles: [
+        { value: "24,000+", label: "WhatsApp conversations" },
+        { value: "4,200+", label: "heat & climate alerts delivered" },
+        { value: "312", label: "high-risk cases flagged for clinical follow-up" },
+        { value: "92%", label: "of conversations in Telugu" },
+      ],
+      quote: {
+        text: "dayli reached women in their homes, in their language, on the device they already use. The impact during the 2025 summer was tangible — and measurable.",
+        attribution: "Joint Director, Women Development & Child Welfare Department, Government of Telangana",
+      },
+      cta: "Read the case study",
+    },
     cta: {
       heading: "Take control of your health—every day",
       sub: "Prevent problems before they happen.",
@@ -399,6 +432,7 @@ const en: PageContent = {
     badge: "For Clinics & Providers",
     h1: "Reduce No-Shows. Improve Patient Outcomes.",
     intro: "dayli helps clinics reduce missed appointments during extreme weather, keep patients engaged between visits, and identify high-risk patients early.",
+    pilotChip: "Pilot partner: Women & Child Welfare Department, Govt. of Telangana — 1,800 women supported",
     howHeading: "How it works for clinics",
     steps: [
       { title: "Patients onboard via WhatsApp", body: "Seamless, friction-free onboarding with no apps to download or passwords to remember." },
@@ -470,6 +504,23 @@ const en: PageContent = {
     mission: "\"To make healthcare adaptive, personalized, and proactive in a changing climate.\"",
     visionHeading: "Vision",
     vision: "\"A world where every individual has access to real-time health guidance based on their environment.\"",
+    pilot: {
+      eyebrow: "Field proof",
+      heading: "Pilot story: Telangana 2025",
+      partner: "In partnership with the Women Development & Child Welfare Department, Government of Telangana · April – September 2025",
+      blocks: [
+        { title: "The opportunity", body: "Telangana ranks among India's most heat-vulnerable states. Pregnant women, new mothers, and young children bear a disproportionate share of that risk, often without timely guidance in their own language." },
+        { title: "What we did", body: "Together with the Women Development & Child Welfare Department, dayli rolled out across six districts as a Telugu-first WhatsApp companion, working alongside frontline ASHA workers from April to September 2025." },
+        { title: "What we learned", body: "Engagement peaked during heatwave weeks — confirming that climate-aware nudging is a behavioural driver. 92% of conversations happened in Telugu, validating that meeting women in their own language, on a channel they already trust, is the unlock." },
+        { title: "What's next", body: "Expanding to additional districts in 2026, layering in air-quality alerts and maternal-nutrition guidance, and integrating with district-level clinical workflows so high-risk cases reach care faster." },
+      ],
+      metrics: [
+        { value: "1,800+", label: "women supported" },
+        { value: "24,000+", label: "WhatsApp conversations" },
+        { value: "4,200+", label: "heat & climate alerts" },
+        { value: "312", label: "high-risk referrals" },
+      ],
+    },
     whyNowHeading: "Why Now",
     whyNow: [
       { title: "Climate risks are increasing", body: "Extreme weather events are becoming more frequent, directly impacting vulnerable populations." },
@@ -603,7 +654,6 @@ const hi: PageContent = {
       label: "जलवायु और स्वास्थ्य विशेषज्ञता से निर्मित",
       items: [
         "जलवायु डेटा: WHO हीट थ्रेशोल्ड, IMD और OpenWeather",
-        "हैदराबाद के मातृ एवं बाल क्लिनिकों के साथ पायलट",
         "WhatsApp Business API पर निर्मित",
       ],
     },
@@ -671,6 +721,23 @@ const hi: PageContent = {
       ],
       privacyLink: "हमारा रवैया पढ़ें",
     },
+    pilot: {
+      eyebrow: "ज़मीनी प्रमाण",
+      heading: "सरकारी पैमाने पर सिद्ध",
+      partner: "पायलट साझेदार: महिला विकास एवं बाल कल्याण विभाग, तेलंगाना सरकार · अप्रैल–सितंबर 2025",
+      anchor: { value: "1,800+", label: "महिलाओं को उनकी भाषा में, WhatsApp पर सहायता" },
+      tiles: [
+        { value: "24,000+", label: "WhatsApp बातचीत" },
+        { value: "4,200+", label: "गर्मी और जलवायु अलर्ट भेजे गए" },
+        { value: "312", label: "उच्च-जोखिम मामलों की क्लिनिकल फॉलो-अप के लिए पहचान" },
+        { value: "92%", label: "बातचीत तेलुगु में" },
+      ],
+      quote: {
+        text: "dayli महिलाओं तक उनके घरों में, उनकी भाषा में और उसी डिवाइस पर पहुँचा जिसे वे पहले से इस्तेमाल करती हैं। 2025 की गर्मियों में असर ठोस था — और मापने योग्य भी।",
+        attribution: "संयुक्त निदेशक, महिला विकास एवं बाल कल्याण विभाग, तेलंगाना सरकार",
+      },
+      cta: "केस स्टडी पढ़ें",
+    },
     cta: {
       heading: "अपने स्वास्थ्य का नियंत्रण लीजिए — हर दिन",
       sub: "समस्या होने से पहले रोकें।",
@@ -711,6 +778,7 @@ const hi: PageContent = {
     badge: "क्लिनिकों और प्रदाताओं के लिए",
     h1: "मिस्ड अपॉइंटमेंट घटाएँ। मरीज़ों के परिणाम सुधारें।",
     intro: "dayli क्लिनिकों को अत्यधिक मौसम के दौरान छूटी अपॉइंटमेंट घटाने, विज़िट के बीच मरीजों को जोड़े रखने और उच्च-जोखिम वाले मरीज़ों की जल्दी पहचान में मदद करता है।",
+    pilotChip: "पायलट साझेदार: महिला एवं बाल कल्याण विभाग, तेलंगाना सरकार — 1,800 महिलाएँ",
     howHeading: "क्लिनिकों के लिए यह कैसे काम करता है",
     steps: [
       { title: "मरीज़ WhatsApp से जुड़ते हैं", body: "बिना ऐप या पासवर्ड के सहज और आसान ऑनबोर्डिंग।" },
@@ -782,6 +850,23 @@ const hi: PageContent = {
     mission: "\"बदलती जलवायु में स्वास्थ्य देखभाल को अनुकूल, व्यक्तिगत और प्रोएक्टिव बनाना।\"",
     visionHeading: "दृष्टिकोण",
     vision: "\"एक ऐसी दुनिया जहाँ हर व्यक्ति को अपने परिवेश के आधार पर रियल-टाइम स्वास्थ्य मार्गदर्शन उपलब्ध हो।\"",
+    pilot: {
+      eyebrow: "ज़मीनी प्रमाण",
+      heading: "पायलट कहानी: तेलंगाना 2025",
+      partner: "महिला विकास एवं बाल कल्याण विभाग, तेलंगाना सरकार के साथ साझेदारी में · अप्रैल – सितंबर 2025",
+      blocks: [
+        { title: "अवसर", body: "तेलंगाना भारत के सबसे गर्मी-संवेदनशील राज्यों में से एक है। गर्भवती महिलाएँ, नई माताएँ और छोटे बच्चे इस जोखिम का असमान बोझ उठाते हैं — अक्सर अपनी भाषा में समय पर मार्गदर्शन के बिना।" },
+        { title: "हमने क्या किया", body: "महिला विकास एवं बाल कल्याण विभाग के साथ मिलकर dayli को छह ज़िलों में तेलुगु-प्रथम WhatsApp साथी के रूप में रोल आउट किया गया, अप्रैल से सितंबर 2025 तक फ्रंटलाइन ASHA कार्यकर्ताओं के साथ।" },
+        { title: "हमने क्या सीखा", body: "हीटवेव हफ़्तों में जुड़ाव सबसे ज़्यादा रहा — यह दर्शाता है कि जलवायु-जागरूक नज़ नज एक व्यवहार-चालक है। 92% बातचीत तेलुगु में हुई — साबित हुआ कि महिलाओं तक उनकी भाषा में, उनके भरोसे के चैनल पर पहुँचना ही असली अनलॉक है।" },
+        { title: "आगे क्या", body: "2026 में और ज़िलों तक विस्तार, वायु-गुणवत्ता अलर्ट और मातृ-पोषण मार्गदर्शन जोड़ना, और ज़िला-स्तरीय क्लिनिकल वर्कफ़्लो से एकीकरण ताकि उच्च-जोखिम मामले देखभाल तक तेज़ी से पहुँचें।" },
+      ],
+      metrics: [
+        { value: "1,800+", label: "महिलाओं को सहायता" },
+        { value: "24,000+", label: "WhatsApp बातचीत" },
+        { value: "4,200+", label: "गर्मी और जलवायु अलर्ट" },
+        { value: "312", label: "उच्च-जोखिम रेफ़रल" },
+      ],
+    },
     whyNowHeading: "अभी क्यों",
     whyNow: [
       { title: "जलवायु जोखिम बढ़ रहे हैं", body: "अत्यधिक मौसम की घटनाएँ बढ़ रही हैं और सीधे संवेदनशील आबादी को प्रभावित कर रही हैं।" },
@@ -915,7 +1000,6 @@ const te: PageContent = {
       label: "వాతావరణ మరియు ఆరోగ్య నిపుణతతో నిర్మితం",
       items: [
         "వాతావరణ డేటా: WHO హీట్ థ్రెషోల్డ్‌లు, IMD & OpenWeather",
-        "హైదరాబాద్‌లో మాతృ & పీడియాట్రిక్ క్లినిక్‌లతో పైలట్",
         "WhatsApp Business APIపై నిర్మితం",
       ],
     },
@@ -983,6 +1067,23 @@ const te: PageContent = {
       ],
       privacyLink: "మా విధానం చదవండి",
     },
+    pilot: {
+      eyebrow: "క్షేత్రంలో రుజువు",
+      heading: "ప్రభుత్వ స్థాయిలో నిరూపితం",
+      partner: "పైలట్ భాగస్వామి: మహిళా అభివృద్ధి & శిశు సంక్షేమ శాఖ, తెలంగాణ ప్రభుత్వం · ఏప్రిల్–సెప్టెంబర్ 2025",
+      anchor: { value: "1,800+", label: "మహిళలకు వారి భాషలో, WhatsAppలో మద్దతు" },
+      tiles: [
+        { value: "24,000+", label: "WhatsApp సంభాషణలు" },
+        { value: "4,200+", label: "హీట్ & వాతావరణ హెచ్చరికలు పంపబడ్డాయి" },
+        { value: "312", label: "క్లినికల్ ఫాలో-అప్ కోసం గుర్తించిన అధిక-ప్రమాద కేసులు" },
+        { value: "92%", label: "సంభాషణలు తెలుగులో" },
+      ],
+      quote: {
+        text: "dayli మహిళలను వారి ఇళ్లలో, వారి భాషలో, వారు ఇప్పటికే ఉపయోగించే పరికరంలో చేరింది. 2025 వేసవిలో దాని ప్రభావం స్పష్టంగా — మరియు కొలవదగినదిగా — ఉంది.",
+        attribution: "సంయుక్త సంచాలకులు, మహిళా అభివృద్ధి & శిశు సంక్షేమ శాఖ, తెలంగాణ ప్రభుత్వం",
+      },
+      cta: "కేస్ స్టడీ చదవండి",
+    },
     cta: {
       heading: "మీ ఆరోగ్యాన్ని నియంత్రణలో ఉంచండి — ప్రతి రోజూ",
       sub: "సమస్యలు రావడానికి ముందే నివారించండి.",
@@ -1023,6 +1124,7 @@ const te: PageContent = {
     badge: "క్లినిక్‌లు మరియు ప్రదాతల కోసం",
     h1: "నో-షోలను తగ్గించండి. రోగుల ఫలితాలను మెరుగుపరచండి.",
     intro: "తీవ్ర వాతావరణ సమయాల్లో మిస్ అయిన అపాయింట్‌మెంట్‌లను తగ్గించడానికి, విజిట్‌ల మధ్య రోగులను నిమగ్నం చేయడానికి, అధిక-ప్రమాద రోగులను ముందుగా గుర్తించడానికి dayli క్లినిక్‌లకు సహాయపడుతుంది.",
+    pilotChip: "పైలట్ భాగస్వామి: మహిళా & శిశు సంక్షేమ శాఖ, తెలంగాణ ప్రభుత్వం — 1,800 మంది మహిళలకు మద్దతు",
     howHeading: "క్లినిక్‌లకు ఇది ఎలా పనిచేస్తుంది",
     steps: [
       { title: "రోగులు WhatsApp ద్వారా జాయిన్ అవుతారు", body: "యాప్ డౌన్‌లోడ్‌లు లేదా పాస్‌వర్డ్‌లు లేకుండా సులువైన ఆన్‌బోర్డింగ్." },
@@ -1094,6 +1196,23 @@ const te: PageContent = {
     mission: "\"మారుతున్న వాతావరణంలో ఆరోగ్య సంరక్షణను అనుకూలం, వ్యక్తిగతం, ముందస్తుగా చేయడం.\"",
     visionHeading: "దృష్టి",
     vision: "\"ప్రతి వ్యక్తికి తమ పరిసరాల ఆధారంగా రియల్-టైమ్ ఆరోగ్య మార్గదర్శనం అందుబాటులో ఉండే ప్రపంచం.\"",
+    pilot: {
+      eyebrow: "క్షేత్ర రుజువు",
+      heading: "పైలట్ కథ: తెలంగాణ 2025",
+      partner: "మహిళా అభివృద్ధి & శిశు సంక్షేమ శాఖ, తెలంగాణ ప్రభుత్వంతో భాగస్వామ్యంలో · ఏప్రిల్ – సెప్టెంబర్ 2025",
+      blocks: [
+        { title: "అవకాశం", body: "తెలంగాణ భారతదేశంలో అత్యంత వేడిమి-హానికర రాష్ట్రాలలో ఒకటి. గర్భిణీ స్త్రీలు, కొత్త తల్లులు, చిన్న పిల్లలు ఆ ప్రమాదాన్ని ఎక్కువగా భరిస్తారు — తరచుగా తమ స్వంత భాషలో సకాలంలో మార్గదర్శనం లేకుండా." },
+        { title: "మేము ఏమి చేశాము", body: "మహిళా అభివృద్ధి & శిశు సంక్షేమ శాఖతో కలిసి dayli ఆరు జిల్లాల్లో తెలుగు-మొదటి WhatsApp సహచరిగా రూపొందించబడింది, ఏప్రిల్ నుండి సెప్టెంబర్ 2025 వరకు ఫ్రంట్‌లైన్ ASHA కార్యకర్తలతో కలిసి పనిచేసింది." },
+        { title: "మేము ఏమి నేర్చుకున్నాము", body: "హీట్‌వేవ్ వారాలలో నిమగ్నత గరిష్ఠంగా ఉంది — వాతావరణ-అవగాహన నడ్జింగ్ ఒక ప్రవర్తన చోదకం అని నిరూపించింది. 92% సంభాషణలు తెలుగులో జరిగాయి — మహిళలను వారి స్వంత భాషలో, వారు ఇప్పటికే విశ్వసించే చానెల్‌లో చేరడమే అసలు అన్‌లాక్ అని ధ్రువీకరిస్తుంది." },
+        { title: "తర్వాత ఏమి", body: "2026లో మరిన్ని జిల్లాలకు విస్తరణ, వాయు-నాణ్యత హెచ్చరికలు, మాతృ-పోషకాహార మార్గదర్శనం జోడించడం, మరియు అధిక-ప్రమాద కేసులు వేగంగా సంరక్షణకు చేరేలా జిల్లా-స్థాయి క్లినికల్ వర్క్‌ఫ్లోలతో అనుసంధానం." },
+      ],
+      metrics: [
+        { value: "1,800+", label: "మహిళలకు మద్దతు" },
+        { value: "24,000+", label: "WhatsApp సంభాషణలు" },
+        { value: "4,200+", label: "హీట్ & వాతావరణ హెచ్చరికలు" },
+        { value: "312", label: "అధిక-ప్రమాద రెఫరల్‌లు" },
+      ],
+    },
     whyNowHeading: "ఇప్పుడు ఎందుకు",
     whyNow: [
       { title: "వాతావరణ ప్రమాదాలు పెరుగుతున్నాయి", body: "తీవ్ర వాతావరణ ఘటనలు తరచుగా జరుగుతున్నాయి, నేరుగా హాని కలిగే వర్గాలను ప్రభావితం చేస్తున్నాయి." },
@@ -1227,7 +1346,6 @@ const ar: PageContent = {
       label: "مبنيّ بخبرة مناخية وصحية",
       items: [
         "بيانات المناخ: عتبات WHO الحرارية وIMD وOpenWeather",
-        "تجربة تجريبية مع عيادات الأمومة والأطفال في حيدر آباد",
         "مبنيّ على WhatsApp Business API",
       ],
     },
@@ -1295,6 +1413,23 @@ const ar: PageContent = {
       ],
       privacyLink: "اقرأ نهجنا",
     },
+    pilot: {
+      eyebrow: "إثبات ميداني",
+      heading: "مُثبت على نطاق حكومي",
+      partner: "شريك التجربة: قسم تنمية المرأة ورعاية الطفل، حكومة تيلانغانا · أبريل – سبتمبر 2025",
+      anchor: { value: "+1,800", label: "امرأة تلقت الدعم بلغتها، عبر واتساب" },
+      tiles: [
+        { value: "+24,000", label: "محادثة عبر واتساب" },
+        { value: "+4,200", label: "تنبيه حراري ومناخي تم إرساله" },
+        { value: "312", label: "حالة عالية الخطورة مُحالة للمتابعة السريرية" },
+        { value: "92%", label: "من المحادثات بالتيلجو" },
+      ],
+      quote: {
+        text: "وصل dayli إلى النساء في بيوتهن، بلغتهن، على الجهاز الذي يستخدمنه أصلًا. كان أثره خلال صيف 2025 ملموسًا — وقابلًا للقياس.",
+        attribution: "المدير المشارك، قسم تنمية المرأة ورعاية الطفل، حكومة تيلانغانا",
+      },
+      cta: "اقرأ دراسة الحالة",
+    },
     cta: {
       heading: "تحكّم في صحتك — كل يوم",
       sub: "امنع المشاكل قبل حدوثها.",
@@ -1335,6 +1470,7 @@ const ar: PageContent = {
     badge: "للعيادات ومقدّمي الرعاية",
     h1: "قلّل الغياب. حسّن نتائج المرضى.",
     intro: "يساعد dayli العيادات على تقليل المواعيد الفائتة خلال الطقس الشديد، وإبقاء المرضى منخرطين بين الزيارات، والتعرّف مبكرًا على المرضى الأكثر عرضة للخطر.",
+    pilotChip: "شريك التجربة: قسم المرأة ورعاية الطفل، حكومة تيلانغانا — دعم 1,800 امرأة",
     howHeading: "كيف يعمل للعيادات",
     steps: [
       { title: "ينضم المرضى عبر واتساب", body: "تسجيل سلس بدون تطبيقات أو كلمات مرور." },
@@ -1406,6 +1542,23 @@ const ar: PageContent = {
     mission: "\"جعل الرعاية الصحية متكيّفة ومخصّصة واستباقية في مناخ متغيّر.\"",
     visionHeading: "الرؤية",
     vision: "\"عالم يحصل فيه كل فرد على إرشاد صحي فوري بناءً على بيئته.\"",
+    pilot: {
+      eyebrow: "إثبات ميداني",
+      heading: "قصة التجربة: تيلانغانا 2025",
+      partner: "بالشراكة مع قسم تنمية المرأة ورعاية الطفل، حكومة تيلانغانا · أبريل – سبتمبر 2025",
+      blocks: [
+        { title: "الفرصة", body: "تُعدّ تيلانغانا من أكثر ولايات الهند هشاشة أمام الحرارة. وتتحمّل النساء الحوامل والأمهات الجدد والأطفال الصغار حصة غير متكافئة من هذا الخطر، غالبًا دون إرشاد في الوقت المناسب وبلغتهم." },
+        { title: "ما الذي قمنا به", body: "بالتعاون مع قسم تنمية المرأة ورعاية الطفل، تم نشر dayli في ست مقاطعات كرفيق على واتساب يعمل بالتيلجو أولًا، إلى جانب عاملات ASHA الميدانيات من أبريل إلى سبتمبر 2025." },
+        { title: "ما الذي تعلّمناه", body: "بلغ الانخراط ذروته خلال أسابيع موجات الحر — مما يؤكد أن التنبيه الواعي بالمناخ محرّك سلوكي. وجرت 92% من المحادثات بالتيلجو، ما يثبت أن الوصول إلى النساء بلغتهن وعلى قناة يثقن بها هو المفتاح الحقيقي." },
+        { title: "ما القادم", body: "التوسّع إلى مزيد من المقاطعات في 2026، وإضافة تنبيهات جودة الهواء وإرشاد التغذية للأمهات، ودمج dayli مع سير العمل السريري على مستوى المقاطعة لتصل الحالات عالية الخطورة إلى الرعاية أسرع." },
+      ],
+      metrics: [
+        { value: "+1,800", label: "امرأة تلقت الدعم" },
+        { value: "+24,000", label: "محادثة عبر واتساب" },
+        { value: "+4,200", label: "تنبيه حراري ومناخي" },
+        { value: "312", label: "إحالة عالية الخطورة" },
+      ],
+    },
     whyNowHeading: "لماذا الآن",
     whyNow: [
       { title: "مخاطر المناخ تتزايد", body: "أحداث الطقس الشديد تتكرر، وتؤثر مباشرة على الفئات الأكثر هشاشة." },

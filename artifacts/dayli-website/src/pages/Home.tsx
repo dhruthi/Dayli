@@ -89,6 +89,95 @@ export default function Home() {
         </div>
       </section>
 
+      {/* PILOT IMPACT
+          Telangana pilot proof block. All numbers come from translations
+          (home.pilot.*) so swapping placeholder values for real measured
+          data later is a single-PR copy change in lib/translations.ts. */}
+      <section
+        aria-labelledby="pilot-impact"
+        className="py-20 md:py-24 bg-brand-sunrise border-b border-border"
+      >
+        <div className="container px-4 md:px-6 mx-auto">
+          <AnimatedReveal className="text-center max-w-3xl mx-auto mb-12">
+            <span className="text-sm uppercase tracking-widest text-primary font-semibold">
+              {c.pilot.eyebrow}
+            </span>
+            <h2
+              id="pilot-impact"
+              className="text-3xl md:text-4xl font-serif font-bold text-foreground mt-4 mb-4"
+            >
+              {c.pilot.heading}
+            </h2>
+            <p className="text-base text-foreground/70">{c.pilot.partner}</p>
+          </AnimatedReveal>
+
+          <div className="max-w-5xl mx-auto">
+            <AnimatedReveal delay={100}>
+              <div className="text-center mb-12">
+                <div className="text-5xl md:text-7xl lg:text-8xl font-serif font-bold leading-none text-brand-gradient">
+                  {c.pilot.anchor.value}
+                </div>
+                <p className="text-base md:text-lg text-foreground/80 mt-3">
+                  {c.pilot.anchor.label}
+                </p>
+              </div>
+            </AnimatedReveal>
+
+            <StaggeredList className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5 mb-12">
+              {c.pilot.tiles.map((tile, i) => {
+                const tones = [
+                  { bg: "bg-marigold/15", ink: "text-marigold-ink" },
+                  { bg: "bg-heat/15", ink: "text-heat-ink" },
+                  { bg: "bg-coral/15", ink: "text-coral-ink" },
+                  { bg: "bg-primary/10", ink: "text-primary" },
+                ];
+                const tone = tones[i % tones.length];
+                return (
+                  <div
+                    key={tile.label}
+                    className={`rounded-2xl p-5 md:p-6 ${tone.bg}`}
+                  >
+                    <div
+                      className={`text-2xl md:text-3xl font-serif font-bold leading-tight ${tone.ink}`}
+                    >
+                      {tile.value}
+                    </div>
+                    <p className="text-sm md:text-base mt-2 text-foreground/75 leading-snug">
+                      {tile.label}
+                    </p>
+                  </div>
+                );
+              })}
+            </StaggeredList>
+
+            <AnimatedReveal delay={300}>
+              <blockquote className="max-w-3xl mx-auto text-center">
+                <p className="text-lg md:text-xl font-serif italic text-foreground/85 leading-relaxed">
+                  &ldquo;{c.pilot.quote.text}&rdquo;
+                </p>
+                <footer className="mt-4 text-sm text-muted-foreground">
+                  &mdash; {c.pilot.quote.attribution}
+                </footer>
+              </blockquote>
+            </AnimatedReveal>
+
+            <div className="text-center mt-10">
+              {/* SPA navigation: wouter <Link> preserves client-side routing.
+                  About.tsx has a useEffect that reads window.location.hash
+                  on mount and scrolls to #pilot-story, so this works for
+                  both first-load and in-app nav. */}
+              <Link
+                href={`${href("/about")}#pilot-story`}
+                className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
+              >
+                {c.pilot.cta}
+                <ArrowRight size={16} aria-hidden="true" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* DEFINITION */}
       <section aria-labelledby="what-is-dayli" className="py-16 bg-background border-b border-border">
         <div className="container px-4 md:px-6 mx-auto max-w-3xl">

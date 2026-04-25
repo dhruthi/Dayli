@@ -4,7 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { AnimatedReveal, StaggeredList } from "@/components/ui/animated-reveal";
-import { Users, CalendarCheck, TrendingUp, Send, Clock } from "lucide-react";
+import { Users, CalendarCheck, TrendingUp, Send, Clock, CheckCircle2 } from "lucide-react";
 import { useState } from "react";
 import clinicImage from "@/assets/images/clinic.png";
 import { submitLead } from "@/lib/site";
@@ -51,6 +51,10 @@ export default function Clinics() {
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold mb-6">{c.h1}</h1>
             <p className="text-xl opacity-90 leading-relaxed max-w-2xl mx-auto">{c.intro}</p>
+            <div className="mt-8 inline-flex items-start gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/15 text-sm font-medium text-primary-foreground/90 max-w-2xl text-start">
+              <CheckCircle2 size={16} className="shrink-0 mt-0.5 text-marigold" aria-hidden="true" />
+              <span>{c.pilotChip}</span>
+            </div>
           </AnimatedReveal>
         </div>
       </section>

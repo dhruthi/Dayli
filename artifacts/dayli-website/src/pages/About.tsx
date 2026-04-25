@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { AnimatedReveal, StaggeredList } from "@/components/ui/animated-reveal";
 import { Target, Eye, Clock, Smartphone, Globe, Sun, GraduationCap, Code2, Baby, Sparkles } from "lucide-react";
 import { SEO } from "@/components/SEO";
@@ -69,6 +70,22 @@ export default function About() {
   const c = t.about;
   const whyIcons = [Globe, Clock, Smartphone];
   const whyTones = ["bg-heat/10 text-heat", "bg-primary/10 text-primary", "bg-sun/10 text-sun"];
+
+  // wouter Link doesn't trigger native hash-scroll on SPA navigation, so
+  // the Home "Read the case study" CTA (href=/about#pilot-story) needs us
+  // to scroll to the target after mount. Initial full-page loads also benefit
+  // because the section is below several heavy reveal-animated sections.
+  useEffect(() => {
+    const hash = typeof window !== "undefined" ? window.location.hash : "";
+    if (!hash) return;
+    const id = hash.replace(/^#/, "");
+    if (!id) return;
+    const target = document.getElementById(id);
+    if (!target) return;
+    requestAnimationFrame(() => {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }, []);
   return (
     <div className="flex flex-col min-h-screen">
       <SEO seo={getPageSeo("about", locale)} />
@@ -222,6 +239,70 @@ export default function About() {
                 </ul>
               </div>
             </AnimatedReveal>
+          </div>
+        </div>
+      </section>
+
+      {/* PILOT STORY
+          Anchor target for the Home "Read the case study" CTA — keep the
+          id="pilot-story" stable so cross-page anchor links don't break. */}
+      <section
+        id="pilot-story"
+        aria-labelledby="pilot-story-heading"
+        className="py-24 bg-card border-y border-border scroll-mt-24"
+      >
+        <div className="container px-4 md:px-6 mx-auto max-w-5xl">
+          <AnimatedReveal className="text-center mb-12">
+            <span className="text-sm uppercase tracking-widest text-primary font-semibold">
+              {c.pilot.eyebrow}
+            </span>
+            <h2
+              id="pilot-story-heading"
+              className="text-3xl md:text-4xl font-serif font-bold mt-4 mb-4"
+            >
+              {c.pilot.heading}
+            </h2>
+            <p className="text-base text-foreground/70 max-w-2xl mx-auto">
+              {c.pilot.partner}
+            </p>
+          </AnimatedReveal>
+
+          <StaggeredList className="grid md:grid-cols-2 gap-5 md:gap-6 mb-10">
+            {c.pilot.blocks.map((block) => (
+              <div
+                key={block.title}
+                className="bg-background rounded-2xl p-6 md:p-7 border border-border shadow-sm"
+              >
+                <h3 className="text-lg md:text-xl font-serif font-bold mb-3 text-primary">
+                  {block.title}
+                </h3>
+                <p className="text-foreground/80 leading-relaxed">{block.body}</p>
+              </div>
+            ))}
+          </StaggeredList>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+            {c.pilot.metrics.map((m, i) => {
+              const tones = [
+                "bg-marigold/15",
+                "bg-heat/15",
+                "bg-coral/15",
+                "bg-primary/10",
+              ];
+              return (
+                <div
+                  key={m.label}
+                  className={`rounded-xl p-4 md:p-5 text-center ${tones[i % tones.length]}`}
+                >
+                  <div className="text-xl md:text-2xl font-serif font-bold text-foreground leading-tight">
+                    {m.value}
+                  </div>
+                  <p className="text-xs md:text-sm text-foreground/70 mt-1">
+                    {m.label}
+                  </p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
