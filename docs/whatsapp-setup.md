@@ -208,7 +208,33 @@ Each conversation row tracks `daily_reply_count` and
 `daily_window_started_at`. The limit (`PER_USER_DAILY_LIMIT` in
 `routes/whatsapp.ts`) is enforced atomically inside a `SELECT ... FOR
 UPDATE` transaction so concurrent webhooks for the same phone cannot
-both slip past the cap.
+both slip past the cap. Emergency replies are intentionally exempt
+from the limit: a person in distress must always be able to receive
+the "call your local emergency number" message.
+
+### Reliability posture (accept-then-process)
+
+The webhook returns `200` to Meta as soon as the HMAC signature checks
+out, BEFORE the handler runs the AI / sends the reply / persists state.
+This is a deliberate MVP trade-off: it keeps webhook latency well
+inside Meta's 5 second timeout (so Meta does not retry healthy events)
+at the cost of one failure mode — if the api-server crashes between
+the ack and the outbound send, that single user message is lost
+because Meta will not retry an event we already 200'd.
+
+The dedup-release logic compensates for the more common case (handler
+catches its own error, releases the dedup row, Meta's automatic retry
+re-processes the same event) but does not cover process death between
+ack and send. For the MVP this is acceptable because:
+- WhatsApp users tend to retry by re-typing if they get no answer.
+- Daily volume is low and the founder monitors the api-server logs.
+- Moving to queue-backed processing (Redis / pg-boss / SQS) is the
+  graduation step once volume justifies it; until then the cost
+  outweighs the benefit.
+
+Watch the api-server logs for `whatsapp processing threw` and
+`whatsapp send failed` lines — sustained occurrences are the signal
+that the queue-backed graduation is overdue.
 
 ## Code references
 
