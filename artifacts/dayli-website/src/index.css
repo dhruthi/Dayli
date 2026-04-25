@@ -41,6 +41,18 @@
 
   --color-sun: hsl(var(--sun));
   --color-heat: hsl(var(--heat));
+  --color-coral: hsl(var(--coral));
+  --color-marigold: hsl(var(--marigold));
+  --color-horizon: hsl(var(--horizon));
+
+  /* Darker "ink" variants of the brand tones, calibrated for accessible
+     text on the warm-cream background. The badges in ChatDemo and any
+     other small label that sits on a tinted brand background should pull
+     from these instead of hardcoding hsl(...) literals. */
+  --color-sun-ink: hsl(var(--sun-ink));
+  --color-marigold-ink: hsl(var(--marigold-ink));
+  --color-heat-ink: hsl(var(--heat-ink));
+  --color-coral-ink: hsl(var(--coral-ink));
 
   --font-sans: var(--app-font-sans);
   --font-serif: var(--app-font-serif);
@@ -62,86 +74,114 @@
   --elevate-1: rgba(0,0,0, .03);
   --elevate-2: rgba(0,0,0, .08);
 
-  /* Calm healthcare base: soft warm cream background, deep teal text */
-  --background: 40 33% 98%;
-  --foreground: 185 45% 15%;
+  /* dayli brand palette ─ "a new day"
+     trust-teal grounds the healthcare promise; sunrise coral and marigold
+     carry the "every dayli, fresh" feeling. cream keeps it warm, not clinical. */
+  --background: 38 60% 97%;          /* warm cream */
+  --foreground: 188 65% 10%;         /* deep teal ink */
 
-  --border: 185 20% 85%;
+  --border: 188 18% 86%;
 
   --card: 0 0% 100%;
-  --card-foreground: 185 45% 15%;
-  --card-border: 185 20% 90%;
+  --card-foreground: 188 65% 10%;
+  --card-border: 188 18% 90%;
 
-  --sidebar: 40 33% 96%;
-  --sidebar-foreground: 185 45% 20%;
-  --sidebar-border: 185 20% 85%;
-  --sidebar-primary: 185 50% 35%;
+  --sidebar: 38 55% 95%;
+  --sidebar-foreground: 188 60% 14%;
+  --sidebar-border: 188 18% 86%;
+  --sidebar-primary: 184 70% 24%;
   --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 40 30% 90%;
-  --sidebar-accent-foreground: 185 45% 15%;
-  --sidebar-ring: 185 50% 35%;
+  --sidebar-accent: 38 50% 90%;
+  --sidebar-accent-foreground: 188 65% 10%;
+  --sidebar-ring: 184 70% 24%;
 
   --popover: 0 0% 100%;
-  --popover-foreground: 185 45% 15%;
-  --popover-border: 185 20% 90%;
+  --popover-foreground: 188 65% 10%;
+  --popover-border: 188 18% 90%;
 
-  /* Primary: Trustworthy, calm healthcare teal */
-  --primary: 185 60% 30%;
+  /* Primary: deep trust-teal — slightly richer & more saturated than before */
+  --primary: 184 70% 24%;
   --primary-foreground: 0 0% 100%;
 
-  /* Secondary: Warm, reassuring sun/sand */
-  --secondary: 35 60% 85%;
-  --secondary-foreground: 185 50% 25%;
+  /* Secondary: warm peach — peeks of sunrise on chips and quiet CTAs */
+  --secondary: 26 90% 92%;
+  --secondary-foreground: 184 70% 22%;
 
-  --muted: 185 20% 92%;
-  --muted-foreground: 185 20% 45%;
+  --muted: 38 30% 93%;
+  --muted-foreground: 188 22% 38%;
 
-  --accent: 35 60% 90%;
-  --accent-foreground: 185 60% 30%;
+  --accent: 26 90% 90%;
+  --accent-foreground: 184 70% 24%;
 
-  --destructive: 0 70% 50%;
+  --destructive: 0 75% 50%;
   --destructive-foreground: 0 0% 100%;
 
-  --input: 185 20% 85%;
-  --ring: 185 60% 30%;
+  --input: 188 18% 86%;
+  --ring: 184 70% 24%;
 
-  /* Custom Climate Tones */
-  --sun: 35 90% 60%;
-  --heat: 15 80% 60%;
+  /* Brand signature tones — used for the sunrise gradient, the wordmark
+     dot, hero glow, and risk indicators. */
+  --coral:    12 88% 64%;            /* warm sunrise pink-orange */
+  --marigold: 35 96% 58%;            /* vivid morning marigold */
+  --sun:      42 96% 56%;            /* daylight sun (= old --sun, brighter) */
+  --heat:     14 82% 56%;            /* heat warning red-orange */
+  --horizon: 184 60% 18%;            /* deep horizon for footer / dark sections */
+
+  /* Accessible-on-cream ink variants of the warm tones. These are the
+     dark counterparts used for badge text and the H1 sunrise gradient
+     so contrast meets WCAG AA on --background (cream). */
+  --sun-ink:      35 80% 26%;        /* deep amber, pairs with bg-sun/15 */
+  --marigold-ink: 24 80% 28%;        /* deep caramel, pairs with bg-marigold/20 */
+  --heat-ink:     14 75% 28%;        /* deep rust, pairs with bg-heat/15 */
+  --coral-ink:    10 70% 30%;        /* deep coral, pairs with bg-coral/20 */
 
   --app-font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
-  --app-font-serif: "Playfair Display", Georgia, serif;
+  --app-font-serif: "Fraunces", "Playfair Display", Georgia, serif;
   --app-font-mono: "Space Mono", monospace;
   --radius: 1rem;
 }
 
 .dark {
-  --background: 185 45% 10%;
-  --foreground: 40 33% 95%;
+  --background: 188 55% 8%;
+  --foreground: 38 60% 96%;
 
-  --border: 185 30% 20%;
+  --border: 188 28% 20%;
 
-  --card: 185 45% 12%;
-  --card-foreground: 40 33% 95%;
-  --card-border: 185 30% 25%;
+  --card: 188 55% 11%;
+  --card-foreground: 38 60% 96%;
+  --card-border: 188 28% 24%;
 
-  --primary: 185 50% 45%;
-  --primary-foreground: 185 45% 10%;
+  --primary: 184 60% 50%;
+  --primary-foreground: 188 65% 10%;
 
-  --secondary: 185 30% 20%;
-  --secondary-foreground: 40 33% 95%;
+  --secondary: 188 30% 18%;
+  --secondary-foreground: 38 60% 96%;
 
-  --muted: 185 30% 15%;
-  --muted-foreground: 185 20% 65%;
+  --muted: 188 30% 14%;
+  --muted-foreground: 188 18% 65%;
 
-  --accent: 35 60% 30%;
-  --accent-foreground: 35 60% 90%;
+  --accent: 26 70% 28%;
+  --accent-foreground: 26 90% 90%;
 
-  --destructive: 0 60% 40%;
+  --destructive: 0 60% 45%;
   --destructive-foreground: 0 0% 100%;
 
-  --input: 185 30% 20%;
-  --ring: 185 50% 45%;
+  --input: 188 30% 20%;
+  --ring: 184 60% 50%;
+
+  --coral:    12 80% 62%;
+  --marigold: 35 90% 60%;
+  --sun:      42 90% 60%;
+  --heat:     14 78% 56%;
+  --horizon: 188 70% 6%;
+
+  /* In dark mode the brand backgrounds are deep, so the "ink" pair
+     should be light & warm — basically the bright brand tones with
+     extra saturation/lightness. */
+  --sun-ink:      42 95% 75%;
+  --marigold-ink: 32 90% 75%;
+  --heat-ink:     14 85% 78%;
+  --coral-ink:    10 85% 80%;
 }
 
 @layer base {
@@ -153,9 +193,60 @@
     @apply font-sans antialiased bg-background text-foreground selection:bg-primary/20 selection:text-primary;
   }
 
+  /* Headings get Fraunces with a touch of optical-size SOFT, so they
+     feel warm and editorial — not the default sterile serif look. */
   h1, h2, h3, h4, h5, h6 {
-    @apply tracking-tight;
+    @apply font-serif tracking-tight;
+    font-variation-settings: "opsz" 96, "SOFT" 50;
   }
+  h1 { font-variation-settings: "opsz" 144, "SOFT" 60; letter-spacing: -0.02em; }
+}
+
+/* ─── brand utilities ────────────────────────────────────────────────────
+   Reusable brand surfaces and text effects so individual components don't
+   reinvent gradients with hardcoded hex values. */
+
+/* The signature sunrise text gradient — used on the wordmark and on
+   the hero H1. The stops use the darker "ink" variants of coral and
+   marigold so the gradient maintains WCAG-AA contrast against the
+   warm-cream background while still reading as a sunrise sweep:
+   deep terracotta → deep amber → primary teal. */
+.text-brand-gradient {
+  background-image: linear-gradient(
+    95deg,
+    hsl(var(--coral-ink)) 0%,
+    hsl(var(--marigold-ink)) 45%,
+    hsl(var(--primary)) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  /* fallback for browsers without background-clip:text */
+  @supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+    color: hsl(var(--primary));
+  }
+}
+
+/* Hero "sunrise" backdrop. Two soft radials over warm cream — one
+   marigold sun rising on the right, one coral wash on the left. */
+.bg-brand-sunrise {
+  background:
+    radial-gradient(80% 60% at 85% 0%, hsl(var(--marigold) / 0.32) 0%, transparent 60%),
+    radial-gradient(70% 50% at 0% 100%, hsl(var(--coral) / 0.18) 0%, transparent 65%),
+    linear-gradient(180deg, hsl(38 70% 96%) 0%, hsl(var(--background)) 70%);
+}
+
+/* The marigold dot used in the dayli·ai wordmark instead of a period. */
+.brand-dot {
+  display: inline-block;
+  width: 0.42em;
+  height: 0.42em;
+  border-radius: 9999px;
+  background: hsl(var(--marigold));
+  box-shadow: 0 0 0 0.12em hsl(var(--marigold) / 0.20);
+  transform: translateY(-0.32em);
+  margin: 0 0.18em;
 }
 
 @keyframes founder-glow {

@@ -37,6 +37,12 @@ export function WhatsAppCTA({
 
   if (!enabled) {
     const pendingLabel = t.layout.whatsappPending;
+    // Concise on-button copy: keeps the original label so the user knows
+    // the channel ("WhatsApp"), with a small "soon" affordance + clock
+    // icon. The full multi-line explanation is exposed via aria-label /
+    // title (assistive tech and tooltip) and via the optional
+    // `noticeAfter` line below the button — that way the pill stays a
+    // reasonable width and never breaks the navbar/hero layout.
     return (
       <div className={cn(block && "w-full")}>
         <Button
@@ -51,7 +57,8 @@ export function WhatsAppCTA({
           {...rest}
         >
           <Clock size={14} className="shrink-0 opacity-80" aria-hidden="true" />
-          <span className="truncate">{pendingLabel}</span>
+          <span className="truncate">{label}</span>
+          <span className="opacity-70 hidden sm:inline">· {t.layout.whatsappSoon}</span>
           {trailingIcon}
         </Button>
         {noticeAfter && (
@@ -61,7 +68,7 @@ export function WhatsAppCTA({
               block ? "text-center" : "",
             )}
           >
-            <span className="opacity-80">{label}:</span> {pendingLabel}
+            {pendingLabel}
           </p>
         )}
       </div>

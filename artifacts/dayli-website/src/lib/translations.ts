@@ -6,6 +6,7 @@ export interface PageContent {
     nav: { product: string; clinics: string; pharma: string; about: string };
     ctaWhatsapp: string;
     whatsappPending: string;
+    whatsappSoon: string;
     languageMenuLabel: string;
     languageBanner: { prompt: string; accept: string; dismiss: string };
     footer: {
@@ -198,6 +199,7 @@ const en: PageContent = {
     nav: { product: "Product", clinics: "For Clinics", pharma: "For Pharma", about: "About" },
     ctaWhatsapp: "Start on WhatsApp",
     whatsappPending: "WhatsApp setup in progress — leave your details below and we'll reach out as soon as it's live.",
+    whatsappSoon: "launching soon",
     languageMenuLabel: "Language",
     languageBanner: {
       prompt: "Would you prefer to view this site in English?",
@@ -509,6 +511,7 @@ const hi: PageContent = {
     nav: { product: "उत्पाद", clinics: "क्लिनिकों के लिए", pharma: "फार्मा के लिए", about: "हमारे बारे में" },
     ctaWhatsapp: "WhatsApp पर शुरू करें",
     whatsappPending: "WhatsApp सेटअप जारी है — नीचे अपनी जानकारी छोड़ें, चालू होते ही हम संपर्क करेंगे।",
+    whatsappSoon: "जल्द आ रहा है",
     languageMenuLabel: "भाषा",
     languageBanner: {
       prompt: "क्या आप यह साइट हिंदी में देखना पसंद करेंगे?",
@@ -820,6 +823,7 @@ const te: PageContent = {
     nav: { product: "ఉత్పత్తి", clinics: "క్లినిక్‌ల కోసం", pharma: "ఫార్మా కోసం", about: "మా గురించి" },
     ctaWhatsapp: "WhatsAppలో మొదలుపెట్టండి",
     whatsappPending: "WhatsApp సెటప్ జరుగుతోంది — క్రింద మీ వివరాలు ఇవ్వండి, ప్రారంభమైన వెంటనే సంప్రదిస్తాము.",
+    whatsappSoon: "త్వరలో వస్తోంది",
     languageMenuLabel: "భాష",
     languageBanner: {
       prompt: "మీరు ఈ సైట్‌ను తెలుగులో చూడాలనుకుంటున్నారా?",
@@ -1131,6 +1135,7 @@ const ar: PageContent = {
     nav: { product: "المنتج", clinics: "للعيادات", pharma: "لشركات الأدوية", about: "من نحن" },
     ctaWhatsapp: "ابدأ على واتساب",
     whatsappPending: "إعداد واتساب قيد التجهيز — اتركوا بياناتكم أدناه وسنتواصل معكم فور تفعيله.",
+    whatsappSoon: "قريباً",
     languageMenuLabel: "اللغة",
     languageBanner: {
       prompt: "هل تفضّل عرض هذا الموقع باللغة العربية؟",

@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Sun, Globe } from "lucide-react";
+import { Menu, X, Globe } from "lucide-react";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { WhatsAppCTA } from "@/components/ui/whatsapp-cta";
@@ -83,11 +83,22 @@ export function Layout({ children }: { children: React.ReactNode }) {
       >
         <div className="container mx-auto px-4 md:px-6">
           <div className="flex items-center justify-between">
-            <Link href={href("/")} className="flex items-center gap-2 group">
-              <div className="w-8 h-8 rounded-lg bg-primary text-primary-foreground flex items-center justify-center transition-transform group-hover:rotate-12">
-                <Sun size={18} />
-              </div>
-              <span className="font-bold text-xl tracking-tight text-foreground">dayli.ai</span>
+            {/* Brand wordmark — the marigold dot replaces the period and
+                doubles as the "sun" mark, giving us a distinctive logotype
+                without any iconography. The "dayli" portion uses the
+                signature coral→marigold→teal gradient. */}
+            <Link
+              href={href("/")}
+              aria-label="dayli.ai home"
+              className="group flex items-baseline leading-none"
+            >
+              <span className="font-serif font-semibold text-2xl tracking-tight text-brand-gradient transition-opacity group-hover:opacity-90">
+                dayli
+              </span>
+              <span className="brand-dot transition-transform group-hover:scale-110" aria-hidden="true" />
+              <span className="font-serif font-semibold text-2xl tracking-tight text-foreground/55">
+                ai
+              </span>
             </Link>
 
             <nav className="hidden md:flex items-center gap-8" aria-label="Primary">
@@ -133,10 +144,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   ))}
                 </DropdownMenuContent>
               </DropdownMenu>
-              <WhatsAppCTA
-                label={t.layout.ctaWhatsapp}
-                className="rounded-full shadow-md hover:shadow-lg transition-all active:scale-95"
-              />
+              {/* Hide the header WhatsApp CTA entirely until the integration
+                  is live. The "setup in progress" pill is long and was
+                  dominating the navbar; the footer + hero already surface
+                  the pending state with proper context. */}
+              {whatsappEnabled && (
+                <WhatsAppCTA
+                  label={t.layout.ctaWhatsapp}
+                  className="rounded-full shadow-md hover:shadow-lg transition-all active:scale-95"
+                />
+              )}
             </div>
 
             <button
@@ -191,13 +208,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 ))}
               </div>
             </div>
-            <div className="px-4 pt-2 pb-1">
-              <WhatsAppCTA
-                label={t.layout.ctaWhatsapp}
-                block
-                className="rounded-full"
-              />
-            </div>
+            {whatsappEnabled && (
+              <div className="px-4 pt-2 pb-1">
+                <WhatsAppCTA
+                  label={t.layout.ctaWhatsapp}
+                  block
+                  className="rounded-full"
+                />
+              </div>
+            )}
           </div>
         )}
       </header>
@@ -210,11 +229,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <div className="container mx-auto px-4 md:px-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
             <div className="md:col-span-1">
-              <Link href={href("/")} className="flex items-center gap-2 mb-4">
-                <div className="w-6 h-6 rounded-md bg-primary text-primary-foreground flex items-center justify-center">
-                  <Sun size={14} />
-                </div>
-                <span className="font-bold text-lg tracking-tight">dayli.ai</span>
+              <Link
+                href={href("/")}
+                aria-label="dayli.ai home"
+                className="group flex items-baseline leading-none mb-4"
+              >
+                <span className="font-serif font-semibold text-xl tracking-tight text-brand-gradient">
+                  dayli
+                </span>
+                <span className="brand-dot" aria-hidden="true" />
+                <span className="font-serif font-semibold text-xl tracking-tight text-foreground/55">
+                  ai
+                </span>
               </Link>
               <p className="text-muted-foreground text-sm leading-relaxed max-w-xs">
                 {t.layout.footer.tagline}

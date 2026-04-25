@@ -133,35 +133,44 @@ function getSessionId(): string {
   return id;
 }
 
+/* Risk badges now read from the dayli brand palette instead of generic
+   Tailwind colors, so a future palette change in `index.css` cascades
+   here too. The semantic ramp is:
+     safe          → primary teal (trust)
+     watch         → sun (daylight yellow)
+     elevated      → marigold (vivid morning)
+     dangerous     → coral / heat (sunset orange-red)
+     extreme       → destructive (deep red)
+*/
 function heatBadgeClass(risk: HeatRisk): string {
   switch (risk) {
     case "low":
-      return "bg-emerald-100 text-emerald-800 border-emerald-200";
+      return "bg-primary/10 text-primary border-primary/20";
     case "moderate":
-      return "bg-yellow-100 text-yellow-800 border-yellow-200";
+      return "bg-sun/15 text-sun-ink border-sun/30";
     case "high":
-      return "bg-orange-100 text-orange-800 border-orange-200";
+      return "bg-marigold/20 text-marigold-ink border-marigold/40";
     case "very_high":
-      return "bg-red-100 text-red-800 border-red-200";
+      return "bg-heat/15 text-heat-ink border-heat/35";
     case "extreme":
-      return "bg-red-200 text-red-900 border-red-300";
+      return "bg-destructive/15 text-destructive border-destructive/30";
   }
 }
 
 function aqiBadgeClass(risk: AirRisk): string {
   switch (risk) {
     case "good":
-      return "bg-emerald-100 text-emerald-800 border-emerald-200";
+      return "bg-primary/10 text-primary border-primary/20";
     case "moderate":
-      return "bg-yellow-100 text-yellow-800 border-yellow-200";
+      return "bg-sun/15 text-sun-ink border-sun/30";
     case "unhealthy_sensitive":
-      return "bg-orange-100 text-orange-800 border-orange-200";
+      return "bg-marigold/20 text-marigold-ink border-marigold/40";
     case "unhealthy":
-      return "bg-red-100 text-red-800 border-red-200";
+      return "bg-heat/15 text-heat-ink border-heat/35";
     case "very_unhealthy":
-      return "bg-purple-100 text-purple-800 border-purple-200";
+      return "bg-coral/20 text-coral-ink border-coral/40";
     case "hazardous":
-      return "bg-rose-200 text-rose-900 border-rose-300";
+      return "bg-destructive/15 text-destructive border-destructive/35";
   }
 }
 

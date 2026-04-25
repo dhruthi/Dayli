@@ -19,8 +19,16 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       <SEO seo={getPageSeo("home", locale)} />
-      {/* HERO SECTION */}
-      <section className="relative pt-20 pb-32 overflow-hidden bg-gradient-to-b from-sun/10 to-background">
+      {/* HERO SECTION
+          Signature sunrise backdrop (defined in index.css as .bg-brand-sunrise)
+          replaces the older near-invisible from-sun/10 gradient. A soft
+          marigold "sun" blob sits behind the copy on the right for extra
+          brand presence. */}
+      <section className="relative pt-20 pb-32 overflow-hidden bg-brand-sunrise">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -top-40 -right-32 w-[640px] h-[640px] rounded-full bg-marigold/20 blur-3xl"
+        />
         <div className="container px-4 md:px-6 mx-auto relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
             <AnimatedReveal direction="up" className="max-w-2xl">
@@ -28,8 +36,11 @@ export default function Home() {
                 <ShieldCheck size={16} />
                 <span>{c.badge}</span>
               </div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-foreground leading-tight mb-6">
-                {c.h1}
+              {/* Render the H1 with the brand sunrise gradient applied to the
+                  whole headline — Fraunces gives it editorial warmth and the
+                  gradient ties the page back to the dayli wordmark. */}
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-semibold leading-[1.05] mb-6">
+                <span className="text-brand-gradient">{c.h1}</span>
               </h1>
               <p className="text-lg md:text-xl text-muted-foreground mb-4 leading-relaxed">{c.p1}</p>
               <p className="text-base text-foreground/70 mb-8 leading-relaxed">{c.p2}</p>
@@ -255,6 +266,11 @@ export default function Home() {
                   <CardContent className="p-8">
                     <ul className="space-y-6">
                       <li className="flex items-center gap-4">
+                        {/* #25D366 is WhatsApp's official brand green — using
+                            it on this trust item is intentional brand
+                            recognition (signals "WhatsApp channel") and
+                            mirrors how Sign in with Apple uses Apple's
+                            colors. Do not tokenize away. */}
                         <div className="bg-[#25D366]/10 p-3 rounded-full text-[#25D366]"><CheckCircle2 /></div>
                         <span className="font-medium text-lg">{c.features.trustItems[0].title}</span>
                       </li>
