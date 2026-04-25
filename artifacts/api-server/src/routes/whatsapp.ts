@@ -221,6 +221,44 @@ function checkAndBumpDaily(conv: WhatsappConversation): {
   return { allowed: true, newCount: conv.dailyReplyCount + 1, newWindowStart: start };
 }
 
+/**
+ * Compensate a previously claimed rate-limit slot when the corresponding
+ * outbound send (template / text) ultimately fails. Without this, a
+ * prolonged Meta/network outage would silently consume each user's daily
+ * quota even though they never received any replies — once the outage
+ * cleared they would hit RATE_LIMITED on a fresh inbound. We re-take the
+ * row lock, re-read the latest count, and decrement by 1 only if it is
+ * positive AND the daily window has not rolled over since the claim
+ * (otherwise our decrement would corrupt the new window). Wrapped in
+ * `safePersist` so a DB blip here cannot escalate into a webhook-level
+ * error that would trigger a Meta retry / duplicate user reply.
+ */
+async function releaseDailyClaim(convId: number, claimWindowStart: Date) {
+  await safePersist(async () => {
+    await db.transaction(async (tx) => {
+      const locked = await tx
+        .select()
+        .from(whatsappConversationsTable)
+        .where(eq(whatsappConversationsTable.id, convId))
+        .for("update");
+      const latest = locked[0];
+      if (!latest) return;
+      if (latest.dailyReplyCount <= 0) return;
+      const currentStart = latest.dailyWindowStartedAt
+        ? new Date(latest.dailyWindowStartedAt).getTime()
+        : 0;
+      if (currentStart !== claimWindowStart.getTime()) return;
+      await tx
+        .update(whatsappConversationsTable)
+        .set({
+          dailyReplyCount: latest.dailyReplyCount - 1,
+          updatedAt: new Date(),
+        })
+        .where(eq(whatsappConversationsTable.id, convId));
+    });
+  });
+}
+
 // --- main handler ---------------------------------------------------------
 
 interface IncomingMessage {
@@ -484,7 +522,7 @@ async function processClaimedMessage(opts: {
         updatedAt: new Date(),
       })
       .where(eq(whatsappConversationsTable.id, conv.id));
-    return { fresh, newCount: limit.newCount };
+    return { fresh, newCount: limit.newCount, newWindowStart: limit.newWindowStart };
   });
 
   if (!claim) {
@@ -513,7 +551,10 @@ async function processClaimedMessage(opts: {
       );
       sent = await safeSendBool(config, fromPhone, ONBOARDING_GREETING[locale]);
     }
-    if (!sent) return false;
+    if (!sent) {
+      await releaseDailyClaim(conv.id, claim.newWindowStart);
+      return false;
+    }
     // Post-send persistence is best-effort: if it throws we still
     // return true so the outer wrapper KEEPS the dedup row, otherwise
     // Meta would retry and the user would receive a duplicate greeting.
@@ -536,7 +577,10 @@ async function processClaimedMessage(opts: {
     const place = await geocodePlace(userText);
     if (!place) {
       const sent = await safeSendBool(config, fromPhone, ONBOARDING_NOT_FOUND[locale]);
-      if (!sent) return false;
+      if (!sent) {
+        await releaseDailyClaim(conv.id, claim.newWindowStart);
+        return false;
+      }
       await safePersist(() =>
         db
           .update(whatsappConversationsTable)
@@ -559,7 +603,10 @@ async function processClaimedMessage(opts: {
     };
     const placeLabel = place.city ?? `${place.lat.toFixed(2)}, ${place.lon.toFixed(2)}`;
     const sent = await safeSendBool(config, fromPhone, ONBOARDING_CONFIRMED[locale](placeLabel));
-    if (!sent) return false;
+    if (!sent) {
+      await releaseDailyClaim(conv.id, claim.newWindowStart);
+      return false;
+    }
     await safePersist(() =>
       db
         .update(whatsappConversationsTable)
@@ -603,15 +650,23 @@ async function processClaimedMessage(opts: {
   } catch (err) {
     logger.error({ err }, "copilot failed for whatsapp");
     // Try to apologise to the user; if even that fails the outer
-    // wrapper will release dedup and Meta will retry.
-    return await safeSendBool(config, fromPhone, GENERIC_ERROR[locale]);
+    // wrapper will release dedup and Meta will retry. Either way the
+    // user did NOT get a real reply, so refund the rate-limit slot.
+    const apolSent = await safeSendBool(config, fromPhone, GENERIC_ERROR[locale]);
+    if (!apolSent) {
+      await releaseDailyClaim(conv.id, claim.newWindowStart);
+    }
+    return apolSent;
   }
 
   // Trim very long replies to a reasonable WhatsApp size (Meta's hard
   // cap is 4096 chars; we cut earlier to keep things readable in chat).
   const trimmed = reply.length > 1500 ? `${reply.slice(0, 1480).trimEnd()}…` : reply;
   const sent = await safeSendBool(config, fromPhone, trimmed);
-  if (!sent) return false;
+  if (!sent) {
+    await releaseDailyClaim(conv.id, claim.newWindowStart);
+    return false;
+  }
 
   // Concurrency-safe history append. The `history` we read above came
   // from the row state at claim time; if a second user message arrived
