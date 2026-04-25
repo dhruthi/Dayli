@@ -4,165 +4,16 @@ import { db, chatTurnsTable } from "@workspace/db";
 import { fetchConditions, type ConditionsSnapshot } from "../lib/conditions";
 import { rateLimit, getClientIp } from "../lib/rate-limit";
 import { logger } from "../lib/logger";
-
-type OpenAIClient = typeof import("@workspace/integrations-openai-ai-server").openai;
-
-/**
- * Lazily resolve the OpenAI client. The integration package throws at
- * module-load time if `AI_INTEGRATIONS_OPENAI_*` env vars are missing —
- * importing it eagerly from `chat.ts` would take the whole API server
- * down (including unrelated /api/leads, /api/admin, /api/geo,
- * /api/conditions endpoints) when the AI integration isn't provisioned.
- * Loading on first chat request lets everything else keep working and
- * surfaces a clean 503 to the caller instead.
- */
-let openaiPromise: Promise<OpenAIClient> | null = null;
-function getOpenAI(): Promise<OpenAIClient> {
-  if (!openaiPromise) {
-    openaiPromise = import("@workspace/integrations-openai-ai-server")
-      .then((m) => m.openai)
-      .catch((err) => {
-        // Reset so a later request can retry once the env is fixed,
-        // rather than caching the failure forever.
-        openaiPromise = null;
-        throw err;
-      });
-  }
-  return openaiPromise;
-}
+import {
+  buildSystemPrompt,
+  emergencyReply,
+  getOpenAI,
+  isEmergency,
+} from "../lib/copilot";
 
 const router: IRouter = Router();
 
 const chatLimiter = rateLimit({ scope: "chat", max: 10, windowMs: 60 * 60 * 1000 });
-
-const LANGUAGE_NAMES: Record<string, string> = {
-  en: "English",
-  hi: "Hindi (हिंदी)",
-  te: "Telugu (తెలుగు)",
-  ar: "Arabic (العربية)",
-};
-
-// Deterministic emergency-redirect patterns. We match across the four
-// supported locales (en/hi/te/ar) so a user typing in Hindi/Telugu/Arabic
-// also gets the safety short-circuit without ever reaching the model.
-// `u` flag enables proper Unicode matching for non-Latin scripts.
-const EMERGENCY_PATTERNS: RegExp[] = [
-  // English
-  /chest pain/iu,
-  /can(?:'?| no)t breathe/iu,
-  /not breathing/iu,
-  /unconscious/iu,
-  /seizure/iu,
-  /convulsion/iu,
-  /stroke/iu,
-  /heart attack/iu,
-  /heavy bleeding/iu,
-  /hemorrhag/iu,
-  /haemorrhag/iu,
-  /suicide/iu,
-  /kill myself/iu,
-  /overdose/iu,
-  /poisoning/iu,
-  /baby (?:not breathing|turning blue|limp)/iu,
-  /child (?:not breathing|turning blue|limp)/iu,
-  // Hindi (devanagari)
-  /सीने में दर्द/u, // chest pain
-  /साँस नहीं/u, // not breathing
-  /सांस नहीं/u, // not breathing (alt spelling)
-  /बेहोश/u, // unconscious
-  /दौरा/u, // seizure
-  /हार्ट अटैक/u, // heart attack
-  /दिल का दौरा/u, // heart attack
-  /खून बहना/u, // bleeding
-  /भारी रक्तस्राव/u, // heavy bleeding
-  /आत्महत्या/u, // suicide
-  /जहर/u, // poison
-  /ओवरडोज/u, // overdose
-  // Telugu
-  /ఛాతీ నొప్పి/u, // chest pain
-  /శ్వాస తీసుకోలేక/u, // can't breathe
-  /శ్వాస ఆగిపోయింది/u, // breathing stopped
-  /అపస్మారక/u, // unconscious
-  /మూర్ఛ/u, // seizure
-  /గుండెపోటు/u, // heart attack
-  /రక్తస్రావం/u, // bleeding
-  /ఆత్మహత్య/u, // suicide
-  /విషం/u, // poison
-  // Arabic
-  /ألم في الصدر/u, // chest pain
-  /لا (?:يستطيع|أستطيع|تستطيع) التنفس/u, // can't breathe
-  /لا يتنفس/u, // not breathing
-  /فاقد الوعي/u, // unconscious
-  /غيبوبة/u, // coma/unconscious
-  /نوبة/u, // seizure
-  /سكتة دماغية/u, // stroke
-  /نوبة قلبية/u, // heart attack
-  /نزيف حاد/u, // heavy bleeding
-  /انتحار/u, // suicide
-  /جرعة زائدة/u, // overdose
-  /تسمم/u, // poisoning
-];
-
-function emergencyReply(locale: string): string {
-  const messages: Record<string, string> = {
-    en: "I'm worried this could be a medical emergency. Please contact your local emergency services or go to the nearest hospital right now. dayli is a guidance tool, not an emergency service.",
-    hi: "यह एक मेडिकल इमरजेंसी हो सकती है। कृपया तुरंत अपनी स्थानीय आपातकालीन सेवा से संपर्क करें या निकटतम अस्पताल जाएं। dayli एक मार्गदर्शन उपकरण है, आपातकालीन सेवा नहीं।",
-    te: "ఇది వైద్య అత్యవసర పరిస్థితి కావచ్చు. దయచేసి వెంటనే మీ స్థానిక అత్యవసర సేవలను సంప్రదించండి లేదా సమీప ఆసుపత్రికి వెళ్లండి. dayli ఒక మార్గదర్శక సాధనం, అత్యవసర సేవ కాదు.",
-    ar: "أخشى أن تكون هذه حالة طبية طارئة. يرجى الاتصال بخدمات الطوارئ المحلية أو التوجه إلى أقرب مستشفى الآن. dayli أداة إرشادية وليست خدمة طوارئ.",
-  };
-  return messages[locale] ?? messages.en;
-}
-
-function buildSystemPrompt(opts: {
-  locale: string;
-  conditions: ConditionsSnapshot | null;
-  audience: string | null;
-}): string {
-  const language = LANGUAGE_NAMES[opts.locale] ?? "English";
-  const audienceLine =
-    opts.audience && opts.audience !== "general"
-      ? `The user is a ${opts.audience} (or asking on behalf of one). Tailor advice accordingly.`
-      : "Tailor advice for women and children's daily climate-health needs.";
-
-  const conditionsBlock = opts.conditions
-    ? [
-        "REAL-TIME LOCAL CONDITIONS (use these to personalise the answer; do not invent other numbers):",
-        opts.conditions.summary,
-        opts.conditions.tempC != null ? `- Temperature: ${opts.conditions.tempC}°C` : null,
-        opts.conditions.feelsLikeC != null ? `- Feels like: ${opts.conditions.feelsLikeC}°C` : null,
-        opts.conditions.humidity != null ? `- Humidity: ${opts.conditions.humidity}%` : null,
-        opts.conditions.aqiUs != null ? `- US AQI: ${opts.conditions.aqiUs}` : null,
-        opts.conditions.uvIndex != null ? `- UV index: ${opts.conditions.uvIndex}` : null,
-        `- Heat risk classification: ${opts.conditions.heatRisk}`,
-        `- Air quality classification: ${opts.conditions.airRisk}`,
-      ]
-        .filter(Boolean)
-        .join("\n")
-    : "No real-time conditions are available; ask the user for their city or be general about climate context.";
-
-  return [
-    "You are dayli, an AI Climate Health Copilot for women and children, talking to a visitor on dayli.ai's homepage demo. dayli is a daily decision layer for health in a changing climate — not a chatbot, not a wellness app, not a medical device.",
-    "",
-    "Your job: combine the user's message with REAL local climate / air conditions to give specific, calm, practical guidance about heat exposure, hydration, air quality, common pregnancy and infant-care concerns, and when to escalate to a clinician.",
-    "",
-    audienceLine,
-    "",
-    conditionsBlock,
-    "",
-    "STYLE RULES:",
-    `- ALWAYS reply in ${language}. Even if the user writes in another language, reply in ${language}.`,
-    "- Be warm, calm and concrete. No emojis.",
-    "- Use short paragraphs and at most 5 bullet points.",
-    "- Reference the local conditions when they are relevant (e.g. 'with feels-like 41°C today...').",
-    "- End with a one-line safety note: this is general guidance, not a diagnosis, and to contact local medical services for emergencies.",
-    "",
-    "SAFETY RULES:",
-    "- You are NOT a medical device and you do NOT diagnose. Never claim certainty about medical conditions.",
-    "- For any symptom that could be an emergency (severe chest pain, breathing trouble, loss of consciousness, heavy bleeding, seizures, stroke signs, suicidal thoughts, baby/child not breathing or turning blue), tell the user to seek emergency care immediately and stop offering home-care suggestions.",
-    "- Do not recommend specific prescription medications or doses. You may mention common over-the-counter categories (oral rehydration salts, paracetamol for fever in age-appropriate doses, etc.) only with a 'check with your clinician' caveat.",
-    "- Do not invent climate, weather, or AQI numbers. Use only the values provided above.",
-  ].join("\n");
-}
 
 router.post("/chat", chatLimiter, async (req, res) => {
   const parsed = ChatBodySchema.safeParse(req.body);
@@ -189,7 +40,7 @@ router.post("/chat", chatLimiter, async (req, res) => {
   };
 
   // Emergency short-circuit — never send to the model.
-  if (lastUser && EMERGENCY_PATTERNS.some((re) => re.test(lastUser.content))) {
+  if (lastUser && isEmergency(lastUser.content)) {
     const reply = emergencyReply(locale);
     send({ content: reply });
     send({ done: true, emergency: true });
@@ -200,7 +51,12 @@ router.post("/chat", chatLimiter, async (req, res) => {
   let conditions: ConditionsSnapshot | null = null;
   if (location) {
     try {
-      conditions = await fetchConditions(location.lat, location.lon, location.city ?? null, location.country ?? null);
+      conditions = await fetchConditions(
+        location.lat,
+        location.lon,
+        location.city ?? null,
+        location.country ?? null,
+      );
     } catch (err) {
       logger.warn({ err }, "conditions lookup failed inside chat; continuing without");
     }
@@ -210,9 +66,10 @@ router.post("/chat", chatLimiter, async (req, res) => {
     locale,
     conditions,
     audience: profile?.audience ?? null,
+    channel: "web",
   });
 
-  let openai: OpenAIClient;
+  let openai;
   try {
     openai = await getOpenAI();
   } catch (err) {

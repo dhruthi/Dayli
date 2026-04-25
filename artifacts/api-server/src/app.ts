@@ -35,7 +35,20 @@ app.use(
   }),
 );
 app.use(cors());
-app.use(express.json({ limit: "256kb" }));
+// Capture the raw request body for routes that need byte-exact HMAC
+// verification (notably the Meta WhatsApp webhook, which signs the raw
+// JSON body with our app secret in `X-Hub-Signature-256`). We attach the
+// buffer to `req.rawBody` so route handlers can re-derive the signature
+// without parsing or re-stringifying. Limit matches the JSON limit so a
+// malicious body can never blow up memory.
+app.use(
+  express.json({
+    limit: "256kb",
+    verify: (req, _res, buf) => {
+      (req as express.Request & { rawBody?: Buffer }).rawBody = Buffer.from(buf);
+    },
+  }),
+);
 app.use(express.urlencoded({ extended: true, limit: "256kb" }));
 
 app.use("/api", router);

@@ -45,6 +45,25 @@ strictly required for the site to load, but several toggle key flows.
 | `AI_INTEGRATIONS_OPENAI_API_KEY` | yes (for `/api/chat`) | Provided by the Replit OpenAI AI integration. The chat route lazy-loads the OpenAI client on first request, so the rest of the API still serves if this is missing — only `/api/chat` returns 503. |
 | `AI_INTEGRATIONS_OPENAI_BASE_URL` | yes (for `/api/chat`) | Provided by the Replit OpenAI AI integration. |
 
+### Used by the WhatsApp Business API integration (all five required to enable)
+
+The `/api/whatsapp/webhook` endpoint and outbound replies are
+**feature-flagged** on the five secrets below being set together. With
+any one missing, the webhook returns 503 and the rest of the site keeps
+working unchanged. See `docs/whatsapp-setup.md` for the founder runbook
+on how to obtain each value from Meta.
+
+| Variable | Required | Purpose |
+| --- | --- | --- |
+| `META_WHATSAPP_TOKEN` | yes (for WhatsApp) | Permanent system-user access token. |
+| `META_WHATSAPP_PHONE_NUMBER_ID` | yes (for WhatsApp) | Numeric ID of the claimed phone number (NOT the dialable number). |
+| `META_WHATSAPP_VERIFY_TOKEN` | yes (for WhatsApp) | Random string you choose; Meta echoes it during the webhook handshake. |
+| `META_WHATSAPP_APP_SECRET` | yes (for WhatsApp) | Used to verify every inbound webhook POST via HMAC-SHA256. |
+| `META_WHATSAPP_HASH_SALT` | yes (for WhatsApp) | Random salt used to hash user phone numbers before persistence. |
+| `META_WHATSAPP_GRAPH_VERSION` | no | Pinned Graph API version. Defaults to `v23.0`. |
+| `META_WHATSAPP_ONBOARDING_TEMPLATE` | no | Approved Meta template name for first-touch outbound. Defaults to `dayli_onboarding_v1`. |
+| `META_WHATSAPP_ONBOARDING_LANGUAGE` | no | Locale for the onboarding template. Defaults to `en`. |
+
 ## Routes
 
 - `/` — homepage (hero with chat demo, conditions snapshot, value props).
