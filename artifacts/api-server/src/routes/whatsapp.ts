@@ -607,17 +607,35 @@ async function processClaimedMessage(opts: {
   const sent = await safeSendBool(config, fromPhone, trimmed);
   if (!sent) return false;
 
-  // Best-effort: history loss is preferable to a duplicate reply.
-  await safePersist(() =>
-    db
-      .update(whatsappConversationsTable)
-      .set({
-        history: appendHistory(history, userText, trimmed),
-        lastOutboundAt: new Date(),
-        updatedAt: new Date(),
-      })
-      .where(eq(whatsappConversationsTable.id, conv.id)),
-  );
+  // Concurrency-safe history append. The `history` we read above came
+  // from the row state at claim time; if a second user message arrived
+  // and committed its own history append between then and now, blindly
+  // writing back our snapshot-derived value would lose the other turn
+  // (last-write-wins). We instead re-take the FOR UPDATE row lock,
+  // re-read the latest history, append OUR turn to that latest copy,
+  // and commit, all inside a tiny transaction (no AI / network calls
+  // hold the lock). Wrapped in `safePersist` so a DB blip cannot flip
+  // a successful send into a dedup release.
+  await safePersist(async () => {
+    await db.transaction(async (tx) => {
+      const locked = await tx
+        .select()
+        .from(whatsappConversationsTable)
+        .where(eq(whatsappConversationsTable.id, conv.id))
+        .for("update");
+      const latest = locked[0];
+      if (!latest) return;
+      const latestHistory = readHistory(latest);
+      await tx
+        .update(whatsappConversationsTable)
+        .set({
+          history: appendHistory(latestHistory, userText, trimmed),
+          lastOutboundAt: new Date(),
+          updatedAt: new Date(),
+        })
+        .where(eq(whatsappConversationsTable.id, conv.id));
+    });
+  });
   return true;
 }
 
