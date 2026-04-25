@@ -205,12 +205,16 @@ much longer than any realistic Meta retry window.
 ### Per-user daily limit
 
 Each conversation row tracks `daily_reply_count` and
-`daily_window_started_at`. The limit (`PER_USER_DAILY_LIMIT` in
-`routes/whatsapp.ts`) is enforced atomically inside a `SELECT ... FOR
-UPDATE` transaction so concurrent webhooks for the same phone cannot
-both slip past the cap. Emergency replies are intentionally exempt
-from the limit: a person in distress must always be able to receive
-the "call your local emergency number" message.
+`daily_window_started_at`. The counter increments on EVERY chargeable
+outbound reply (AI answer, onboarding template, "couldn't understand"
+notice — anything that opens or extends a Meta conversation window)
+not only AI answers, so the cap is a true ceiling on cost per user.
+The limit (`PER_USER_DAILY_LIMIT` in `routes/whatsapp.ts`) is enforced
+atomically inside a `SELECT ... FOR UPDATE` transaction so concurrent
+webhooks for the same phone cannot both slip past the cap. Emergency
+replies are intentionally exempt from the limit and do NOT increment
+the counter: a person in distress must always be able to receive the
+"call your local emergency number" message.
 
 ### Reliability posture (accept-then-process)
 

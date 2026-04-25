@@ -68,6 +68,12 @@ import { logger } from "../lib/logger";
 const router: IRouter = Router();
 
 const HISTORY_CAP = 20;
+/** Cap on outbound WhatsApp replies per user per rolling 24h window.
+ * Counts EVERY chargeable reply we send (AI answer, onboarding template,
+ * "couldn't understand" notice, location ack, etc.) — not only AI
+ * responses — so this is a true ceiling on Meta conversation cost per
+ * user. Emergency safety messages are intentionally exempt and do NOT
+ * count against this limit (see `EMERGENCY_*` short-circuit below). */
 const PER_USER_DAILY_LIMIT = 60;
 
 // --- locale & message helpers ----------------------------------------------

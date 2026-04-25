@@ -28,7 +28,12 @@ export const whatsappConversationsTable = pgTable("whatsapp_conversations", {
    * for city. "awaiting_location" → reply parsed as city/pincode. "ready" →
    * full conversational mode. */
   onboardingState: text("onboarding_state").notNull().default("new"),
-  /** How many AI replies we've sent in the current 24h window. */
+  /** How many outbound WhatsApp replies we've sent to this user in the
+   * current 24h window — counts every chargeable reply (AI answer,
+   * onboarding template, "couldn't understand" notice, etc.) and is
+   * capped at PER_USER_DAILY_LIMIT in `routes/whatsapp.ts` to bound
+   * Meta conversation cost per user. Emergency replies are intentionally
+   * exempt and do NOT increment this counter. */
   dailyReplyCount: integer("daily_reply_count").notNull().default(0),
   dailyWindowStartedAt: timestamp("daily_window_started_at", {
     withTimezone: true,
