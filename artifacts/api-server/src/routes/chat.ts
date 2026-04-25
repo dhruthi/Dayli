@@ -1,10 +1,35 @@
 import { Router, type IRouter } from "express";
 import { StreamChatBody as ChatBodySchema } from "@workspace/api-zod";
-import { openai } from "@workspace/integrations-openai-ai-server";
 import { db, chatTurnsTable } from "@workspace/db";
 import { fetchConditions, type ConditionsSnapshot } from "../lib/conditions";
 import { rateLimit, getClientIp } from "../lib/rate-limit";
 import { logger } from "../lib/logger";
+
+type OpenAIClient = typeof import("@workspace/integrations-openai-ai-server").openai;
+
+/**
+ * Lazily resolve the OpenAI client. The integration package throws at
+ * module-load time if `AI_INTEGRATIONS_OPENAI_*` env vars are missing —
+ * importing it eagerly from `chat.ts` would take the whole API server
+ * down (including unrelated /api/leads, /api/admin, /api/geo,
+ * /api/conditions endpoints) when the AI integration isn't provisioned.
+ * Loading on first chat request lets everything else keep working and
+ * surfaces a clean 503 to the caller instead.
+ */
+let openaiPromise: Promise<OpenAIClient> | null = null;
+function getOpenAI(): Promise<OpenAIClient> {
+  if (!openaiPromise) {
+    openaiPromise = import("@workspace/integrations-openai-ai-server")
+      .then((m) => m.openai)
+      .catch((err) => {
+        // Reset so a later request can retry once the env is fixed,
+        // rather than caching the failure forever.
+        openaiPromise = null;
+        throw err;
+      });
+  }
+  return openaiPromise;
+}
 
 const router: IRouter = Router();
 
@@ -145,6 +170,20 @@ router.post("/chat", chatLimiter, async (req, res) => {
     conditions,
     audience: profile?.audience ?? null,
   });
+
+  let openai: OpenAIClient;
+  try {
+    openai = await getOpenAI();
+  } catch (err) {
+    logger.error({ err }, "openai integration unavailable");
+    res.statusCode = 503;
+    send({
+      error: "ai_unavailable",
+      message: "The AI copilot is not configured. Please try again later.",
+    });
+    res.end();
+    return;
+  }
 
   let assistantText = "";
   try {
