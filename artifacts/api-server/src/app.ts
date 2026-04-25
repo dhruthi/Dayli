@@ -6,9 +6,14 @@ import { logger } from "./lib/logger";
 
 const app: Express = express();
 
-// Render the load balancer / proxy headers (X-Forwarded-For) trustworthy so
-// `req.ip` and our rate limiter see the real client IP.
-app.set("trust proxy", true);
+// Trust exactly ONE hop of upstream proxy (Replit's edge, or a single
+// reverse-proxy in production). This causes Express to derive `req.ip`
+// from the right-most entry of `X-Forwarded-For` written by that trusted
+// hop, NOT from arbitrary client-supplied prefixes. Setting this to
+// `true` (the previous value) trusted the entire forwarded chain, which
+// let any client spoof `X-Forwarded-For: 1.2.3.4` to evade per-IP
+// rate limits. See https://expressjs.com/en/guide/behind-proxies.html.
+app.set("trust proxy", 1);
 
 app.use(
   pinoHttp({

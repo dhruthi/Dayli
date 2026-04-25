@@ -6,13 +6,13 @@ const router: IRouter = Router();
 
 const geoLimiter = rateLimit({ scope: "geo", max: 30, windowMs: 60 * 60 * 1000 });
 
-interface IpApiResponse {
-  status?: string;
-  lat?: number;
-  lon?: number;
+interface IpwhoResponse {
+  success?: boolean;
+  message?: string;
+  latitude?: number;
+  longitude?: number;
   city?: string;
   country?: string;
-  message?: string;
 }
 
 /**
@@ -66,20 +66,28 @@ router.get("/geo", geoLimiter, async (req, res) => {
   }
 
   try {
+    // ipwho.is is keyless and supports HTTPS on its free tier — important
+    // because the previous provider (ip-api.com) only allows HTTPS with a
+    // paid key, which would have leaked the requester's IP over plain
+    // HTTP to a third party.
     const response = await fetch(
-      `http://ip-api.com/json/${encodeURIComponent(ip)}?fields=status,message,country,city,lat,lon`,
+      `https://ipwho.is/${encodeURIComponent(ip)}?fields=success,message,latitude,longitude,city,country`,
       { signal: AbortSignal.timeout(3000) },
     );
     if (!response.ok) {
-      throw new Error(`ip-api responded ${response.status}`);
+      throw new Error(`ipwho responded ${response.status}`);
     }
-    const data = (await response.json()) as IpApiResponse;
-    if (data.status !== "success" || typeof data.lat !== "number" || typeof data.lon !== "number") {
+    const data = (await response.json()) as IpwhoResponse;
+    if (
+      data.success !== true ||
+      typeof data.latitude !== "number" ||
+      typeof data.longitude !== "number"
+    ) {
       throw new Error(data.message ?? "no location");
     }
     res.json({
-      lat: data.lat,
-      lon: data.lon,
+      lat: data.latitude,
+      lon: data.longitude,
       city: data.city ?? null,
       country: data.country ?? null,
       source: "ip",

@@ -8,9 +8,10 @@ interface Bucket {
 const buckets = new Map<string, Bucket>();
 
 function clientKey(req: Request, scope: string): string {
-  const fwd = req.headers["x-forwarded-for"];
-  const ip = (Array.isArray(fwd) ? fwd[0] : fwd?.split(",")[0])?.trim() || req.ip || req.socket.remoteAddress || "unknown";
-  return `${scope}:${ip}`;
+  // Use the IP that Express derives from `req.socket` + the trusted-proxy
+  // setting (`app.set('trust proxy', 1)`). Reading the raw
+  // `X-Forwarded-For` header here would let any client spoof the IP.
+  return `${scope}:${req.ip ?? req.socket.remoteAddress ?? "unknown"}`;
 }
 
 export function rateLimit(opts: { scope: string; max: number; windowMs: number }) {
@@ -40,6 +41,7 @@ export function rateLimit(opts: { scope: string; max: number; windowMs: number }
 }
 
 export function getClientIp(req: Request): string {
-  const fwd = req.headers["x-forwarded-for"];
-  return (Array.isArray(fwd) ? fwd[0] : fwd?.split(",")[0])?.trim() || req.ip || req.socket.remoteAddress || "unknown";
+  // Same reasoning as `clientKey` — must rely on Express's resolved
+  // `req.ip`, never the raw forwarded header.
+  return req.ip ?? req.socket.remoteAddress ?? "unknown";
 }
