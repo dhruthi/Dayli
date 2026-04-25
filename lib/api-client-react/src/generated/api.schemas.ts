@@ -8,3 +8,194 @@
 export interface HealthStatus {
   status: string;
 }
+
+export interface ApiError {
+  error: string;
+  message?: string;
+}
+
+export interface LeadAccepted {
+  ok: boolean;
+  id: number;
+}
+
+export interface ClinicLeadBody {
+  /**
+   * @minLength 1
+   * @maxLength 200
+   */
+  name: string;
+  /**
+   * @minLength 1
+   * @maxLength 200
+   */
+  role: string;
+  /**
+   * @minLength 1
+   * @maxLength 200
+   */
+  clinic: string;
+  /** @maxLength 50 */
+  patients?: string | null;
+  /** @maxLength 200 */
+  city?: string | null;
+  /** @maxLength 320 */
+  email: string;
+  /** @maxLength 4000 */
+  message?: string | null;
+  /** @maxLength 8 */
+  locale?: string | null;
+  /** @maxLength 1024 */
+  pageUrl?: string | null;
+}
+
+export interface PharmaLeadBody {
+  /**
+   * @minLength 1
+   * @maxLength 200
+   */
+  name: string;
+  /**
+   * @minLength 1
+   * @maxLength 200
+   */
+  company: string;
+  /** @maxLength 200 */
+  therapeutic?: string | null;
+  /** @maxLength 320 */
+  email: string;
+  /** @maxLength 4000 */
+  message?: string | null;
+  /** @maxLength 8 */
+  locale?: string | null;
+  /** @maxLength 1024 */
+  pageUrl?: string | null;
+}
+
+export interface GeoLocation {
+  lat: number;
+  lon: number;
+  city?: string | null;
+  country?: string | null;
+  source: string;
+}
+
+export type ConditionsHeatRisk =
+  (typeof ConditionsHeatRisk)[keyof typeof ConditionsHeatRisk];
+
+export const ConditionsHeatRisk = {
+  low: "low",
+  moderate: "moderate",
+  high: "high",
+  very_high: "very_high",
+  extreme: "extreme",
+} as const;
+
+export type ConditionsAirRisk =
+  (typeof ConditionsAirRisk)[keyof typeof ConditionsAirRisk];
+
+export const ConditionsAirRisk = {
+  good: "good",
+  moderate: "moderate",
+  unhealthy_sensitive: "unhealthy_sensitive",
+  unhealthy: "unhealthy",
+  very_unhealthy: "very_unhealthy",
+  hazardous: "hazardous",
+} as const;
+
+export interface Conditions {
+  lat: number;
+  lon: number;
+  city?: string | null;
+  country?: string | null;
+  tempC?: number | null;
+  feelsLikeC?: number | null;
+  humidity?: number | null;
+  windKph?: number | null;
+  uvIndex?: number | null;
+  aqiUs?: number | null;
+  pm25?: number | null;
+  summary: string;
+  heatRisk: ConditionsHeatRisk;
+  airRisk: ConditionsAirRisk;
+  observedAt: string;
+}
+
+export type ChatMessageRole =
+  (typeof ChatMessageRole)[keyof typeof ChatMessageRole];
+
+export const ChatMessageRole = {
+  user: "user",
+  assistant: "assistant",
+} as const;
+
+export interface ChatMessage {
+  role: ChatMessageRole;
+  /** @maxLength 4000 */
+  content: string;
+}
+
+export type ChatBodyLocation = {
+  lat: number;
+  lon: number;
+  city?: string | null;
+  country?: string | null;
+} | null;
+
+export type ChatBodyProfileAudience =
+  | (typeof ChatBodyProfileAudience)[keyof typeof ChatBodyProfileAudience]
+  | null;
+
+export const ChatBodyProfileAudience = {
+  pregnant: "pregnant",
+  child: "child",
+  caregiver: "caregiver",
+  general: "general",
+} as const;
+
+export type ChatBodyProfile = {
+  audience?: ChatBodyProfileAudience;
+} | null;
+
+export interface ChatBody {
+  /** @maxLength 64 */
+  sessionId?: string;
+  /** @maxLength 8 */
+  locale: string;
+  /**
+   * @minItems 1
+   * @maxItems 16
+   */
+  messages: ChatMessage[];
+  location?: ChatBodyLocation;
+  profile?: ChatBodyProfile;
+}
+
+export type AdminLeadRowType =
+  (typeof AdminLeadRowType)[keyof typeof AdminLeadRowType];
+
+export const AdminLeadRowType = {
+  clinic: "clinic",
+  pharma: "pharma",
+} as const;
+
+export interface AdminLeadRow {
+  id: number;
+  type: AdminLeadRowType;
+  name: string;
+  email: string;
+  org: string;
+  locale?: string | null;
+  city?: string | null;
+  message?: string | null;
+  createdAt: string;
+}
+
+export interface AdminLeadList {
+  leads: AdminLeadRow[];
+}
+
+export type GetConditionsParams = {
+  lat: number;
+  lon: number;
+};

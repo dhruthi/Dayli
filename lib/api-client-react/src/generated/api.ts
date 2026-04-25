@@ -5,18 +5,32 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
+  MutationFunction,
   QueryFunction,
   QueryKey,
+  UseMutationOptions,
+  UseMutationResult,
   UseQueryOptions,
   UseQueryResult,
 } from "@tanstack/react-query";
 
-import type { HealthStatus } from "./api.schemas";
+import type {
+  AdminLeadList,
+  ApiError,
+  ChatBody,
+  ClinicLeadBody,
+  Conditions,
+  GeoLocation,
+  GetConditionsParams,
+  HealthStatus,
+  LeadAccepted,
+  PharmaLeadBody,
+} from "./api.schemas";
 
 import { customFetch } from "../custom-fetch";
-import type { ErrorType } from "../custom-fetch";
+import type { ErrorType, BodyType } from "../custom-fetch";
 
 type AwaitedInput<T> = PromiseLike<T> | T;
 
@@ -92,6 +106,497 @@ export function useHealthCheck<
   request?: SecondParameter<typeof customFetch>;
 }): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getHealthCheckQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Submit a clinic partner enquiry
+ */
+export const getSubmitClinicLeadUrl = () => {
+  return `/api/leads/clinic`;
+};
+
+export const submitClinicLead = async (
+  clinicLeadBody: ClinicLeadBody,
+  options?: RequestInit,
+): Promise<LeadAccepted> => {
+  return customFetch<LeadAccepted>(getSubmitClinicLeadUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(clinicLeadBody),
+  });
+};
+
+export const getSubmitClinicLeadMutationOptions = <
+  TError = ErrorType<ApiError>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof submitClinicLead>>,
+    TError,
+    { data: BodyType<ClinicLeadBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof submitClinicLead>>,
+  TError,
+  { data: BodyType<ClinicLeadBody> },
+  TContext
+> => {
+  const mutationKey = ["submitClinicLead"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof submitClinicLead>>,
+    { data: BodyType<ClinicLeadBody> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return submitClinicLead(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type SubmitClinicLeadMutationResult = NonNullable<
+  Awaited<ReturnType<typeof submitClinicLead>>
+>;
+export type SubmitClinicLeadMutationBody = BodyType<ClinicLeadBody>;
+export type SubmitClinicLeadMutationError = ErrorType<ApiError>;
+
+/**
+ * @summary Submit a clinic partner enquiry
+ */
+export const useSubmitClinicLead = <
+  TError = ErrorType<ApiError>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof submitClinicLead>>,
+    TError,
+    { data: BodyType<ClinicLeadBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof submitClinicLead>>,
+  TError,
+  { data: BodyType<ClinicLeadBody> },
+  TContext
+> => {
+  return useMutation(getSubmitClinicLeadMutationOptions(options));
+};
+
+/**
+ * @summary Submit a pharma partner enquiry
+ */
+export const getSubmitPharmaLeadUrl = () => {
+  return `/api/leads/pharma`;
+};
+
+export const submitPharmaLead = async (
+  pharmaLeadBody: PharmaLeadBody,
+  options?: RequestInit,
+): Promise<LeadAccepted> => {
+  return customFetch<LeadAccepted>(getSubmitPharmaLeadUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(pharmaLeadBody),
+  });
+};
+
+export const getSubmitPharmaLeadMutationOptions = <
+  TError = ErrorType<ApiError>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof submitPharmaLead>>,
+    TError,
+    { data: BodyType<PharmaLeadBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof submitPharmaLead>>,
+  TError,
+  { data: BodyType<PharmaLeadBody> },
+  TContext
+> => {
+  const mutationKey = ["submitPharmaLead"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof submitPharmaLead>>,
+    { data: BodyType<PharmaLeadBody> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return submitPharmaLead(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type SubmitPharmaLeadMutationResult = NonNullable<
+  Awaited<ReturnType<typeof submitPharmaLead>>
+>;
+export type SubmitPharmaLeadMutationBody = BodyType<PharmaLeadBody>;
+export type SubmitPharmaLeadMutationError = ErrorType<ApiError>;
+
+/**
+ * @summary Submit a pharma partner enquiry
+ */
+export const useSubmitPharmaLead = <
+  TError = ErrorType<ApiError>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof submitPharmaLead>>,
+    TError,
+    { data: BodyType<PharmaLeadBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof submitPharmaLead>>,
+  TError,
+  { data: BodyType<PharmaLeadBody> },
+  TContext
+> => {
+  return useMutation(getSubmitPharmaLeadMutationOptions(options));
+};
+
+/**
+ * @summary Approximate location of the requesting IP
+ */
+export const getLookupGeoUrl = () => {
+  return `/api/geo`;
+};
+
+export const lookupGeo = async (
+  options?: RequestInit,
+): Promise<GeoLocation> => {
+  return customFetch<GeoLocation>(getLookupGeoUrl(), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getLookupGeoQueryKey = () => {
+  return [`/api/geo`] as const;
+};
+
+export const getLookupGeoQueryOptions = <
+  TData = Awaited<ReturnType<typeof lookupGeo>>,
+  TError = ErrorType<ApiError>,
+>(options?: {
+  query?: UseQueryOptions<Awaited<ReturnType<typeof lookupGeo>>, TError, TData>;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getLookupGeoQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof lookupGeo>>> = ({
+    signal,
+  }) => lookupGeo({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof lookupGeo>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type LookupGeoQueryResult = NonNullable<
+  Awaited<ReturnType<typeof lookupGeo>>
+>;
+export type LookupGeoQueryError = ErrorType<ApiError>;
+
+/**
+ * @summary Approximate location of the requesting IP
+ */
+
+export function useLookupGeo<
+  TData = Awaited<ReturnType<typeof lookupGeo>>,
+  TError = ErrorType<ApiError>,
+>(options?: {
+  query?: UseQueryOptions<Awaited<ReturnType<typeof lookupGeo>>, TError, TData>;
+  request?: SecondParameter<typeof customFetch>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getLookupGeoQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Current weather + air quality for a coordinate
+ */
+export const getGetConditionsUrl = (params: GetConditionsParams) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString());
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/api/conditions?${stringifiedParams}`
+    : `/api/conditions`;
+};
+
+export const getConditions = async (
+  params: GetConditionsParams,
+  options?: RequestInit,
+): Promise<Conditions> => {
+  return customFetch<Conditions>(getGetConditionsUrl(params), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetConditionsQueryKey = (params?: GetConditionsParams) => {
+  return [`/api/conditions`, ...(params ? [params] : [])] as const;
+};
+
+export const getGetConditionsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getConditions>>,
+  TError = ErrorType<ApiError>,
+>(
+  params: GetConditionsParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getConditions>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetConditionsQueryKey(params);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getConditions>>> = ({
+    signal,
+  }) => getConditions(params, { signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getConditions>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetConditionsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getConditions>>
+>;
+export type GetConditionsQueryError = ErrorType<ApiError>;
+
+/**
+ * @summary Current weather + air quality for a coordinate
+ */
+
+export function useGetConditions<
+  TData = Awaited<ReturnType<typeof getConditions>>,
+  TError = ErrorType<ApiError>,
+>(
+  params: GetConditionsParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getConditions>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetConditionsQueryOptions(params, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * Streams an OpenAI completion as Server-Sent Events. Each event is JSON
+with either `{"content": "..."}` for partial tokens or `{"done": true}`
+on completion. Codegen does not produce a hook for this endpoint —
+consume it on the client with `fetch` + ReadableStream.
+
+ * @summary Stream an AI copilot reply for the demo (Server-Sent Events)
+ */
+export const getStreamChatUrl = () => {
+  return `/api/chat`;
+};
+
+export const streamChat = async (
+  chatBody: ChatBody,
+  options?: RequestInit,
+): Promise<string> => {
+  return customFetch<string>(getStreamChatUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(chatBody),
+  });
+};
+
+export const getStreamChatMutationOptions = <
+  TError = ErrorType<ApiError>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof streamChat>>,
+    TError,
+    { data: BodyType<ChatBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof streamChat>>,
+  TError,
+  { data: BodyType<ChatBody> },
+  TContext
+> => {
+  const mutationKey = ["streamChat"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof streamChat>>,
+    { data: BodyType<ChatBody> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return streamChat(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type StreamChatMutationResult = NonNullable<
+  Awaited<ReturnType<typeof streamChat>>
+>;
+export type StreamChatMutationBody = BodyType<ChatBody>;
+export type StreamChatMutationError = ErrorType<ApiError>;
+
+/**
+ * @summary Stream an AI copilot reply for the demo (Server-Sent Events)
+ */
+export const useStreamChat = <
+  TError = ErrorType<ApiError>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof streamChat>>,
+    TError,
+    { data: BodyType<ChatBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof streamChat>>,
+  TError,
+  { data: BodyType<ChatBody> },
+  TContext
+> => {
+  return useMutation(getStreamChatMutationOptions(options));
+};
+
+/**
+ * @summary List recent clinic + pharma leads (Basic-auth)
+ */
+export const getListLeadsUrl = () => {
+  return `/api/admin/leads`;
+};
+
+export const listLeads = async (
+  options?: RequestInit,
+): Promise<AdminLeadList> => {
+  return customFetch<AdminLeadList>(getListLeadsUrl(), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getListLeadsQueryKey = () => {
+  return [`/api/admin/leads`] as const;
+};
+
+export const getListLeadsQueryOptions = <
+  TData = Awaited<ReturnType<typeof listLeads>>,
+  TError = ErrorType<ApiError>,
+>(options?: {
+  query?: UseQueryOptions<Awaited<ReturnType<typeof listLeads>>, TError, TData>;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getListLeadsQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof listLeads>>> = ({
+    signal,
+  }) => listLeads({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof listLeads>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type ListLeadsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listLeads>>
+>;
+export type ListLeadsQueryError = ErrorType<ApiError>;
+
+/**
+ * @summary List recent clinic + pharma leads (Basic-auth)
+ */
+
+export function useListLeads<
+  TData = Awaited<ReturnType<typeof listLeads>>,
+  TError = ErrorType<ApiError>,
+>(options?: {
+  query?: UseQueryOptions<Awaited<ReturnType<typeof listLeads>>, TError, TData>;
+  request?: SecondParameter<typeof customFetch>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getListLeadsQueryOptions(options);
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
     queryKey: QueryKey;

@@ -14,3 +14,171 @@ import * as zod from "zod";
 export const HealthCheckResponse = zod.object({
   status: zod.string(),
 });
+
+/**
+ * @summary Submit a clinic partner enquiry
+ */
+export const submitClinicLeadBodyNameMax = 200;
+
+export const submitClinicLeadBodyRoleMax = 200;
+
+export const submitClinicLeadBodyClinicMax = 200;
+
+export const submitClinicLeadBodyPatientsMax = 50;
+
+export const submitClinicLeadBodyCityMax = 200;
+
+export const submitClinicLeadBodyEmailMax = 320;
+
+export const submitClinicLeadBodyMessageMax = 4000;
+
+export const submitClinicLeadBodyLocaleMax = 8;
+
+export const submitClinicLeadBodyPageUrlMax = 1024;
+
+export const SubmitClinicLeadBody = zod.object({
+  name: zod.string().min(1).max(submitClinicLeadBodyNameMax),
+  role: zod.string().min(1).max(submitClinicLeadBodyRoleMax),
+  clinic: zod.string().min(1).max(submitClinicLeadBodyClinicMax),
+  patients: zod.string().max(submitClinicLeadBodyPatientsMax).nullish(),
+  city: zod.string().max(submitClinicLeadBodyCityMax).nullish(),
+  email: zod.string().email().max(submitClinicLeadBodyEmailMax),
+  message: zod.string().max(submitClinicLeadBodyMessageMax).nullish(),
+  locale: zod.string().max(submitClinicLeadBodyLocaleMax).nullish(),
+  pageUrl: zod.string().max(submitClinicLeadBodyPageUrlMax).nullish(),
+});
+
+/**
+ * @summary Submit a pharma partner enquiry
+ */
+export const submitPharmaLeadBodyNameMax = 200;
+
+export const submitPharmaLeadBodyCompanyMax = 200;
+
+export const submitPharmaLeadBodyTherapeuticMax = 200;
+
+export const submitPharmaLeadBodyEmailMax = 320;
+
+export const submitPharmaLeadBodyMessageMax = 4000;
+
+export const submitPharmaLeadBodyLocaleMax = 8;
+
+export const submitPharmaLeadBodyPageUrlMax = 1024;
+
+export const SubmitPharmaLeadBody = zod.object({
+  name: zod.string().min(1).max(submitPharmaLeadBodyNameMax),
+  company: zod.string().min(1).max(submitPharmaLeadBodyCompanyMax),
+  therapeutic: zod.string().max(submitPharmaLeadBodyTherapeuticMax).nullish(),
+  email: zod.string().email().max(submitPharmaLeadBodyEmailMax),
+  message: zod.string().max(submitPharmaLeadBodyMessageMax).nullish(),
+  locale: zod.string().max(submitPharmaLeadBodyLocaleMax).nullish(),
+  pageUrl: zod.string().max(submitPharmaLeadBodyPageUrlMax).nullish(),
+});
+
+/**
+ * @summary Approximate location of the requesting IP
+ */
+export const LookupGeoResponse = zod.object({
+  lat: zod.number(),
+  lon: zod.number(),
+  city: zod.string().nullish(),
+  country: zod.string().nullish(),
+  source: zod.string(),
+});
+
+/**
+ * @summary Current weather + air quality for a coordinate
+ */
+export const GetConditionsQueryParams = zod.object({
+  lat: zod.coerce.number(),
+  lon: zod.coerce.number(),
+});
+
+export const GetConditionsResponse = zod.object({
+  lat: zod.number(),
+  lon: zod.number(),
+  city: zod.string().nullish(),
+  country: zod.string().nullish(),
+  tempC: zod.number().nullish(),
+  feelsLikeC: zod.number().nullish(),
+  humidity: zod.number().nullish(),
+  windKph: zod.number().nullish(),
+  uvIndex: zod.number().nullish(),
+  aqiUs: zod.number().nullish(),
+  pm25: zod.number().nullish(),
+  summary: zod.string(),
+  heatRisk: zod.enum(["low", "moderate", "high", "very_high", "extreme"]),
+  airRisk: zod.enum([
+    "good",
+    "moderate",
+    "unhealthy_sensitive",
+    "unhealthy",
+    "very_unhealthy",
+    "hazardous",
+  ]),
+  observedAt: zod.coerce.date(),
+});
+
+/**
+ * Streams an OpenAI completion as Server-Sent Events. Each event is JSON
+with either `{"content": "..."}` for partial tokens or `{"done": true}`
+on completion. Codegen does not produce a hook for this endpoint —
+consume it on the client with `fetch` + ReadableStream.
+
+ * @summary Stream an AI copilot reply for the demo (Server-Sent Events)
+ */
+export const streamChatBodySessionIdMax = 64;
+
+export const streamChatBodyLocaleMax = 8;
+
+export const streamChatBodyMessagesItemContentMax = 4000;
+
+export const streamChatBodyMessagesMax = 16;
+
+export const StreamChatBody = zod.object({
+  sessionId: zod.string().max(streamChatBodySessionIdMax).optional(),
+  locale: zod.string().max(streamChatBodyLocaleMax),
+  messages: zod
+    .array(
+      zod.object({
+        role: zod.enum(["user", "assistant"]),
+        content: zod.string().max(streamChatBodyMessagesItemContentMax),
+      }),
+    )
+    .min(1)
+    .max(streamChatBodyMessagesMax),
+  location: zod
+    .object({
+      lat: zod.number(),
+      lon: zod.number(),
+      city: zod.string().nullish(),
+      country: zod.string().nullish(),
+    })
+    .nullish(),
+  profile: zod
+    .object({
+      audience: zod
+        .enum(["pregnant", "child", "caregiver", "general"])
+        .nullish(),
+    })
+    .nullish(),
+});
+
+/**
+ * @summary List recent clinic + pharma leads (Basic-auth)
+ */
+export const ListLeadsResponse = zod.object({
+  leads: zod.array(
+    zod.object({
+      id: zod.number(),
+      type: zod.enum(["clinic", "pharma"]),
+      name: zod.string(),
+      email: zod.string(),
+      org: zod.string(),
+      locale: zod.string().nullish(),
+      city: zod.string().nullish(),
+      message: zod.string().nullish(),
+      createdAt: zod.coerce.date(),
+    }),
+  ),
+});

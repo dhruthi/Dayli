@@ -10,6 +10,16 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: leads
+    description: Partner lead capture
+  - name: geo
+    description: Geolocation lookup
+  - name: conditions
+    description: Local climate / weather conditions
+  - name: chat
+    description: AI climate-health copilot demo (SSE)
+  - name: admin
+    description: Internal admin views (Basic-auth)
 paths:
   /healthz:
     get:
@@ -24,7 +34,169 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /leads/clinic:
+    post:
+      operationId: submitClinicLead
+      tags: [leads]
+      summary: Submit a clinic partner enquiry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClinicLeadBody"
+      responses:
+        "201":
+          description: Lead accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LeadAccepted"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "429":
+          description: Rate limited
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /leads/pharma:
+    post:
+      operationId: submitPharmaLead
+      tags: [leads]
+      summary: Submit a pharma partner enquiry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PharmaLeadBody"
+      responses:
+        "201":
+          description: Lead accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LeadAccepted"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "429":
+          description: Rate limited
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /geo:
+    get:
+      operationId: lookupGeo
+      tags: [geo]
+      summary: Approximate location of the requesting IP
+      responses:
+        "200":
+          description: Approximate location
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GeoLocation"
+        "502":
+          description: Geo lookup failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /conditions:
+    get:
+      operationId: getConditions
+      tags: [conditions]
+      summary: Current weather + air quality for a coordinate
+      parameters:
+        - name: lat
+          in: query
+          required: true
+          schema:
+            type: number
+            format: double
+        - name: lon
+          in: query
+          required: true
+          schema:
+            type: number
+            format: double
+      responses:
+        "200":
+          description: Conditions snapshot
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Conditions"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /chat:
+    post:
+      operationId: streamChat
+      tags: [chat]
+      summary: Stream an AI copilot reply for the demo (Server-Sent Events)
+      description: |
+        Streams an OpenAI completion as Server-Sent Events. Each event is JSON
+        with either `{"content": "..."}` for partial tokens or `{"done": true}`
+        on completion. Codegen does not produce a hook for this endpoint —
+        consume it on the client with `fetch` + ReadableStream.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChatBody"
+      responses:
+        "200":
+          description: SSE stream
+          content:
+            text/event-stream:
+              schema:
+                type: string
+        "429":
+          description: Rate limited
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /admin/leads:
+    get:
+      operationId: listLeads
+      tags: [admin]
+      summary: List recent clinic + pharma leads (Basic-auth)
+      security:
+        - basicAuth: []
+      responses:
+        "200":
+          description: Recent leads
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminLeadList"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
 components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
   schemas:
     HealthStatus:
       type: object
@@ -33,4 +205,280 @@ components:
           type: string
       required:
         - status
-
+    ApiError:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+      required:
+        - error
+    LeadAccepted:
+      type: object
+      properties:
+        ok:
+          type: boolean
+        id:
+          type: integer
+      required:
+        - ok
+        - id
+    ClinicLeadBody:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 200
+        role:
+          type: string
+          minLength: 1
+          maxLength: 200
+        clinic:
+          type: string
+          minLength: 1
+          maxLength: 200
+        patients:
+          type: string
+          maxLength: 50
+          nullable: true
+        city:
+          type: string
+          maxLength: 200
+          nullable: true
+        email:
+          type: string
+          format: email
+          maxLength: 320
+        message:
+          type: string
+          maxLength: 4000
+          nullable: true
+        locale:
+          type: string
+          maxLength: 8
+          nullable: true
+        pageUrl:
+          type: string
+          maxLength: 1024
+          nullable: true
+      required:
+        - name
+        - role
+        - clinic
+        - email
+    PharmaLeadBody:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 200
+        company:
+          type: string
+          minLength: 1
+          maxLength: 200
+        therapeutic:
+          type: string
+          maxLength: 200
+          nullable: true
+        email:
+          type: string
+          format: email
+          maxLength: 320
+        message:
+          type: string
+          maxLength: 4000
+          nullable: true
+        locale:
+          type: string
+          maxLength: 8
+          nullable: true
+        pageUrl:
+          type: string
+          maxLength: 1024
+          nullable: true
+      required:
+        - name
+        - company
+        - email
+    GeoLocation:
+      type: object
+      properties:
+        lat:
+          type: number
+          format: double
+        lon:
+          type: number
+          format: double
+        city:
+          type: string
+          nullable: true
+        country:
+          type: string
+          nullable: true
+        source:
+          type: string
+      required:
+        - lat
+        - lon
+        - source
+    Conditions:
+      type: object
+      properties:
+        lat:
+          type: number
+          format: double
+        lon:
+          type: number
+          format: double
+        city:
+          type: string
+          nullable: true
+        country:
+          type: string
+          nullable: true
+        tempC:
+          type: number
+          format: double
+          nullable: true
+        feelsLikeC:
+          type: number
+          format: double
+          nullable: true
+        humidity:
+          type: integer
+          nullable: true
+        windKph:
+          type: number
+          format: double
+          nullable: true
+        uvIndex:
+          type: number
+          format: double
+          nullable: true
+        aqiUs:
+          type: integer
+          nullable: true
+        pm25:
+          type: number
+          format: double
+          nullable: true
+        summary:
+          type: string
+        heatRisk:
+          type: string
+          enum: [low, moderate, high, very_high, extreme]
+        airRisk:
+          type: string
+          enum: [good, moderate, unhealthy_sensitive, unhealthy, very_unhealthy, hazardous]
+        observedAt:
+          type: string
+          format: date-time
+      required:
+        - lat
+        - lon
+        - summary
+        - heatRisk
+        - airRisk
+        - observedAt
+    ChatMessage:
+      type: object
+      properties:
+        role:
+          type: string
+          enum: [user, assistant]
+        content:
+          type: string
+          maxLength: 4000
+      required:
+        - role
+        - content
+    ChatBody:
+      type: object
+      properties:
+        sessionId:
+          type: string
+          maxLength: 64
+        locale:
+          type: string
+          maxLength: 8
+        messages:
+          type: array
+          minItems: 1
+          maxItems: 16
+          items:
+            $ref: "#/components/schemas/ChatMessage"
+        location:
+          type: object
+          nullable: true
+          properties:
+            lat:
+              type: number
+              format: double
+            lon:
+              type: number
+              format: double
+            city:
+              type: string
+              nullable: true
+            country:
+              type: string
+              nullable: true
+          required:
+            - lat
+            - lon
+        profile:
+          type: object
+          nullable: true
+          properties:
+            audience:
+              type: string
+              enum: [pregnant, child, caregiver, general]
+              nullable: true
+      required:
+        - messages
+        - locale
+    AdminLeadRow:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          enum: [clinic, pharma]
+        name:
+          type: string
+        email:
+          type: string
+        org:
+          type: string
+        locale:
+          type: string
+          nullable: true
+        city:
+          type: string
+          nullable: true
+        message:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - type
+        - name
+        - email
+        - org
+        - createdAt
+    AdminLeadList:
+      type: object
+      properties:
+        leads:
+          type: array
+          items:
+            $ref: "#/components/schemas/AdminLeadRow"
+      required:
+        - leads
