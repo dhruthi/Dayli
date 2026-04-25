@@ -11,6 +11,7 @@ import Clinics from "@/pages/Clinics";
 import Pharma from "@/pages/Pharma";
 import About from "@/pages/About";
 import Privacy from "@/pages/Privacy";
+import AdminLeads from "@/pages/AdminLeads";
 import { LOCALES, DEFAULT_LOCALE } from "@/lib/i18n";
 
 const queryClient = new QueryClient();
@@ -36,6 +37,7 @@ function Router() {
           return <Route key={`${locale}-${r.path}`} path={path} component={r.component} />;
         }),
       )}
+      <Route path="/admin/leads" component={AdminLeads} />
       <Route component={NotFound} />
     </Switch>
   );

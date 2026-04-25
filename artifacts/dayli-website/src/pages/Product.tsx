@@ -5,7 +5,7 @@ import { ThermometerSun, HeartPulse, BrainCircuit, ArrowRight } from "lucide-rea
 import { SEO } from "@/components/SEO";
 import { getPageSeo } from "@/lib/seo";
 import { useLocale } from "@/hooks/use-locale";
-import { WHATSAPP_URL } from "@/lib/site";
+import { WhatsAppCTA } from "@/components/ui/whatsapp-cta";
 
 export default function Product() {
   const { locale, t } = useLocale();
@@ -62,12 +62,13 @@ export default function Product() {
                 ))}
               </ul>
 
-              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-                <Button size="lg" className="rounded-full shadow-md">
-                  {c.realtime.cta}
-                  <ArrowRight className="ml-2" size={18} />
-                </Button>
-              </a>
+              <WhatsAppCTA
+                label={c.realtime.cta}
+                size="lg"
+                className="rounded-full shadow-md"
+                trailingIcon={<ArrowRight className="ml-2" size={18} />}
+                noticeAfter
+              />
             </AnimatedReveal>
 
             <AnimatedReveal direction="left" delay={200} className="relative">

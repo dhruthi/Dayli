@@ -150,7 +150,8 @@ router.post("/chat", chatLimiter, async (req, res) => {
   try {
     const stream = await openai.chat.completions.create({
       model: "gpt-5-mini",
-      max_completion_tokens: 600,
+      max_completion_tokens: 2000,
+      reasoning_effort: "minimal",
       stream: true,
       messages: [
         { role: "system", content: system },

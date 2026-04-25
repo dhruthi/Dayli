@@ -5,6 +5,7 @@ export interface PageContent {
   layout: {
     nav: { product: string; clinics: string; pharma: string; about: string };
     ctaWhatsapp: string;
+    whatsappPending: string;
     languageMenuLabel: string;
     languageBanner: { prompt: string; accept: string; dismiss: string };
     footer: {
@@ -42,6 +43,28 @@ export interface PageContent {
     ctaSecondary: string;
     tagline: string;
     chatHero: string;
+    chatDemo: {
+      title: string;
+      subtitle: string;
+      introHeading: string;
+      introBody: string;
+      startButton: string;
+      loading: string;
+      retry: string;
+      errorBody: string;
+      examplesLabel: string;
+      examplePrompts: string[];
+      inputPlaceholder: string;
+      inputDisabledPlaceholder: string;
+      sendLabel: string;
+      formLabel: string;
+      disclaimer: string;
+      sourceGps: string;
+      sourceIp: string;
+      locationUnknown: string;
+      heatRiskLabels: { low: string; moderate: string; high: string; very_high: string; extreme: string };
+      aqiLabels: { good: string; moderate: string; unhealthy_sensitive: string; unhealthy: string; very_unhealthy: string; hazardous: string; unknown: string };
+    };
     trust: { label: string; items: string[] };
     definition: { heading: string; body: string; bodyStrong: string };
     problem: { eyebrow: string; heading: string; intro: string; cardHeading: string; bullet1: string; bullet2: string; cardBody: string };
@@ -174,6 +197,7 @@ const en: PageContent = {
   layout: {
     nav: { product: "Product", clinics: "For Clinics", pharma: "For Pharma", about: "About" },
     ctaWhatsapp: "Start on WhatsApp",
+    whatsappPending: "WhatsApp setup in progress — leave your details below and we'll reach out as soon as it's live.",
     languageMenuLabel: "Language",
     languageBanner: {
       prompt: "Would you prefer to view this site in English?",
@@ -221,6 +245,46 @@ const en: PageContent = {
     ctaSecondary: "For Clinics & Partners",
     tagline: "Not a chatbot. Not a wellness app. A daily decision layer for health.",
     chatHero: "Tomorrow will be extremely hot (45°C). Ensure you drink water frequently and stay indoors between 12-4 PM.",
+    chatDemo: {
+      title: "dayli copilot",
+      subtitle: "Live demo — climate-aware health guidance",
+      introHeading: "Try a live conversation",
+      introBody: "Share your location and ask a question. dayli will use today's local weather and air quality to tailor practical, plain-language guidance.",
+      startButton: "Use my location",
+      loading: "Reading local weather and air quality…",
+      retry: "Try again",
+      errorBody: "We couldn't reach the local conditions service. Please try again.",
+      examplesLabel: "Try one of these:",
+      examplePrompts: [
+        "My child has asthma. Is it safe to play outside this afternoon?",
+        "I have high blood pressure. Any heat tips for today?",
+        "Is the air clean enough for a morning walk?",
+      ],
+      inputPlaceholder: "Ask about today's weather, air quality, or your symptoms…",
+      inputDisabledPlaceholder: "Share your location to start the demo",
+      sendLabel: "Send",
+      formLabel: "Chat with dayli",
+      disclaimer: "Demo only. Educational guidance — not a medical diagnosis. Call your local emergency number for chest pain, difficulty breathing, or other emergencies.",
+      sourceGps: "from your device",
+      sourceIp: "estimated from your network",
+      locationUnknown: "Your area",
+      heatRiskLabels: {
+        low: "Low heat",
+        moderate: "Moderate heat",
+        high: "High heat",
+        very_high: "Very high heat",
+        extreme: "Extreme heat",
+      },
+      aqiLabels: {
+        good: "Good air",
+        moderate: "Moderate air",
+        unhealthy_sensitive: "Unhealthy for sensitive groups",
+        unhealthy: "Unhealthy air",
+        very_unhealthy: "Very unhealthy air",
+        hazardous: "Hazardous air",
+        unknown: "Air quality unavailable",
+      },
+    },
     trust: {
       label: "Built with climate and health expertise",
       items: [
@@ -444,6 +508,7 @@ const hi: PageContent = {
   layout: {
     nav: { product: "उत्पाद", clinics: "क्लिनिकों के लिए", pharma: "फार्मा के लिए", about: "हमारे बारे में" },
     ctaWhatsapp: "WhatsApp पर शुरू करें",
+    whatsappPending: "WhatsApp सेटअप जारी है — नीचे अपनी जानकारी छोड़ें, चालू होते ही हम संपर्क करेंगे।",
     languageMenuLabel: "भाषा",
     languageBanner: {
       prompt: "क्या आप यह साइट हिंदी में देखना पसंद करेंगे?",
@@ -491,6 +556,46 @@ const hi: PageContent = {
     ctaSecondary: "क्लिनिकों और भागीदारों के लिए",
     tagline: "कोई चैटबॉट नहीं। कोई वेलनेस ऐप नहीं। स्वास्थ्य के लिए एक दैनिक निर्णय परत।",
     chatHero: "कल बहुत गर्मी होगी (45°C)। बार-बार पानी पिएं और दोपहर 12 से 4 बजे के बीच घर के अंदर रहें।",
+    chatDemo: {
+      title: "dayli कोपायलट",
+      subtitle: "लाइव डेमो — मौसम-आधारित स्वास्थ्य मार्गदर्शन",
+      introHeading: "एक लाइव बातचीत आज़माएँ",
+      introBody: "अपना स्थान साझा करें और कोई प्रश्न पूछें। dayli आज के स्थानीय मौसम और वायु गुणवत्ता के आधार पर सरल भाषा में व्यावहारिक सलाह देगा।",
+      startButton: "मेरा स्थान उपयोग करें",
+      loading: "स्थानीय मौसम और वायु गुणवत्ता पढ़ रहे हैं…",
+      retry: "फिर से प्रयास करें",
+      errorBody: "स्थानीय जानकारी सेवा से संपर्क नहीं हो सका। कृपया फिर से कोशिश करें।",
+      examplesLabel: "इनमें से एक आज़माएँ:",
+      examplePrompts: [
+        "मेरे बच्चे को अस्थमा है। क्या आज दोपहर बाहर खेलना सुरक्षित है?",
+        "मेरा रक्तचाप अधिक है। आज की गर्मी के लिए कोई सुझाव?",
+        "क्या सुबह की सैर के लिए हवा साफ है?",
+      ],
+      inputPlaceholder: "आज के मौसम, वायु गुणवत्ता या लक्षणों के बारे में पूछें…",
+      inputDisabledPlaceholder: "डेमो शुरू करने के लिए अपना स्थान साझा करें",
+      sendLabel: "भेजें",
+      formLabel: "dayli के साथ चैट करें",
+      disclaimer: "केवल डेमो। शैक्षिक मार्गदर्शन — चिकित्सीय निदान नहीं। सीने में दर्द, साँस लेने में कठिनाई या अन्य आपातकाल पर अपनी स्थानीय आपातकालीन सेवा को कॉल करें।",
+      sourceGps: "आपके उपकरण से",
+      sourceIp: "आपके नेटवर्क से अनुमानित",
+      locationUnknown: "आपका क्षेत्र",
+      heatRiskLabels: {
+        low: "कम गर्मी",
+        moderate: "मध्यम गर्मी",
+        high: "अधिक गर्मी",
+        very_high: "बहुत अधिक गर्मी",
+        extreme: "अत्यधिक गर्मी",
+      },
+      aqiLabels: {
+        good: "अच्छी हवा",
+        moderate: "मध्यम हवा",
+        unhealthy_sensitive: "संवेदनशील समूहों के लिए अस्वास्थ्यकर",
+        unhealthy: "अस्वास्थ्यकर हवा",
+        very_unhealthy: "बहुत अस्वास्थ्यकर हवा",
+        hazardous: "खतरनाक हवा",
+        unknown: "वायु गुणवत्ता उपलब्ध नहीं",
+      },
+    },
     trust: {
       label: "जलवायु और स्वास्थ्य विशेषज्ञता से निर्मित",
       items: [
@@ -714,6 +819,7 @@ const te: PageContent = {
   layout: {
     nav: { product: "ఉత్పత్తి", clinics: "క్లినిక్‌ల కోసం", pharma: "ఫార్మా కోసం", about: "మా గురించి" },
     ctaWhatsapp: "WhatsAppలో మొదలుపెట్టండి",
+    whatsappPending: "WhatsApp సెటప్ జరుగుతోంది — క్రింద మీ వివరాలు ఇవ్వండి, ప్రారంభమైన వెంటనే సంప్రదిస్తాము.",
     languageMenuLabel: "భాష",
     languageBanner: {
       prompt: "మీరు ఈ సైట్‌ను తెలుగులో చూడాలనుకుంటున్నారా?",
@@ -761,6 +867,46 @@ const te: PageContent = {
     ctaSecondary: "క్లినిక్‌లు & భాగస్వాముల కోసం",
     tagline: "ఇది చాట్‌బాట్ కాదు. వెల్‌నెస్ యాప్ కాదు. ఆరోగ్యం కోసం ఒక రోజువారీ నిర్ణయ పొర.",
     chatHero: "రేపు చాలా వేడిగా ఉంటుంది (45°C). తరచుగా నీరు త్రాగండి మరియు మధ్యాహ్నం 12-4 మధ్య ఇంట్లో ఉండండి.",
+    chatDemo: {
+      title: "dayli కోపైలట్",
+      subtitle: "లైవ్ డెమో — వాతావరణ ఆధారిత ఆరోగ్య సూచనలు",
+      introHeading: "ఒక లైవ్ సంభాషణను ప్రయత్నించండి",
+      introBody: "మీ స్థానాన్ని పంచుకుని ఒక ప్రశ్న అడగండి. dayli ఈరోజు స్థానిక వాతావరణం, గాలి నాణ్యత ఆధారంగా సరళమైన భాషలో ఆచరణాత్మక సలహాలు ఇస్తుంది.",
+      startButton: "నా స్థానాన్ని ఉపయోగించండి",
+      loading: "స్థానిక వాతావరణం, గాలి నాణ్యతను చదువుతున్నాం…",
+      retry: "మళ్ళీ ప్రయత్నించండి",
+      errorBody: "స్థానిక సమాచార సేవను చేరుకోలేకపోయాం. దయచేసి మళ్ళీ ప్రయత్నించండి.",
+      examplesLabel: "వీటిలో ఒకటి ప్రయత్నించండి:",
+      examplePrompts: [
+        "నా బిడ్డకు ఆస్తమా ఉంది. ఈరోజు మధ్యాహ్నం బయట ఆడటం సురక్షితమేనా?",
+        "నాకు అధిక రక్తపోటు. ఈరోజు వేడికి ఏవైనా చిట్కాలు?",
+        "ఉదయం నడకకు గాలి తగినంత శుభ్రంగా ఉందా?",
+      ],
+      inputPlaceholder: "ఈరోజు వాతావరణం, గాలి నాణ్యత లేదా లక్షణాల గురించి అడగండి…",
+      inputDisabledPlaceholder: "డెమోను ప్రారంభించడానికి మీ స్థానాన్ని పంచుకోండి",
+      sendLabel: "పంపండి",
+      formLabel: "dayli తో చాట్ చేయండి",
+      disclaimer: "డెమో మాత్రమే. విద్యాపరమైన సూచనలు — వైద్య నిర్ధారణ కాదు. ఛాతీ నొప్పి, శ్వాస తీసుకోవడంలో కష్టం లేదా అత్యవసర పరిస్థితుల్లో మీ స్థానిక అత్యవసర నంబర్‌కు ఫోన్ చేయండి.",
+      sourceGps: "మీ పరికరం నుండి",
+      sourceIp: "మీ నెట్‌వర్క్ ఆధారంగా అంచనా",
+      locationUnknown: "మీ ప్రాంతం",
+      heatRiskLabels: {
+        low: "తక్కువ వేడి",
+        moderate: "మధ్యస్థ వేడి",
+        high: "ఎక్కువ వేడి",
+        very_high: "చాలా ఎక్కువ వేడి",
+        extreme: "విపరీతమైన వేడి",
+      },
+      aqiLabels: {
+        good: "మంచి గాలి",
+        moderate: "మధ్యస్థ గాలి",
+        unhealthy_sensitive: "సున్నితమైన వారికి అనారోగ్యకరం",
+        unhealthy: "అనారోగ్యకర గాలి",
+        very_unhealthy: "చాలా అనారోగ్యకర గాలి",
+        hazardous: "ప్రమాదకర గాలి",
+        unknown: "గాలి నాణ్యత అందుబాటులో లేదు",
+      },
+    },
     trust: {
       label: "వాతావరణ మరియు ఆరోగ్య నిపుణతతో నిర్మితం",
       items: [
@@ -984,6 +1130,7 @@ const ar: PageContent = {
   layout: {
     nav: { product: "المنتج", clinics: "للعيادات", pharma: "لشركات الأدوية", about: "من نحن" },
     ctaWhatsapp: "ابدأ على واتساب",
+    whatsappPending: "إعداد واتساب قيد التجهيز — اتركوا بياناتكم أدناه وسنتواصل معكم فور تفعيله.",
     languageMenuLabel: "اللغة",
     languageBanner: {
       prompt: "هل تفضّل عرض هذا الموقع باللغة العربية؟",
@@ -1031,6 +1178,46 @@ const ar: PageContent = {
     ctaSecondary: "للعيادات والشركاء",
     tagline: "ليس روبوت محادثة. ليس تطبيق عافية. طبقة قرار يومية للصحة.",
     chatHero: "غدًا سيكون شديد الحرارة (45°م). اشربي الماء بكثرة وابقَي داخل المنزل بين الساعة 12 و4 ظهرًا.",
+    chatDemo: {
+      title: "مساعد dayli",
+      subtitle: "عرض مباشر — إرشادات صحية مرتبطة بالطقس",
+      introHeading: "جرّبي محادثة حية",
+      introBody: "شاركي موقعك واطرحي سؤالًا. سيستخدم dayli الطقس وجودة الهواء المحلية اليوم لتقديم إرشادات عملية بلغة بسيطة.",
+      startButton: "استخدمي موقعي",
+      loading: "جارٍ قراءة الطقس وجودة الهواء المحلية…",
+      retry: "حاولي مرة أخرى",
+      errorBody: "تعذّر الوصول إلى خدمة الأحوال المحلية. يُرجى المحاولة مجددًا.",
+      examplesLabel: "جرّبي إحدى هذه:",
+      examplePrompts: [
+        "طفلي يعاني من الربو. هل اللعب خارج المنزل آمن بعد ظهر اليوم؟",
+        "لديّ ارتفاع في ضغط الدم. أي نصائح لحرّ اليوم؟",
+        "هل الهواء نظيف بما يكفي للمشي صباحًا؟",
+      ],
+      inputPlaceholder: "اسألي عن طقس اليوم أو جودة الهواء أو الأعراض…",
+      inputDisabledPlaceholder: "شاركي موقعك لبدء العرض",
+      sendLabel: "إرسال",
+      formLabel: "محادثة مع dayli",
+      disclaimer: "هذا عرض توضيحي فقط. إرشادات تثقيفية — وليست تشخيصًا طبيًا. اتصلي برقم الطوارئ المحلي عند ألم الصدر أو ضيق التنفس أو أي حالة طارئة.",
+      sourceGps: "من جهازك",
+      sourceIp: "تقدير من شبكتك",
+      locationUnknown: "منطقتك",
+      heatRiskLabels: {
+        low: "حرارة منخفضة",
+        moderate: "حرارة معتدلة",
+        high: "حرارة مرتفعة",
+        very_high: "حرارة مرتفعة جدًا",
+        extreme: "حرارة شديدة",
+      },
+      aqiLabels: {
+        good: "هواء جيد",
+        moderate: "هواء معتدل",
+        unhealthy_sensitive: "غير صحي للفئات الحساسة",
+        unhealthy: "هواء غير صحي",
+        very_unhealthy: "هواء غير صحي جدًا",
+        hazardous: "هواء خطير",
+        unknown: "جودة الهواء غير متاحة",
+      },
+    },
     trust: {
       label: "مبنيّ بخبرة مناخية وصحية",
       items: [

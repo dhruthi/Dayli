@@ -23,7 +23,7 @@ export default function Clinics() {
     const form = e.target as HTMLFormElement;
     setIsSubmitting(true);
     try {
-      await submitLead("clinic", form);
+      await submitLead("clinic", form, locale);
       toast({ title: c.toastSuccessTitle, description: c.toastSuccessBody });
       form.reset();
     } catch {

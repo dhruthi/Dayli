@@ -1,0 +1,84 @@
+import { Clock } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { WHATSAPP_ENABLED, WHATSAPP_URL } from "@/lib/site";
+import { useLocale } from "@/hooks/use-locale";
+
+type ButtonProps = React.ComponentProps<typeof Button>;
+
+interface WhatsAppCTAProps extends Omit<ButtonProps, "asChild"> {
+  label: string;
+  block?: boolean;
+  noticeAfter?: boolean;
+  trailingIcon?: React.ReactNode;
+}
+
+/**
+ * Renders a WhatsApp call-to-action that becomes an anchor link when a
+ * VITE_WHATSAPP_NUMBER is configured, and a clearly-labelled disabled button
+ * with a "setup in progress" notice when it is not. This avoids ever sending
+ * visitors to wa.me without a destination number.
+ */
+export function WhatsAppCTA({
+  label,
+  block,
+  noticeAfter,
+  trailingIcon,
+  className,
+  variant,
+  size,
+  ...rest
+}: WhatsAppCTAProps) {
+  const { t } = useLocale();
+  const widthCls = block ? "w-full" : "";
+
+  if (!WHATSAPP_ENABLED) {
+    return (
+      <div className={cn(block && "w-full")}>
+        <Button
+          type="button"
+          disabled
+          aria-disabled="true"
+          variant={variant}
+          size={size}
+          className={cn(widthCls, className)}
+          {...rest}
+        >
+          {label}
+          {trailingIcon}
+        </Button>
+        {noticeAfter && (
+          <p
+            className={cn(
+              "mt-2 text-xs text-muted-foreground flex items-center gap-1.5",
+              block ? "justify-center" : "",
+            )}
+          >
+            <Clock size={12} className="shrink-0" />
+            <span>{t.layout.whatsappPending}</span>
+          </p>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <a
+      href={WHATSAPP_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={cn(block && "block w-full")}
+    >
+      <Button
+        type="button"
+        variant={variant}
+        size={size}
+        className={cn(widthCls, className)}
+        {...rest}
+      >
+        {label}
+        {trailingIcon}
+      </Button>
+    </a>
+  );
+}

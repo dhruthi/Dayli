@@ -4,8 +4,9 @@ import { Link } from "wouter";
 import { ArrowRight, ThermometerSun, ShieldCheck, HeartPulse, CheckCircle2, Clock, Globe, Droplets, MapPin, Info } from "lucide-react";
 import { AnimatedReveal, StaggeredList } from "@/components/ui/animated-reveal";
 import { WhatsAppChatPreview } from "@/components/ui/whatsapp-chat";
+import { WhatsAppCTA } from "@/components/ui/whatsapp-cta";
+import { ChatDemo } from "@/components/chat/ChatDemo";
 import heroImage from "@/assets/images/hero.png";
-import { WHATSAPP_URL } from "@/lib/site";
 import { SEO } from "@/components/SEO";
 import { FAQSection } from "@/components/FAQSection";
 import { getPageSeo } from "@/lib/seo";
@@ -33,11 +34,11 @@ export default function Home() {
               <p className="text-lg md:text-xl text-muted-foreground mb-4 leading-relaxed">{c.p1}</p>
               <p className="text-base text-foreground/70 mb-8 leading-relaxed">{c.p2}</p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-                  <Button size="lg" className="w-full sm:w-auto text-base h-12 px-8 rounded-full shadow-lg hover:shadow-xl transition-all">
-                    {c.ctaPrimary}
-                  </Button>
-                </a>
+                <WhatsAppCTA
+                  label={c.ctaPrimary}
+                  size="lg"
+                  className="w-full sm:w-auto text-base h-12 px-8 rounded-full shadow-lg hover:shadow-xl transition-all"
+                />
                 <Link href={href("/clinics")}>
                   <Button size="lg" variant="outline" className="w-full sm:w-auto text-base h-12 px-8 rounded-full border-primary/20 text-primary hover:bg-primary/5">
                     {c.ctaSecondary}
@@ -52,16 +53,8 @@ export default function Home() {
             </AnimatedReveal>
 
             <AnimatedReveal direction="left" delay={200} className="relative">
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3] max-w-md mx-auto lg:max-w-none">
-                <img src={heroImage} alt="" className="object-cover w-full h-full" />
-                <div className="absolute inset-0 bg-gradient-to-t from-heat/40 to-transparent mix-blend-overlay"></div>
-              </div>
-
-              <div className="absolute -bottom-10 left-2 sm:-left-6 md:-left-12 max-w-[260px] sm:max-w-[320px]">
-                <WhatsAppChatPreview
-                  messages={[{ text: c.chatHero, sender: "dayli" }]}
-                  animate={true}
-                />
+              <div className="max-w-md mx-auto lg:max-w-none">
+                <ChatDemo />
               </div>
             </AnimatedReveal>
           </div>
@@ -304,12 +297,13 @@ export default function Home() {
           <AnimatedReveal className="max-w-2xl mx-auto">
             <h2 className="text-3xl md:text-5xl font-serif font-bold mb-8">{c.cta.heading}</h2>
             <p className="text-xl opacity-90 mb-10">{c.cta.sub}</p>
-            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-              <Button size="lg" variant="secondary" className="text-lg h-14 px-10 rounded-full shadow-xl hover:scale-105 transition-transform text-primary">
-                {c.cta.button}
-                <ArrowRight className="ml-2" />
-              </Button>
-            </a>
+            <WhatsAppCTA
+              label={c.cta.button}
+              size="lg"
+              variant="secondary"
+              className="text-lg h-14 px-10 rounded-full shadow-xl hover:scale-105 transition-transform text-primary"
+              trailingIcon={<ArrowRight className="ml-2" />}
+            />
             <p className="mt-5 text-sm opacity-80">{t.ctaMicrocopy}</p>
           </AnimatedReveal>
         </div>

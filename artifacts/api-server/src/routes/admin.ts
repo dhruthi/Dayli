@@ -53,32 +53,32 @@ router.get("/admin/leads", adminLimiter, basicAuth, async (_req, res) => {
       db.select().from(pharmaLeadsTable).orderBy(desc(pharmaLeadsTable.createdAt)).limit(500),
     ]);
 
-    const leads = [
-      ...clinics.map((row) => ({
-        id: row.id,
-        type: "clinic" as const,
+    res.json({
+      clinic: clinics.map((row) => ({
+        id: String(row.id),
         name: row.name,
-        email: row.email,
-        org: row.clinic,
-        locale: row.locale,
+        role: row.role,
+        clinic: row.clinic,
+        patients: row.patients,
         city: row.city,
-        message: row.message,
-        createdAt: row.createdAt.toISOString(),
-      })),
-      ...pharmas.map((row) => ({
-        id: row.id,
-        type: "pharma" as const,
-        name: row.name,
         email: row.email,
-        org: row.company,
-        locale: row.locale,
-        city: null,
         message: row.message,
+        locale: row.locale,
+        pageUrl: row.pageUrl,
         createdAt: row.createdAt.toISOString(),
       })),
-    ].sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
-
-    res.json({ leads });
+      pharma: pharmas.map((row) => ({
+        id: String(row.id),
+        name: row.name,
+        company: row.company,
+        therapeutic: row.therapeutic,
+        email: row.email,
+        message: row.message,
+        locale: row.locale,
+        pageUrl: row.pageUrl,
+        createdAt: row.createdAt.toISOString(),
+      })),
+    });
   } catch (err) {
     logger.error({ err }, "admin leads query failed");
     res.status(500).json({ error: "server_error", message: "Could not load leads." });

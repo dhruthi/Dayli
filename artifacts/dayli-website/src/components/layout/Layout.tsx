@@ -3,7 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Menu, X, Sun, Globe } from "lucide-react";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
-import { WHATSAPP_URL } from "@/lib/site";
+import { WhatsAppCTA } from "@/components/ui/whatsapp-cta";
+import { WHATSAPP_ENABLED } from "@/lib/site";
 import { useLocale } from "@/hooks/use-locale";
 import { LOCALES, LOCALE_META, localizedPath, parseLocaleFromPath, setStoredLocalePref } from "@/lib/i18n";
 import { LanguageBanner } from "@/components/layout/LanguageBanner";
@@ -131,11 +132,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   ))}
                 </DropdownMenuContent>
               </DropdownMenu>
-              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-                <Button className="rounded-full shadow-md hover:shadow-lg transition-all active:scale-95">
-                  {t.layout.ctaWhatsapp}
-                </Button>
-              </a>
+              <WhatsAppCTA
+                label={t.layout.ctaWhatsapp}
+                className="rounded-full shadow-md hover:shadow-lg transition-all active:scale-95"
+              />
             </div>
 
             <button
@@ -191,9 +191,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
               </div>
             </div>
             <div className="px-4 pt-2 pb-1">
-              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="block w-full">
-                <Button className="w-full rounded-full">{t.layout.ctaWhatsapp}</Button>
-              </a>
+              <WhatsAppCTA
+                label={t.layout.ctaWhatsapp}
+                block
+                className="rounded-full"
+              />
             </div>
           </div>
         )}
@@ -237,11 +239,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
             <div>
               <h4 className="font-semibold mb-4 text-foreground">{t.layout.footer.getStarted}</h4>
-              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="inline-block">
-                <Button variant="outline" className="rounded-full w-full justify-start text-primary border-primary/20 hover:bg-primary/5">
-                  {t.layout.footer.connect}
-                </Button>
-              </a>
+              <WhatsAppCTA
+                label={t.layout.footer.connect}
+                block
+                variant="outline"
+                className="rounded-full justify-start text-primary border-primary/20 hover:bg-primary/5"
+              />
+              {!WHATSAPP_ENABLED && (
+                <p className="mt-2 text-xs text-muted-foreground">
+                  {t.layout.whatsappPending}
+                </p>
+              )}
             </div>
           </div>
 

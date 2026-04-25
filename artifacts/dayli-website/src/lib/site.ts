@@ -1,62 +1,76 @@
-export const WHATSAPP_NUMBER: string = "";
+import type { Locale } from "./i18n";
+
+export const WHATSAPP_NUMBER: string =
+  (import.meta.env.VITE_WHATSAPP_NUMBER as string | undefined)?.trim() ?? "";
 
 const PREFILLED_MESSAGE = encodeURIComponent(
-  "Hi dayli, I'd like to start receiving daily climate-aware health guidance."
+  "Hi dayli, I'd like to start receiving daily climate-aware health guidance.",
 );
 
-export const WHATSAPP_URL = WHATSAPP_NUMBER
+export const WHATSAPP_ENABLED = WHATSAPP_NUMBER.length > 0;
+
+export const WHATSAPP_URL = WHATSAPP_ENABLED
   ? `https://wa.me/${WHATSAPP_NUMBER.replace(/\D/g, "")}?text=${PREFILLED_MESSAGE}`
-  : `https://wa.me/?text=${PREFILLED_MESSAGE}`;
+  : "";
 
 export const CTA_MICROCOPY =
   "Free · No app to download · Onboard in under a minute · Your data stays private.";
 
-export const LEADS_ENDPOINT = (import.meta.env.VITE_LEADS_ENDPOINT as string | undefined) ?? "";
+const API_BASE: string =
+  (import.meta.env.VITE_API_BASE as string | undefined)?.replace(/\/$/, "") ??
+  "/api";
+
+export function apiUrl(path: string): string {
+  const p = path.startsWith("/") ? path : `/${path}`;
+  return `${API_BASE}${p}`;
+}
 
 export type LeadType = "clinic" | "pharma";
 
-export interface LeadPayload {
-  type: LeadType;
-  data: Record<string, FormDataEntryValue>;
-  submittedAt: string;
-  pageUrl: string;
+const STRING_FIELDS_BY_TYPE: Record<LeadType, readonly string[]> = {
+  clinic: ["name", "role", "clinic", "patients", "city", "email", "message"],
+  pharma: ["name", "company", "therapeutic", "email", "message"],
+};
+
+function formToPayload(
+  type: LeadType,
+  form: HTMLFormElement,
+  locale: Locale,
+): Record<string, string> {
+  const formData = new FormData(form);
+  const payload: Record<string, string> = {
+    locale,
+    pageUrl:
+      typeof window !== "undefined" ? window.location.href.slice(0, 1024) : "",
+  };
+  for (const key of STRING_FIELDS_BY_TYPE[type]) {
+    const v = formData.get(key);
+    if (typeof v === "string" && v.trim().length > 0) {
+      payload[key] = v.trim();
+    }
+  }
+  return payload;
 }
 
-export async function submitLead(type: LeadType, form: HTMLFormElement): Promise<void> {
-  const formData = new FormData(form);
-  const data: Record<string, FormDataEntryValue> = {};
-  formData.forEach((value, key) => {
-    data[key] = value;
+export async function submitLead(
+  type: LeadType,
+  form: HTMLFormElement,
+  locale: Locale = "en",
+): Promise<void> {
+  const payload = formToPayload(type, form, locale);
+  const response = await fetch(apiUrl(`/leads/${type}`), {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
   });
-
-  const payload: LeadPayload = {
-    type,
-    data,
-    submittedAt: new Date().toISOString(),
-    pageUrl: typeof window !== "undefined" ? window.location.href : "",
-  };
-
-  if (LEADS_ENDPOINT) {
-    const response = await fetch(LEADS_ENDPOINT, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-    if (!response.ok) {
-      throw new Error(`Lead submission failed: ${response.status}`);
+  if (!response.ok) {
+    let detail = "";
+    try {
+      const body = (await response.json()) as { error?: string };
+      detail = body?.error ? `: ${body.error}` : "";
+    } catch {
+      // ignore
     }
-    return;
-  }
-
-  // Fallback: persist locally so submissions are never silently lost
-  // when no endpoint is configured. Replace with a real endpoint via
-  // VITE_LEADS_ENDPOINT in production.
-  if (typeof window !== "undefined") {
-    const key = "dayli.pendingLeads";
-    const existing = JSON.parse(window.localStorage.getItem(key) ?? "[]") as LeadPayload[];
-    existing.push(payload);
-    window.localStorage.setItem(key, JSON.stringify(existing));
-    // eslint-disable-next-line no-console
-    console.info("[dayli] Lead captured locally (no VITE_LEADS_ENDPOINT configured):", payload);
+    throw new Error(`Lead submission failed (${response.status})${detail}`);
   }
 }

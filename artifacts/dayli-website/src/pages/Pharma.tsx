@@ -23,7 +23,7 @@ export default function Pharma() {
     const form = e.target as HTMLFormElement;
     setIsSubmitting(true);
     try {
-      await submitLead("pharma", form);
+      await submitLead("pharma", form, locale);
       toast({ title: c.toastSuccessTitle, description: c.toastSuccessBody });
       form.reset();
     } catch {
