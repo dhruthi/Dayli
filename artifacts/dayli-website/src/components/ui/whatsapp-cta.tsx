@@ -33,29 +33,32 @@ export function WhatsAppCTA({
   const widthCls = block ? "w-full" : "";
 
   if (!WHATSAPP_ENABLED) {
+    const pendingLabel = t.layout.whatsappPending;
     return (
       <div className={cn(block && "w-full")}>
         <Button
           type="button"
           disabled
           aria-disabled="true"
+          aria-label={`${label} — ${pendingLabel}`}
+          title={pendingLabel}
           variant={variant}
           size={size}
-          className={cn(widthCls, className)}
+          className={cn(widthCls, "gap-2", className)}
           {...rest}
         >
-          {label}
+          <Clock size={14} className="shrink-0 opacity-80" aria-hidden="true" />
+          <span className="truncate">{pendingLabel}</span>
           {trailingIcon}
         </Button>
         {noticeAfter && (
           <p
             className={cn(
-              "mt-2 text-xs text-muted-foreground flex items-center gap-1.5",
-              block ? "justify-center" : "",
+              "mt-2 text-xs text-muted-foreground",
+              block ? "text-center" : "",
             )}
           >
-            <Clock size={12} className="shrink-0" />
-            <span>{t.layout.whatsappPending}</span>
+            <span className="opacity-80">{label}:</span> {pendingLabel}
           </p>
         )}
       </div>
