@@ -168,16 +168,31 @@ export const StreamChatBody = zod.object({
  * @summary List recent clinic + pharma leads (Basic-auth)
  */
 export const ListLeadsResponse = zod.object({
-  leads: zod.array(
+  clinic: zod.array(
     zod.object({
-      id: zod.number(),
-      type: zod.enum(["clinic", "pharma"]),
+      id: zod.string(),
       name: zod.string(),
-      email: zod.string(),
-      org: zod.string(),
-      locale: zod.string().nullish(),
+      role: zod.string(),
+      clinic: zod.string(),
+      patients: zod.string().nullish(),
       city: zod.string().nullish(),
+      email: zod.string(),
       message: zod.string().nullish(),
+      locale: zod.string().nullish(),
+      pageUrl: zod.string().nullish(),
+      createdAt: zod.coerce.date(),
+    }),
+  ),
+  pharma: zod.array(
+    zod.object({
+      id: zod.string(),
+      name: zod.string(),
+      company: zod.string(),
+      therapeutic: zod.string().nullish(),
+      email: zod.string(),
+      message: zod.string().nullish(),
+      locale: zod.string().nullish(),
+      pageUrl: zod.string().nullish(),
       createdAt: zod.coerce.date(),
     }),
   ),

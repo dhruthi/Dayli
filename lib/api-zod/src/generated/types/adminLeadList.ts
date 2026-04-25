@@ -5,8 +5,10 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-import type { AdminLeadRow } from "./adminLeadRow";
+import type { AdminClinicLeadRow } from "./adminClinicLeadRow";
+import type { AdminPharmaLeadRow } from "./adminPharmaLeadRow";
 
 export interface AdminLeadList {
-  leads: AdminLeadRow[];
+  clinic: AdminClinicLeadRow[];
+  pharma: AdminPharmaLeadRow[];
 }

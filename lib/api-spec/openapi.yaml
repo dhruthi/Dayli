@@ -440,27 +440,32 @@ components:
       required:
         - messages
         - locale
-    AdminLeadRow:
+    AdminClinicLeadRow:
       type: object
       properties:
         id:
-          type: integer
-        type:
           type: string
-          enum: [clinic, pharma]
         name:
           type: string
-        email:
+        role:
           type: string
-        org:
+        clinic:
           type: string
-        locale:
+        patients:
           type: string
           nullable: true
         city:
           type: string
           nullable: true
+        email:
+          type: string
         message:
+          type: string
+          nullable: true
+        locale:
+          type: string
+          nullable: true
+        pageUrl:
           type: string
           nullable: true
         createdAt:
@@ -468,17 +473,54 @@ components:
           format: date-time
       required:
         - id
-        - type
         - name
+        - role
+        - clinic
         - email
-        - org
+        - createdAt
+    AdminPharmaLeadRow:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        company:
+          type: string
+        therapeutic:
+          type: string
+          nullable: true
+        email:
+          type: string
+        message:
+          type: string
+          nullable: true
+        locale:
+          type: string
+          nullable: true
+        pageUrl:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - name
+        - company
+        - email
         - createdAt
     AdminLeadList:
       type: object
       properties:
-        leads:
+        clinic:
           type: array
           items:
-            $ref: "#/components/schemas/AdminLeadRow"
+            $ref: "#/components/schemas/AdminClinicLeadRow"
+        pharma:
+          type: array
+          items:
+            $ref: "#/components/schemas/AdminPharmaLeadRow"
       required:
-        - leads
+        - clinic
+        - pharma

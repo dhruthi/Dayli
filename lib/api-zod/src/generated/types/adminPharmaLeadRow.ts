@@ -5,16 +5,15 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-import type { AdminLeadRowType } from "./adminLeadRowType";
 
-export interface AdminLeadRow {
-  id: number;
-  type: AdminLeadRowType;
+export interface AdminPharmaLeadRow {
+  id: string;
   name: string;
+  company: string;
+  therapeutic?: string | null;
   email: string;
-  org: string;
-  locale?: string | null;
-  city?: string | null;
   message?: string | null;
+  locale?: string | null;
+  pageUrl?: string | null;
   createdAt: Date;
 }

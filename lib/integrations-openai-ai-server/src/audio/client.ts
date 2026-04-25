@@ -6,6 +6,19 @@ import { randomUUID } from "crypto";
 import { tmpdir } from "os";
 import { join } from "path";
 
+/**
+ * The OpenAI SDK type definitions do not yet expose the `audio` field on
+ * chat completion messages/deltas (used by the `gpt-audio` model family).
+ * These narrow extensions add the missing shape so the audio helpers below
+ * can stay strictly typed.
+ */
+interface AudioPayload {
+  data?: string;
+  transcript?: string;
+}
+type AudioMessage = OpenAI.Chat.Completions.ChatCompletionMessage & { audio?: AudioPayload };
+type AudioDelta = OpenAI.Chat.Completions.ChatCompletionChunk.Choice.Delta & { audio?: AudioPayload };
+
 if (!process.env.AI_INTEGRATIONS_OPENAI_BASE_URL) {
   throw new Error(
     "AI_INTEGRATIONS_OPENAI_BASE_URL must be set. Did you forget to provision the OpenAI AI integration?",
@@ -127,8 +140,8 @@ export async function voiceChat(
       ],
     }],
   });
-  const message = response.choices[0]?.message as any;
-  const transcript = message?.audio?.transcript || message?.content || "";
+  const message = response.choices[0]?.message as AudioMessage | undefined;
+  const transcript = message?.audio?.transcript ?? message?.content ?? "";
   const audioData = message?.audio?.data ?? "";
   return {
     transcript,
@@ -158,12 +171,12 @@ export async function voiceChatStream(
 
   return (async function* () {
     for await (const chunk of stream) {
-      const delta = chunk.choices?.[0]?.delta as any;
+      const delta = chunk.choices?.[0]?.delta as AudioDelta | undefined;
       if (!delta) continue;
-      if (delta?.audio?.transcript) {
+      if (delta.audio?.transcript) {
         yield { type: "transcript", data: delta.audio.transcript };
       }
-      if (delta?.audio?.data) {
+      if (delta.audio?.data) {
         yield { type: "audio", data: delta.audio.data };
       }
     }
@@ -185,7 +198,8 @@ export async function textToSpeech(
       { role: "user", content: `Repeat the following text verbatim: ${text}` },
     ],
   });
-  const audioData = (response.choices[0]?.message as any)?.audio?.data ?? "";
+  const message = response.choices[0]?.message as AudioMessage | undefined;
+  const audioData = message?.audio?.data ?? "";
   return Buffer.from(audioData, "base64");
 }
 
@@ -207,9 +221,9 @@ export async function textToSpeechStream(
 
   return (async function* () {
     for await (const chunk of stream) {
-      const delta = chunk.choices?.[0]?.delta as any;
+      const delta = chunk.choices?.[0]?.delta as AudioDelta | undefined;
       if (!delta) continue;
-      if (delta?.audio?.data) {
+      if (delta.audio?.data) {
         yield delta.audio.data;
       }
     }

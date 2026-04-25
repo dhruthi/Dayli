@@ -1,9 +1,75 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { MapPin, Send, ThermometerSun, Wind, Loader2, AlertTriangle } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { apiUrl } from "@/lib/site";
 import { useLocale } from "@/hooks/use-locale";
+
+interface MarkdownLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+  href?: string;
+}
+
+const markdownComponents = {
+  a: ({ href, children, ...rest }: MarkdownLinkProps) => (
+    <a
+      {...rest}
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer nofollow"
+      className="underline underline-offset-2 hover:opacity-80"
+    >
+      {children}
+    </a>
+  ),
+  p: ({ children }: { children?: React.ReactNode }) => (
+    <p className="mb-2 last:mb-0 leading-relaxed">{children}</p>
+  ),
+  ul: ({ children }: { children?: React.ReactNode }) => (
+    <ul className="list-disc pl-5 mb-2 last:mb-0 space-y-1">{children}</ul>
+  ),
+  ol: ({ children }: { children?: React.ReactNode }) => (
+    <ol className="list-decimal pl-5 mb-2 last:mb-0 space-y-1">{children}</ol>
+  ),
+  li: ({ children }: { children?: React.ReactNode }) => <li className="leading-relaxed">{children}</li>,
+  strong: ({ children }: { children?: React.ReactNode }) => (
+    <strong className="font-semibold">{children}</strong>
+  ),
+  em: ({ children }: { children?: React.ReactNode }) => <em className="italic">{children}</em>,
+  code: ({ children }: { children?: React.ReactNode }) => (
+    <code className="px-1 py-0.5 rounded bg-black/10 text-[0.85em] font-mono">{children}</code>
+  ),
+  h1: ({ children }: { children?: React.ReactNode }) => (
+    <p className="font-semibold text-base mb-1.5">{children}</p>
+  ),
+  h2: ({ children }: { children?: React.ReactNode }) => (
+    <p className="font-semibold mb-1.5">{children}</p>
+  ),
+  h3: ({ children }: { children?: React.ReactNode }) => (
+    <p className="font-semibold mb-1.5">{children}</p>
+  ),
+  hr: () => <hr className="my-2 border-border/60" />,
+  blockquote: ({ children }: { children?: React.ReactNode }) => (
+    <blockquote className="border-l-2 border-current/30 pl-3 italic opacity-90 mb-2">
+      {children}
+    </blockquote>
+  ),
+};
+
+function AssistantMarkdown({ text }: { text: string }) {
+  return (
+    <div className="text-sm">
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        components={markdownComponents}
+        skipHtml
+      >
+        {text}
+      </ReactMarkdown>
+    </div>
+  );
+}
 
 interface ChatMessage {
   role: "user" | "assistant";
@@ -445,19 +511,21 @@ export function ChatDemo() {
           <div
             key={i}
             className={cn(
-              "max-w-[85%] rounded-2xl px-3.5 py-2 text-sm whitespace-pre-wrap break-words",
+              "max-w-[85%] rounded-2xl px-3.5 py-2 break-words",
               m.role === "user"
-                ? "bg-primary text-primary-foreground self-end ml-auto rounded-tr-sm"
+                ? "bg-primary text-primary-foreground self-end ml-auto rounded-tr-sm text-sm whitespace-pre-wrap"
                 : "bg-muted text-foreground self-start mr-auto rounded-tl-sm",
             )}
           >
-            {m.content}
+            {m.role === "assistant" ? <AssistantMarkdown text={m.content} /> : m.content}
           </div>
         ))}
 
         {streaming && (
-          <div className="max-w-[85%] rounded-2xl rounded-tl-sm bg-muted text-foreground self-start mr-auto px-3.5 py-2 text-sm whitespace-pre-wrap break-words">
-            {streamingText || (
+          <div className="max-w-[85%] rounded-2xl rounded-tl-sm bg-muted text-foreground self-start mr-auto px-3.5 py-2 break-words">
+            {streamingText ? (
+              <AssistantMarkdown text={streamingText} />
+            ) : (
               <span className="inline-flex gap-1 items-center text-muted-foreground">
                 <span className="w-1.5 h-1.5 rounded-full bg-current animate-bounce" />
                 <span

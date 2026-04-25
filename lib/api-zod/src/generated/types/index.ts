@@ -6,9 +6,9 @@
  * OpenAPI spec version: 0.1.0
  */
 
+export * from "./adminClinicLeadRow";
 export * from "./adminLeadList";
-export * from "./adminLeadRow";
-export * from "./adminLeadRowType";
+export * from "./adminPharmaLeadRow";
 export * from "./apiError";
 export * from "./chatBody";
 export * from "./chatBodyLocation";

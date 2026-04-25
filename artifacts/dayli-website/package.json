@@ -74,5 +74,9 @@
     "vite": "catalog:",
     "wouter": "^3.3.5",
     "zod": "catalog:"
+  },
+  "dependencies": {
+    "react-markdown": "9.0.1",
+    "remark-gfm": "4.0.0"
   }
 }

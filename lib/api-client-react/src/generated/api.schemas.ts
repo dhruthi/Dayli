@@ -171,28 +171,35 @@ export interface ChatBody {
   profile?: ChatBodyProfile;
 }
 
-export type AdminLeadRowType =
-  (typeof AdminLeadRowType)[keyof typeof AdminLeadRowType];
-
-export const AdminLeadRowType = {
-  clinic: "clinic",
-  pharma: "pharma",
-} as const;
-
-export interface AdminLeadRow {
-  id: number;
-  type: AdminLeadRowType;
+export interface AdminClinicLeadRow {
+  id: string;
   name: string;
-  email: string;
-  org: string;
-  locale?: string | null;
+  role: string;
+  clinic: string;
+  patients?: string | null;
   city?: string | null;
+  email: string;
   message?: string | null;
+  locale?: string | null;
+  pageUrl?: string | null;
+  createdAt: string;
+}
+
+export interface AdminPharmaLeadRow {
+  id: string;
+  name: string;
+  company: string;
+  therapeutic?: string | null;
+  email: string;
+  message?: string | null;
+  locale?: string | null;
+  pageUrl?: string | null;
   createdAt: string;
 }
 
 export interface AdminLeadList {
-  leads: AdminLeadRow[];
+  clinic: AdminClinicLeadRow[];
+  pharma: AdminPharmaLeadRow[];
 }
 
 export type GetConditionsParams = {
