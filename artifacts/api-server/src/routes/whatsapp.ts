@@ -431,6 +431,9 @@ async function processClaimedMessage(opts: {
     : (conv.locale as SupportedLocale) ?? "en";
 
   // Emergency short-circuit (deterministic, never reaches the model).
+  // Emergency replies are intentionally NOT rate-limited: a person in
+  // distress must always be able to hear "call your local emergency
+  // number". The reply is static text, no AI cost is incurred.
   if (isEmergency(userText)) {
     const sent = await safeSendBool(config, fromPhone, emergencyReply(locale));
     if (sent) {
@@ -439,8 +442,55 @@ async function processClaimedMessage(opts: {
     return sent;
   }
 
+  // Atomic per-user rate claim, applied to ALL non-emergency paths
+  // (onboarding template / geocode replies / conversational AI). We
+  // open a transaction, take a row lock on the conversation
+  // (`SELECT ... FOR UPDATE`), read the FRESH counter, and bump it
+  // inside the SAME transaction so the increment commits before any
+  // other webhook handler can see the row. Without bumping inside the
+  // transaction, two concurrent deliveries for the same user would
+  // both read the same prior count and both proceed.
+  //
+  // Any AI / template / geocode call happens AFTER the transaction
+  // commits, so we are not holding a row lock while waiting on
+  // external services.
+  const claim = await db.transaction(async (tx) => {
+    // Use the typed query API (NOT raw `tx.execute(sql\`select * ...\`)`)
+    // because raw execute returns snake_case column names and we need
+    // the camelCase fields (`dailyReplyCount`, `dailyWindowStartedAt`)
+    // to feed `checkAndBumpDaily`. `.for("update")` adds the
+    // `SELECT ... FOR UPDATE` row-lock clause.
+    const locked = await tx
+      .select()
+      .from(whatsappConversationsTable)
+      .where(eq(whatsappConversationsTable.id, conv.id))
+      .for("update");
+    const fresh = locked[0] ?? conv;
+    const limit = checkAndBumpDaily(fresh);
+    if (!limit.allowed) return null;
+    await tx
+      .update(whatsappConversationsTable)
+      .set({
+        locale,
+        dailyReplyCount: limit.newCount,
+        dailyWindowStartedAt: limit.newWindowStart,
+        lastInboundAt: new Date(),
+        updatedAt: new Date(),
+      })
+      .where(eq(whatsappConversationsTable.id, conv.id));
+    return { fresh, newCount: limit.newCount };
+  });
+
+  if (!claim) {
+    // User has exhausted today's slots. Send the deterministic notice
+    // (no AI cost) and stop.
+    return await safeSendBool(config, fromPhone, RATE_LIMITED[locale]);
+  }
+
+  const fresh = claim.fresh;
+
   // Onboarding state machine.
-  if (conv.onboardingState === "new") {
+  if (fresh.onboardingState === "new") {
     // First-touch onboarding MUST go out as an approved Meta template
     // message. Even though the user just messaged us (so we are inside
     // their 24h customer-service window and free-form would technically
@@ -476,7 +526,7 @@ async function processClaimedMessage(opts: {
     return true;
   }
 
-  if (conv.onboardingState === "awaiting_location") {
+  if (fresh.onboardingState === "awaiting_location") {
     const place = await geocodePlace(userText);
     if (!place) {
       const sent = await safeSendBool(config, fromPhone, ONBOARDING_NOT_FOUND[locale]);
@@ -520,50 +570,9 @@ async function processClaimedMessage(opts: {
     return true;
   }
 
-  // Conversational mode.
-  //
-  // Atomic-claim a daily-rate slot. We open a transaction, take a row
-  // lock on the conversation (`SELECT ... FOR UPDATE`), read the FRESH
-  // counter (NOT the stale one we read above into `conv`), and bump it
-  // inside the SAME transaction so the counter increment commits before
-  // any other webhook handler can see the row. Without bumping inside
-  // the transaction, two concurrent deliveries for the same user would
-  // both read the same prior count and both proceed.
-  //
-  // The AI call itself happens AFTER the transaction commits, so we are
-  // not holding a row lock for several seconds.
-  const claim = await db.transaction(async (tx) => {
-    // Use the typed query API (NOT raw `tx.execute(sql\`select * ...\`)`)
-    // because raw execute returns snake_case column names and we need
-    // the camelCase fields (`dailyReplyCount`, `dailyWindowStartedAt`)
-    // to feed `checkAndBumpDaily`. `.for("update")` adds the
-    // `SELECT ... FOR UPDATE` row-lock clause.
-    const locked = await tx
-      .select()
-      .from(whatsappConversationsTable)
-      .where(eq(whatsappConversationsTable.id, conv.id))
-      .for("update");
-    const fresh = locked[0] ?? conv;
-    const limit = checkAndBumpDaily(fresh);
-    if (!limit.allowed) return null;
-    await tx
-      .update(whatsappConversationsTable)
-      .set({
-        locale,
-        dailyReplyCount: limit.newCount,
-        dailyWindowStartedAt: limit.newWindowStart,
-        lastInboundAt: new Date(),
-        updatedAt: new Date(),
-      })
-      .where(eq(whatsappConversationsTable.id, conv.id));
-    return { fresh, newCount: limit.newCount };
-  });
-
-  if (!claim) {
-    return await safeSendBool(config, fromPhone, RATE_LIMITED[locale]);
-  }
-
-  const fresh = claim.fresh;
+  // Conversational mode (state="ready"). The atomic rate claim was
+  // already performed above for ALL non-emergency paths, so we go
+  // straight to fetching conditions and running the model.
   const location = readLocation(fresh);
   let conditions = null;
   if (location) {
