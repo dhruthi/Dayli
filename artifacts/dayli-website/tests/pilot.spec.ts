@@ -163,6 +163,37 @@ test.describe("Telangana pilot impact — Hindi (/hi)", () => {
 
     expect(errors, `Page errors in Hindi: ${errors.join("\n")}`).toHaveLength(0);
   });
+
+  test("Hindi: CTA navigates to /hi/about#pilot-story and the section scrolls into view", async ({
+    page,
+  }) => {
+    await page.goto("/hi");
+
+    const homeSection = page.locator("section[aria-labelledby=\"pilot-impact\"]");
+    await homeSection.scrollIntoViewIfNeeded();
+    // CTA is the only link inside the pilot section pointing at the About hash.
+    await homeSection
+      .locator('a[href$="/about#pilot-story"]')
+      .click();
+
+    // Locale prefix is preserved on SPA navigation.
+    await page.waitForURL(/\/hi\/about#pilot-story$/);
+
+    const storySection = page.locator("#pilot-story");
+    await expect(storySection).toBeAttached();
+    // Hash-scroll fired without manual intervention.
+    await expect
+      .poll(
+        async () => {
+          const box = await storySection.boundingBox();
+          if (!box) return false;
+          const vh = page.viewportSize()?.height ?? 720;
+          return box.y >= 0 && box.y <= vh;
+        },
+        { timeout: 5000 },
+      )
+      .toBe(true);
+  });
 });
 
 test.describe("Telangana pilot impact — Arabic (/ar) — RTL", () => {
@@ -188,6 +219,36 @@ test.describe("Telangana pilot impact — Arabic (/ar) — RTL", () => {
     ).toBeVisible();
 
     expect(errors, `Page errors in Arabic: ${errors.join("\n")}`).toHaveLength(0);
+  });
+
+  test("Arabic: CTA navigates to /ar/about#pilot-story and the section scrolls into view (RTL)", async ({
+    page,
+  }) => {
+    await page.goto("/ar");
+
+    const homeSection = page.locator("section[aria-labelledby=\"pilot-impact\"]");
+    await homeSection.scrollIntoViewIfNeeded();
+    await homeSection
+      .locator('a[href$="/about#pilot-story"]')
+      .click();
+
+    await page.waitForURL(/\/ar\/about#pilot-story$/);
+    // RTL stays applied after SPA navigation.
+    await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
+
+    const storySection = page.locator("#pilot-story");
+    await expect(storySection).toBeAttached();
+    await expect
+      .poll(
+        async () => {
+          const box = await storySection.boundingBox();
+          if (!box) return false;
+          const vh = page.viewportSize()?.height ?? 720;
+          return box.y >= 0 && box.y <= vh;
+        },
+        { timeout: 5000 },
+      )
+      .toBe(true);
   });
 
   test("Clinics chip uses logical (start) alignment in RTL", async ({ page }) => {
