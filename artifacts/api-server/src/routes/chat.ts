@@ -42,24 +42,65 @@ const LANGUAGE_NAMES: Record<string, string> = {
   ar: "Arabic (العربية)",
 };
 
-const EMERGENCY_PATTERNS = [
-  /chest pain/i,
-  /can(?:'?| no)t breathe/i,
-  /not breathing/i,
-  /unconscious/i,
-  /seizure/i,
-  /convulsion/i,
-  /stroke/i,
-  /heart attack/i,
-  /heavy bleeding/i,
-  /hemorrhag/i,
-  /haemorrhag/i,
-  /suicide/i,
-  /kill myself/i,
-  /overdose/i,
-  /poisoning/i,
-  /baby (?:not breathing|turning blue|limp)/i,
-  /child (?:not breathing|turning blue|limp)/i,
+// Deterministic emergency-redirect patterns. We match across the four
+// supported locales (en/hi/te/ar) so a user typing in Hindi/Telugu/Arabic
+// also gets the safety short-circuit without ever reaching the model.
+// `u` flag enables proper Unicode matching for non-Latin scripts.
+const EMERGENCY_PATTERNS: RegExp[] = [
+  // English
+  /chest pain/iu,
+  /can(?:'?| no)t breathe/iu,
+  /not breathing/iu,
+  /unconscious/iu,
+  /seizure/iu,
+  /convulsion/iu,
+  /stroke/iu,
+  /heart attack/iu,
+  /heavy bleeding/iu,
+  /hemorrhag/iu,
+  /haemorrhag/iu,
+  /suicide/iu,
+  /kill myself/iu,
+  /overdose/iu,
+  /poisoning/iu,
+  /baby (?:not breathing|turning blue|limp)/iu,
+  /child (?:not breathing|turning blue|limp)/iu,
+  // Hindi (devanagari)
+  /सीने में दर्द/u, // chest pain
+  /साँस नहीं/u, // not breathing
+  /सांस नहीं/u, // not breathing (alt spelling)
+  /बेहोश/u, // unconscious
+  /दौरा/u, // seizure
+  /हार्ट अटैक/u, // heart attack
+  /दिल का दौरा/u, // heart attack
+  /खून बहना/u, // bleeding
+  /भारी रक्तस्राव/u, // heavy bleeding
+  /आत्महत्या/u, // suicide
+  /जहर/u, // poison
+  /ओवरडोज/u, // overdose
+  // Telugu
+  /ఛాతీ నొప్పి/u, // chest pain
+  /శ్వాస తీసుకోలేక/u, // can't breathe
+  /శ్వాస ఆగిపోయింది/u, // breathing stopped
+  /అపస్మారక/u, // unconscious
+  /మూర్ఛ/u, // seizure
+  /గుండెపోటు/u, // heart attack
+  /రక్తస్రావం/u, // bleeding
+  /ఆత్మహత్య/u, // suicide
+  /విషం/u, // poison
+  // Arabic
+  /ألم في الصدر/u, // chest pain
+  /لا (?:يستطيع|أستطيع|تستطيع) التنفس/u, // can't breathe
+  /لا يتنفس/u, // not breathing
+  /فاقد الوعي/u, // unconscious
+  /غيبوبة/u, // coma/unconscious
+  /نوبة/u, // seizure
+  /سكتة دماغية/u, // stroke
+  /نوبة قلبية/u, // heart attack
+  /نزيف حاد/u, // heavy bleeding
+  /انتحار/u, // suicide
+  /جرعة زائدة/u, // overdose
+  /تسمم/u, // poisoning
 ];
 
 function emergencyReply(locale: string): string {
