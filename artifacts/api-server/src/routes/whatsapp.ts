@@ -293,20 +293,16 @@ interface IncomingPayload {
 
 /**
  * Public read-only status endpoint the website calls to decide whether
- * to enable WhatsApp CTAs. We expose only `{ enabled, number }` —
- * never any secret values. The website prefers this endpoint over the
- * build-time `VITE_WHATSAPP_NUMBER` so that CTAs are NEVER shown when
- * the backend integration is missing required Meta secrets (i.e. when
- * the webhook would 503 anyway). The phone number itself comes from
- * the env var because Meta does not expose it via the same secrets we
- * already require, and because the same display number is used across
- * all locales.
+ * to enable WhatsApp CTAs. Opening a wa.me conversation does not depend
+ * on the automated Meta webhook, so link availability is based only on
+ * having a valid public number. Webhook routes continue to enforce the
+ * full Meta configuration independently.
  */
 router.get("/whatsapp/status", (_req, res) => {
-  const config = loadWhatsappConfig();
-  const number = process.env.WHATSAPP_DISPLAY_NUMBER?.trim() || "";
+  const number =
+    process.env.WHATSAPP_DISPLAY_NUMBER?.trim() || "918431061497";
   res.status(200).json({
-    enabled: Boolean(config) && number.length > 0,
+    enabled: /^\d{8,15}$/.test(number),
     number,
   });
 });
