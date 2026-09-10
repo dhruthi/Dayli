@@ -1,20 +1,17 @@
 import type { Locale } from "./i18n";
 
-const PREFILLED_MESSAGE = encodeURIComponent(
-  "Hi dayli, I'd like to start receiving daily climate-aware health guidance.",
-);
+const PREFILLED_MESSAGE = "Hi";
+export const DAYLI_WHATSAPP_NUMBER = "918431061497";
 
 /**
  * Build-time fallback for the WhatsApp number. Kept so that local dev
  * setups without the api-server reachable can still render the wa.me
- * link, but it is NEVER used to decide whether the CTA is enabled —
- * the CTA's enabled state is driven by the api-server's runtime
- * `/whatsapp/status` endpoint so we cannot accidentally show users a
- * working CTA while the backend is feature-flag-disabled (and the
- * webhook would 503).
+ * link. The CTA's enabled state is driven by the api-server's runtime
+ * `/whatsapp/status` endpoint.
  */
 const BUILD_TIME_NUMBER: string =
-  (import.meta.env.VITE_WHATSAPP_NUMBER as string | undefined)?.trim() ?? "";
+  (import.meta.env.VITE_WHATSAPP_NUMBER as string | undefined)?.trim() ||
+  DAYLI_WHATSAPP_NUMBER;
 
 export type WhatsappStatus = {
   enabled: boolean;
@@ -36,7 +33,7 @@ export function buildWhatsappUrl(number: string): string {
  * actually wired up.
  */
 export const INITIAL_WHATSAPP_STATUS: WhatsappStatus = {
-  enabled: false,
+  enabled: /^\d{8,15}$/.test(BUILD_TIME_NUMBER),
   number: BUILD_TIME_NUMBER,
   url: buildWhatsappUrl(BUILD_TIME_NUMBER),
 };

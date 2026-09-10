@@ -33,7 +33,7 @@ strictly required for the site to load, but several toggle key flows.
 | `PORT` | yes | Port the dev/preview server binds to. Provided by the platform. |
 | `BASE_PATH` | yes | Path prefix the site is served under (e.g. `/` or `/dayli-website`). Provided by the platform. |
 | `VITE_API_BASE` | no | Override the base URL for `/api/*` calls. Defaults to a same-origin path computed by `apiUrl()` so production and local dev both work without setting this. Set when pointing the website at a remote API. |
-| `VITE_WHATSAPP_NUMBER` | no | International WhatsApp number (digits only, no `+`) used as a build-time fallback for the `https://wa.me/<number>` link. **No longer controls CTA enablement** — the website fetches `/api/whatsapp/status` at runtime and only enables CTAs when the api-server reports the integration is fully wired (all five Meta secrets + `WHATSAPP_DISPLAY_NUMBER` set). Setting this without the backend secrets will not turn the CTAs on. |
+| `VITE_WHATSAPP_NUMBER` | no | Optional build-time override for the public WhatsApp number (digits only, no `+`). The website defaults to Dayli's live number, `918431061497`, and keeps that link available if the API is temporarily unreachable. |
 
 ### Used by the API server (`artifacts/api-server`) the website talks to
 
@@ -60,7 +60,7 @@ on how to obtain each value from Meta.
 | `META_WHATSAPP_VERIFY_TOKEN` | yes (for WhatsApp) | Random string you choose; Meta echoes it during the webhook handshake. |
 | `META_WHATSAPP_APP_SECRET` | yes (for WhatsApp) | Used to verify every inbound webhook POST via HMAC-SHA256. |
 | `META_WHATSAPP_HASH_SALT` | yes (for WhatsApp) | Random salt used to hash user phone numbers before persistence. |
-| `WHATSAPP_DISPLAY_NUMBER` | yes (for CTAs) | Public dialable WhatsApp number (digits only, no `+`, e.g. `919999999999`). The api-server's `/api/whatsapp/status` endpoint reads this so the website can enable the "Start on WhatsApp" CTAs. CTAs stay disabled until both this and all five `META_*` secrets above are present. |
+| `WHATSAPP_DISPLAY_NUMBER` | no | Optional runtime override for the public dialable WhatsApp number (digits only, no `+`). This controls the website link independently of the five `META_*` secrets used for automated webhook replies. |
 | `META_WHATSAPP_GRAPH_VERSION` | no | Pinned Graph API version. Defaults to `v23.0`. |
 | `META_WHATSAPP_ONBOARDING_TEMPLATE` | no | Approved Meta template name for first-touch outbound. Defaults to `dayli_onboarding_v1`. |
 | `META_WHATSAPP_ONBOARDING_LANGUAGE` | no | Locale for the onboarding template. Defaults to `en`. |

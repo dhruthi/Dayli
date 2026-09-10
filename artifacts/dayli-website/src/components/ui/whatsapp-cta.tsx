@@ -15,11 +15,9 @@ interface WhatsAppCTAProps extends Omit<ButtonProps, "asChild"> {
 
 /**
  * Renders a WhatsApp call-to-action that becomes an anchor link when
- * the api-server reports the WhatsApp Business integration is wired up
- * (all five Meta secrets present + a display number configured), and a
+ * the api-server reports a valid public WhatsApp number, and a
  * clearly-labelled disabled button with a "setup in progress" notice
- * when it is not. This avoids ever sending visitors to a wa.me link
- * pointing at a number whose webhook would 503.
+ * when it does not.
  */
 export function WhatsAppCTA({
   label,

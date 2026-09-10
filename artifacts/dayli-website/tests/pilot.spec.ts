@@ -1,5 +1,29 @@
 import { test, expect } from "@playwright/test";
 
+const LIVE_WHATSAPP_URL = "https://wa.me/918431061497?text=Hi";
+
+test.describe("Live WhatsApp handoff", () => {
+  test("all enabled WhatsApp calls to action use the live Dayli account", async ({
+    page,
+  }) => {
+    for (const path of ["/", "/product"]) {
+      await page.goto(path);
+      const links = page.locator(`a[href="${LIVE_WHATSAPP_URL}"]`);
+      await expect(links.first()).toBeAttached();
+
+      const count = await links.count();
+      expect(count).toBeGreaterThan(0);
+      for (let index = 0; index < count; index += 1) {
+        await expect(links.nth(index)).toHaveAttribute("target", "_blank");
+        await expect(links.nth(index)).toHaveAttribute(
+          "rel",
+          "noopener noreferrer",
+        );
+      }
+    }
+  });
+});
+
 /**
  * E2E coverage for Task #36 — Telangana pilot impact section.
  *

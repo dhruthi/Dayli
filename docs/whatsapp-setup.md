@@ -5,10 +5,10 @@ on **Meta's side** before users can text the dayli copilot from their own
 phones. Once these steps are done, the integration runs end-to-end through
 code that is already shipped (`artifacts/api-server/src/routes/whatsapp.ts`).
 
-The integration is **feature-flagged**: with no Meta secrets set, the rest
-of the website keeps working unchanged and the "Start on WhatsApp" CTAs
-render in their disabled "setup in progress" state from the MVP. Adding
-the secrets below is what flips the whole thing on.
+The automated chatbot integration is **feature-flagged**: with no Meta
+secrets set, the public "Start on WhatsApp" links still open Dayli's live
+WhatsApp Business account, while webhook automation remains disabled.
+Adding the secrets below turns automated replies on.
 
 ## Required secrets (paste into Replit Secrets)
 
@@ -19,7 +19,7 @@ the secrets below is what flips the whole thing on.
 | `META_WHATSAPP_VERIFY_TOKEN` | Any random string YOU pick. Meta will echo it back during the webhook handshake to prove the URL belongs to you. | Generate it yourself (`openssl rand -hex 32` is fine). Paste the same value into Meta's webhook config and into Replit Secrets. |
 | `META_WHATSAPP_APP_SECRET` | App secret of the Meta App that owns the WhatsApp product. Used to verify every incoming webhook POST via HMAC-SHA256. | Meta App → Settings → Basic → "App secret" → Show. |
 | `META_WHATSAPP_HASH_SALT` | Random salt used to HMAC-SHA256 every user's phone number before persisting it to our DB. We never store raw E.164 numbers. | Generate it yourself (`openssl rand -hex 32`). DO NOT rotate casually — rotating it orphans every existing conversation row. |
-| `WHATSAPP_DISPLAY_NUMBER` | Public dialable WhatsApp number (international form, **digits only, no `+`**). The api-server's `/api/whatsapp/status` endpoint uses this to tell the website whether to enable the "Start on WhatsApp" CTAs. | Same number you claimed in step 3, formatted as digits only (e.g. `919999999999`). |
+| `WHATSAPP_DISPLAY_NUMBER` | Optional override for the public dialable WhatsApp number (international form, **digits only, no `+`**). The website defaults to Dayli's live number, `918431061497`. | Only set this when intentionally replacing the live Dayli number. |
 
 Optional secrets (sane defaults shipped):
 
@@ -131,20 +131,18 @@ exist.
 
 ## Wiring the website CTAs
 
-There are TWO env vars involved in the website CTAs and they must be
-set together:
+The website defaults to Dayli's live WhatsApp Business link:
+`https://wa.me/918431061497?text=Hi`. The two number variables below are
+optional overrides and, when used, must be set together:
 
 | Variable | Where | Purpose |
 |---|---|---|
-| `WHATSAPP_DISPLAY_NUMBER` | api-server (Replit Secrets) | International form, **digits only, no `+`** (e.g. `919999999999`). The api-server's public `/api/whatsapp/status` endpoint reads this and tells the website. |
-| `VITE_WHATSAPP_NUMBER` | dayli-website (Replit Secrets, prefix `VITE_`) | Same value as `WHATSAPP_DISPLAY_NUMBER`. Build-time fallback used only if the website cannot reach the api-server's status endpoint. |
+| `WHATSAPP_DISPLAY_NUMBER` | api-server (Replit Secrets) | Optional international-number override, **digits only, no `+`**. |
+| `VITE_WHATSAPP_NUMBER` | dayli-website (Replit Secrets, prefix `VITE_`) | Optional matching build-time override. |
 
 The CTA enabled state is **driven by the api-server**, not by the
-build-time env var: even if `VITE_WHATSAPP_NUMBER` is set, the CTA will
-stay in the "setup in progress" state unless ALL FIVE Meta secrets
-above are also set (i.e. unless the webhook would actually accept
-calls). This prevents users from being deep-linked into a WhatsApp
-chat whose webhook would 503.
+build-time env var. It is enabled whenever the runtime number is valid;
+the five Meta secrets above control automated webhook replies separately.
 
 ## Verifying the integration end-to-end
 

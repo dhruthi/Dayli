@@ -48,6 +48,14 @@ Thumbs.db
 .cache/
 .local/
 
+# Private working notes and source uploads (not application assets)
+.agents/
+replit.md
+attached_assets/
+.env
+.env.*
+!.env.example
+
 # Playwright generated outputs
 test-results/
 playwright-report/
