@@ -6,6 +6,7 @@
  * needs a single full-text reply to send back via Meta).
  */
 import type { ConditionsSnapshot } from "./conditions";
+import { VICINITY_LIMIT_M, type Facility, type FacilityKind, type FacilityLookupStatus } from "./places";
 import { logger } from "./logger";
 
 export const SUPPORTED_LOCALES = ["en", "hi", "te", "ar"] as const;
@@ -93,11 +94,83 @@ export function emergencyReply(locale: string): string {
   return messages[locale] ?? messages.en;
 }
 
+/**
+ * India-specific, because the pilot is. 108 is the free 24/7 ambulance line and
+ * reaches a caller at their location without them naming any facility, which is
+ * exactly what is needed when the directory cannot answer. Change these two
+ * numbers if dayli is ever deployed outside India.
+ */
+const EMERGENCY_NUMBERS =
+  "108 (free 24/7 ambulance across India, which reaches them where they are) or 112 (all-purpose emergency number)";
+
+export interface FacilityContext {
+  kind: FacilityKind;
+  /** `no_location` means we never got as far as a lookup. */
+  status: FacilityLookupStatus | "no_location";
+  results: Facility[];
+}
+
+/**
+ * Turn a facility lookup into model instructions.
+ *
+ * The statuses must never be collapsed. "The directory did not answer" and
+ * "nothing is mapped near you" are opposite claims, and only the second is
+ * about the user's surroundings — reporting an outage as an absence is the
+ * dangerous failure this whole feature guards against. Every degraded branch
+ * therefore says what we do and do not know, offers something that works
+ * without a facility name, and closes on a question rather than an apology.
+ */
+function buildFacilitiesBlock(facilities: FacilityContext): string {
+  const kindWord = facilities.kind === "pharmacy" ? "pharmacies" : "hospitals or clinics";
+  const noInvent =
+    "Do NOT name, recall or give an example of any specific facility, its address or its phone number — not even a well-known one. The national numbers named below are the only numbers you may give.";
+  const closeOnQuestion =
+    "End with exactly ONE short follow-up question, and make it the question that changes what you do next: whether someone is unwell right now, so you can help with the symptoms meanwhile, or whether they are noting this down to have ready later. Never end on the apology, and never close with a generic \"anything else?\".";
+
+  if (facilities.status === "ok" && facilities.results.length > 0) {
+    const lines = facilities.results.map((f, i) => {
+      const address = f.address ? `\n   Address: ${f.address}` : "";
+      return `${i + 1}. ${f.name} (${f.type}) — ${f.distanceText} away${address}\n   Map: ${f.mapsUrl}`;
+    });
+    const nearest = facilities.results[0];
+    const tooFar =
+      nearest.distanceMetres > VICINITY_LIMIT_M
+        ? `\nNOTHING CLOSE BY: the nearest is ${nearest.distanceText} away, which is not walking distance. Say plainly that nothing is very close and that this is the nearest option, so they can plan how to travel.`
+        : "";
+    return [
+      `NEARBY ${facilities.kind.toUpperCase()} RESULTS (OpenStreetMap, measured from the user's own coordinates, nearest first):`,
+      ...lines,
+      "List these in the order given — it is nearest-first and the user asked for the nearest. Quote each distance exactly as shown, include the map link for each, and do NOT add, reorder or invent any facility, address or distance. This list is worth the characters: keep every entry and its link even though the channel hint asks for brevity." +
+        tooFar,
+    ].join("\n");
+  }
+
+  if (facilities.status === "unavailable") {
+    return [
+      `FACILITY DIRECTORY TEMPORARILY DOWN: the live map directory did not answer, so we do NOT know what is near this user. Do not say there are none, and do not suggest their area is unmapped. ${noInvent} Build the reply in this order:`,
+      "1. Say plainly that you could not reach the live facility directory just now, and that this is a fault on dayli's side — not a sign that there is nothing near them.",
+      "2. Say you would rather not guess at a name or address, because a wrong address costs time they may not have.",
+      `3. Give what works right now without any facility name: ${EMERGENCY_NUMBERS}.`,
+      "4. Tell them the directory usually recovers within a minute or two and that asking again is all it takes. Do NOT ask for their location: we already have it.",
+      `5. ${closeOnQuestion}`,
+    ].join("\n");
+  }
+
+  if (facilities.status === "empty") {
+    return `NONE REGISTERED NEARBY: the directory answered and has no ${kindWord} mapped within 25km of this user. ${noInvent} Say plainly that none are listed near them, and that rural areas are often incompletely mapped, so something unlisted may still be close. Point them at ${EMERGENCY_NUMBERS}, and suggest asking a neighbour or the local ASHA worker, who will know what the map does not. Do NOT ask for their location: we already have it. ${closeOnQuestion}`;
+  }
+
+  // "no_location" and "invalid" both mean we could not run a lookup at all.
+  return `NO LOCATION KNOWN: we have no usable location for this user, so no lookup ran. ${noInvent} Ask them to share a WhatsApp location pin, or to name their town or area, so you can look up ${kindWord} near them, and say it is used only for this search. If they need help before that, ${EMERGENCY_NUMBERS} reach help without any address. ${closeOnQuestion}`;
+}
+
 export function buildSystemPrompt(opts: {
   locale: string;
   conditions: ConditionsSnapshot | null;
   audience: string | null;
   channel?: "web" | "whatsapp";
+  /** Present only when the user actually asked for a nearby facility. */
+  facilities?: FacilityContext | null;
 }): string {
   const language = LANGUAGE_NAMES[opts.locale] ?? "English";
   const audienceLine =
@@ -139,6 +212,9 @@ export function buildSystemPrompt(opts: {
     "",
     conditionsBlock,
     "",
+    // Only present when the user asked where to go; the rest of the time this
+    // costs nothing and the model never sees facility instructions at all.
+    ...(opts.facilities ? [buildFacilitiesBlock(opts.facilities), ""] : []),
     "STYLE RULES:",
     `- ALWAYS reply in ${language}. Even if the user writes in another language, reply in ${language}.`,
     "- Be warm, calm and concrete. No emojis.",
@@ -196,6 +272,7 @@ export async function runCopilotOnce(opts: {
   history: CopilotMessage[];
   userMessage: string;
   channel?: "web" | "whatsapp";
+  facilities?: FacilityContext | null;
 }): Promise<string> {
   if (isEmergency(opts.userMessage)) {
     return emergencyReply(opts.locale);
@@ -206,6 +283,7 @@ export async function runCopilotOnce(opts: {
     conditions: opts.conditions,
     audience: opts.audience,
     channel: opts.channel ?? "web",
+    facilities: opts.facilities ?? null,
   });
   try {
     const completion = await openai.chat.completions.create({
