@@ -19,7 +19,7 @@ export const whatsappConversationsTable = pgTable("whatsapp_conversations", {
   /** Locale resolved from the user's most recent message ("en"/"hi"/"te"/"ar"). */
   locale: text("locale").notNull().default("en"),
   /** Resolved location for personalised conditions. JSON of
-   * { lat, lon, city, country, source: "onboarding"|"detected" }. */
+   * { lat, lon, city, country, source: "onboarding"|"detected"|"pin" }. */
   location: jsonb("location"),
   /** Rolling message history, capped to the most recent ~20 turns at write
    * time. JSON of `[{ role: "user"|"assistant", content: string, ts: ISO }]`. */
@@ -52,7 +52,8 @@ export interface WhatsappLocation {
   lon: number;
   city: string | null;
   country: string | null;
-  source: "onboarding" | "detected";
+  /** `pin` is a WhatsApp location share — exact coordinates, not a city centroid. */
+  source: "onboarding" | "detected" | "pin";
 }
 
 export interface WhatsappHistoryEntry {

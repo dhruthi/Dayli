@@ -56,11 +56,13 @@ import {
 } from "../lib/whatsapp";
 import { fetchConditions } from "../lib/conditions";
 import { geocodePlace } from "../lib/geocode";
+import { detectFacilityKind, lookupFacilities } from "../lib/places";
 import {
   emergencyReply,
   isEmergency,
   runCopilotOnce,
   SUPPORTED_LOCALES,
+  type FacilityContext,
   type SupportedLocale,
 } from "../lib/copilot";
 import { logger } from "../lib/logger";
@@ -107,6 +109,18 @@ const ONBOARDING_CONFIRMED: Record<SupportedLocale, (place: string) => string> =
   hi: (p) => `ठीक है — आपकी स्थानीय परिस्थितियों के लिए ${p} का उपयोग कर रहा हूँ। आज आप किस बारे में मार्गदर्शन चाहेंगे?`,
   te: (p) => `అర్థమయింది — మీ స్థానిక పరిస్థితుల కోసం ${p} ఉపయోగిస్తున్నాను. ఈరోజు మీకు ఏ విషయంపై మార్గదర్శనం కావాలి?`,
   ar: (p) => `تم — سأستخدم ${p} لظروفك المحلية. بأي شيء تودّ أن أرشدك اليوم؟`,
+};
+
+/** Sent when someone drops a WhatsApp location pin, in any onboarding state. */
+const LOCATION_PIN_CONFIRMED: Record<SupportedLocale, (place: string) => string> = {
+  en: (p) =>
+    `Got your location${p ? ` — ${p}` : ""}. I'll use it for your local conditions, and I can find the nearest hospital or pharmacy if you ask.`,
+  hi: (p) =>
+    `आपका स्थान मिल गया${p ? ` — ${p}` : ""}। मैं इसका उपयोग आपकी स्थानीय परिस्थितियों के लिए करूँगा, और पूछने पर निकटतम अस्पताल या दवा की दुकान भी बता सकता हूँ।`,
+  te: (p) =>
+    `మీ లొకేషన్ అందింది${p ? ` — ${p}` : ""}. మీ స్థానిక పరిస్థితుల కోసం దీన్ని ఉపయోగిస్తాను, అడిగితే దగ్గరలోని ఆసుపత్రి లేదా మెడికల్ షాప్ కూడా చెప్పగలను.`,
+  ar: (p) =>
+    `وصلني موقعك${p ? ` — ${p}` : ""}. سأستخدمه لظروفك المحلية، ويمكنني أيضاً إيجاد أقرب مستشفى أو صيدلية إذا طلبت.`,
 };
 
 const RATE_LIMITED: Record<SupportedLocale, string> = {
@@ -267,6 +281,7 @@ interface IncomingMessage {
   timestamp: string;
   type: string;
   text?: { body?: string };
+  location?: { latitude?: number; longitude?: number; name?: string; address?: string };
 }
 
 interface IncomingValue {
@@ -370,13 +385,12 @@ async function handleIncomingMessage(
   value: IncomingValue,
   config: WhatsappConfig,
 ): Promise<void> {
-  if (msg.type !== "text" || !msg.text?.body) {
-    // We only support text in the MVP; silently ignore other types
-    // (interactive replies, status updates, media, etc.).
-    return;
-  }
-  const userText = msg.text.body.trim();
-  if (userText.length === 0) return;
+  // A WhatsApp location pin arrives as its own message with no text body, so
+  // it is read separately rather than through `userText`. Everything else
+  // (interactive replies, status updates, media) is still ignored.
+  const pin = readLocationPin(msg);
+  const userText = msg.type === "text" ? (msg.text?.body ?? "").trim() : "";
+  if (!pin && userText.length === 0) return;
 
   const fromPhone = msg.from;
   if (!fromPhone) return;
@@ -421,6 +435,7 @@ async function handleIncomingMessage(
       value,
       config,
       userText,
+      pin,
       fromPhone,
       phoneHash,
     });
@@ -437,6 +452,29 @@ async function handleIncomingMessage(
 }
 
 /**
+ * Read a location pin off an inbound message, or `null` if this is not a usable
+ * pin. Meta sends latitude/longitude as numbers; anything else is discarded
+ * rather than coerced, because a bad coordinate silently relocates the user.
+ */
+function readLocationPin(msg: IncomingMessage): WhatsappLocation | null {
+  if (msg.type !== "location") return null;
+  const lat = msg.location?.latitude;
+  const lon = msg.location?.longitude;
+  if (typeof lat !== "number" || typeof lon !== "number") return null;
+  if (!Number.isFinite(lat) || !Number.isFinite(lon)) return null;
+  if (Math.abs(lat) > 90 || Math.abs(lon) > 180) return null;
+  return {
+    lat,
+    lon,
+    // A pin's name/address is the label WhatsApp showed the sender. It is
+    // display-only and never used to look anything up.
+    city: msg.location?.name ?? msg.location?.address ?? null,
+    country: null,
+    source: "pin",
+  };
+}
+
+/**
  * The post-dedup processing. Returns `true` iff we successfully sent
  * SOME message (success, apology, or rate-limit notice) to the user, in
  * which case the caller keeps the dedup row. Returns `false` if no
@@ -448,27 +486,30 @@ async function processClaimedMessage(opts: {
   value: IncomingValue;
   config: WhatsappConfig;
   userText: string;
+  pin: WhatsappLocation | null;
   fromPhone: string;
   phoneHash: string;
 }): Promise<boolean> {
-  const { value, config, userText, fromPhone, phoneHash } = opts;
+  const { value, config, userText, pin, fromPhone, phoneHash } = opts;
   const contact = value.contacts?.[0];
   const waId = contact?.wa_id ?? null;
   const waIdHash = waId ? hashPhoneNumber(waId, config.hashSalt) : null;
   const displayName = contact?.profile?.name ?? null;
 
-  const detected = detectLocale(userText, "en");
+  // A pin has no text to sniff, so it must not drag the user back to English.
+  const detected = userText.length > 0 ? detectLocale(userText, "en") : null;
 
   const conv = await getOrCreateConversation({
     phoneHash,
     waIdHash,
     displayName,
-    locale: detected,
+    locale: detected ?? "en",
   });
 
-  const locale: SupportedLocale = SUPPORTED_LOCALES.includes(detected)
-    ? detected
-    : (conv.locale as SupportedLocale) ?? "en";
+  const locale: SupportedLocale =
+    detected && SUPPORTED_LOCALES.includes(detected)
+      ? detected
+      : (conv.locale as SupportedLocale) ?? "en";
 
   // Emergency short-circuit (deterministic, never reaches the model).
   // Emergency replies are intentionally NOT rate-limited: a person in
@@ -528,6 +569,38 @@ async function processClaimedMessage(opts: {
   }
 
   const fresh = claim.fresh;
+
+  // A location pin both answers the onboarding question and re-anchors an
+  // existing user, so it is handled ahead of the onboarding state machine
+  // rather than as another case inside it. A pin is strictly better than the
+  // geocoded city it replaces: "nearest hospital" measured from a city
+  // centroid can be kilometres wrong.
+  //
+  // State "new" is deliberately excluded. First contact must go out as the
+  // approved Meta template (see the branch below), so a pin from someone we
+  // have never greeted falls through to onboarding and is not consumed here.
+  if (pin && fresh.onboardingState !== "new") {
+    const placeLabel = pin.city ?? `${pin.lat.toFixed(2)}, ${pin.lon.toFixed(2)}`;
+    const sent = await safeSendBool(config, fromPhone, LOCATION_PIN_CONFIRMED[locale](placeLabel));
+    if (!sent) {
+      await releaseDailyClaim(conv.id, claim.newWindowStart);
+      return false;
+    }
+    await safePersist(() =>
+      db
+        .update(whatsappConversationsTable)
+        .set({
+          onboardingState: "ready",
+          locale,
+          location: pin,
+          lastInboundAt: new Date(),
+          lastOutboundAt: new Date(),
+          updatedAt: new Date(),
+        })
+        .where(eq(whatsappConversationsTable.id, conv.id)),
+    );
+    return true;
+  }
 
   // Onboarding state machine.
   if (fresh.onboardingState === "new") {
@@ -632,6 +705,40 @@ async function processClaimedMessage(opts: {
     }
   }
 
+  // Only look up facilities when the user actually asked for one: most
+  // messages are not "where is the nearest hospital", and a round trip to the
+  // public OSM mirrors costs several seconds.
+  const facilityKind = detectFacilityKind(userText);
+  let facilities: FacilityContext | null = null;
+  if (facilityKind) {
+    if (!location) {
+      facilities = { kind: facilityKind, status: "no_location", results: [] };
+    } else {
+      try {
+        const lookup = await lookupFacilities({
+          lat: location.lat,
+          lon: location.lon,
+          kind: facilityKind,
+        });
+        facilities = { kind: facilityKind, status: lookup.status, results: lookup.results };
+        logger.info(
+          {
+            kind: facilityKind,
+            status: lookup.status,
+            source: lookup.source,
+            count: lookup.results.length,
+          },
+          "whatsapp facility lookup",
+        );
+      } catch (err) {
+        // An outage has its own reply and must never reach the user as
+        // "there are none near you".
+        logger.warn({ err }, "facility lookup threw in whatsapp handler");
+        facilities = { kind: facilityKind, status: "unavailable", results: [] };
+      }
+    }
+  }
+
   const history = readHistory(fresh);
   let reply: string;
   try {
@@ -642,6 +749,7 @@ async function processClaimedMessage(opts: {
       history,
       userMessage: userText,
       channel: "whatsapp",
+      facilities,
     });
   } catch (err) {
     logger.error({ err }, "copilot failed for whatsapp");
