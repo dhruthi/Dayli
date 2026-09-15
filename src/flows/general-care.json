@@ -1,0 +1,540 @@
+{
+  "id": "general-care",
+  "title": "dayli.ai Climate Health Copilot",
+  "description": "Interactive maternal climate health copilot offering area-specific weather warnings, clinical symptom triage, and medication storage protection.",
+  "category": "Maternal & Child Health",
+  "badge": "Main Copilot Flow",
+  "estimatedDuration": "2 mins",
+  "targetAudience": "Pregnant Mothers, New Parents & Healthcare Workers",
+  "initialNodeId": "start_welcome_template",
+  "nodes": {
+    "start_welcome_template": {
+      "id": "start_welcome_template",
+      "type": "template",
+      "templateName": "dayli_maternal_onboarding_v1",
+      "header": "☀️ dayli.ai Climate Health Copilot",
+      "message": "Welcome to *dayli.ai Climate Health Copilot*! We protect pregnant mothers and children from extreme heatwaves, air pollution, and dehydration with hyper-local weather guidance.\n\nPlease select an option below to continue:",
+      "footer": "Supported by Healthcare & Climate Partners • Opt-out anytime",
+      "buttons": [
+        {
+          "id": "btn_general_care",
+          "title": "☀️ General Care & Area Alerts",
+          "next": "ask_trimester",
+          "variablesToSet": { "selectedPathway": "General Care" }
+        },
+        {
+          "id": "btn_clinical_triage",
+          "title": "🚨 Clinical Triage",
+          "next": "show_symptom_form",
+          "variablesToSet": { "selectedPathway": "Clinical Triage" }
+        },
+        {
+          "id": "btn_medication_adherence",
+          "title": "💊 Medication Adherence",
+          "next": "select_supplements",
+          "variablesToSet": { "selectedPathway": "Medication Adherence" }
+        }
+      ],
+      "presentationAutoResponse": {
+        "action": "click_button",
+        "value": "btn_general_care",
+        "delayMs": 1500
+      }
+    },
+    "ask_trimester": {
+      "id": "ask_trimester",
+      "type": "interactive_list",
+      "header": "👩‍👧 Profile Setup — General Care",
+      "message": "To tailor your area heat vulnerability alerts and hydration targets, please select your current pregnancy stage or child age category:",
+      "footer": "Select one option to continue",
+      "listSections": [
+        {
+          "title": "Pregnancy Trimesters",
+          "options": [
+            {
+              "id": "opt_trimester_1",
+              "title": "1st Trimester (Weeks 1-13)",
+              "description": "High neural tube risk during extreme heat",
+              "next": "request_location",
+              "variablesToSet": { "isPregnant": true, "trimester": "1st Trimester" }
+            },
+            {
+              "id": "opt_trimester_2",
+              "title": "2nd Trimester (Weeks 14-27)",
+              "description": "Increased blood volume & thermoregulation needs",
+              "next": "request_location",
+              "variablesToSet": { "isPregnant": true, "trimester": "2nd Trimester" }
+            },
+            {
+              "id": "opt_trimester_3",
+              "title": "3rd Trimester (Weeks 28+)",
+              "description": "Highest risk for heat-induced premature labor",
+              "next": "request_location",
+              "variablesToSet": { "isPregnant": true, "trimester": "3rd Trimester" }
+            }
+          ]
+        },
+        {
+          "title": "Newborn & Infant Care",
+          "options": [
+            {
+              "id": "opt_infant",
+              "title": "Infant (0 - 12 Months)",
+              "description": "Immature sweat glands, rapid heat accumulation",
+              "next": "request_location",
+              "variablesToSet": { "isPregnant": false, "childAge": "0-12 Months" }
+            }
+          ]
+        }
+      ],
+      "presentationAutoResponse": {
+        "action": "select_list",
+        "value": "opt_trimester_2",
+        "delayMs": 2000
+      }
+    },
+    "request_location": {
+      "id": "request_location",
+      "type": "interactive_list",
+      "header": "📍 Select Area & Live Location",
+      "message": "Please share your current GPS location or select your city area so dayli.ai can query real-time ambient temperature, humidity, air quality (AQI), and regional heat advisory protocols:",
+      "footer": "Select location to receive area-specific health guidance",
+      "listSections": [
+        {
+          "title": "Regional Climate Micro-Zones",
+          "options": [
+            {
+              "id": "opt_delhi",
+              "title": "📍 New Delhi (Extreme Dry Heat 42.5°C)",
+              "description": "Northern heatwave corridor & Severe AQI 215",
+              "next": "fetch_weather_api",
+              "variablesToSet": { "latitude": 28.6139, "longitude": 77.209, "locationName": "New Delhi (Northern Heat Corridor)" }
+            },
+            {
+              "id": "opt_mumbai",
+              "title": "🌊 Mumbai (High Coastal Humidity 82%)",
+              "description": "High heat index 44.2°C & silent dehydration risk",
+              "next": "fetch_weather_api",
+              "variablesToSet": { "latitude": 19.076, "longitude": 72.8777, "locationName": "Mumbai (Coastal High Humidity Zone)" }
+            },
+            {
+              "id": "opt_kolkata",
+              "title": "💨 Kolkata (Hazardous AQI 290 & Smog)",
+              "description": "Industrial air pollution & high fetal respiratory risk",
+              "next": "fetch_weather_api",
+              "variablesToSet": { "latitude": 22.5726, "longitude": 88.3639, "locationName": "Kolkata (Gangetic Industrial Belt)" }
+            },
+            {
+              "id": "opt_hyderabad",
+              "title": "☀️ Hyderabad (Deccan Heat & High UV 11+)",
+              "description": "Semi-arid plateau heatwave (41.8°C) & intense solar radiation",
+              "next": "fetch_weather_api",
+              "variablesToSet": { "latitude": 17.385, "longitude": 78.4867, "locationName": "Hyderabad (Deccan Plateau Heat Zone)" }
+            }
+          ]
+        }
+      ],
+      "buttons": [
+        {
+          "id": "btn_send_gps",
+          "title": "📍 Share Live GPS Coordinates",
+          "next": "fetch_weather_api",
+          "variablesToSet": { "latitude": 28.6139, "longitude": 77.209, "locationName": "New Delhi Central" }
+        }
+      ],
+      "presentationAutoResponse": {
+        "action": "select_list",
+        "value": "opt_delhi",
+        "delayMs": 1800
+      }
+    },
+    "fetch_weather_api": {
+      "id": "fetch_weather_api",
+      "type": "api_call",
+      "apiCall": {
+        "service": "weather",
+        "method": "getClimateHealthData",
+        "params": { "latitude": 28.6139, "longitude": 77.209 },
+        "storeResultAs": "weatherData",
+        "next": "display_weather_alert"
+      }
+    },
+    "display_weather_alert": {
+      "id": "display_weather_alert",
+      "type": "media",
+      "mediaType": "image",
+      "mediaUrl": "https://images.unsplash.com/photo-1504386106331-3e4e71712b38?q=80&w=800&auto=format&fit=crop",
+      "header": "⚠️ LOCATION CLIMATE ADVISORY — {{weatherData.cityName}}",
+      "message": "🌍 *Area Location:* {{weatherData.cityName}}\n🌡️ *Ambient Temp:* {{weatherData.temperatureC}}°C (Feels like {{weatherData.feelsLikeC}}°C)\n💨 *Air Quality (AQI):* {{weatherData.aqi}} ({{weatherData.aqiStatus}})\n☀️ *UV Index:* {{weatherData.uvIndex}} / 12\n💧 *Target Hydration:* {{weatherData.hydrationTargetLiters}} Liters\n\n📢 *Area Weather Health Guidance:*\n{{weatherData.recommendation}}\n\n💡 *Cooling & Storage Advice:*\n{{weatherData.coolingAdvice}}",
+      "footer": "dayli.ai Hyper-Local Climate Health Protection Engine",
+      "buttons": [
+        {
+          "id": "btn_get_cooling_tips",
+          "title": "🧊 Cooling Protocols",
+          "next": "show_cooling_carousel"
+        },
+        {
+          "id": "btn_change_location",
+          "title": "📍 Change Area Location",
+          "next": "request_location"
+        }
+      ],
+      "presentationAutoResponse": {
+        "action": "click_button",
+        "value": "btn_get_cooling_tips",
+        "delayMs": 2200
+      }
+    },
+    "show_cooling_carousel": {
+      "id": "show_cooling_carousel",
+      "type": "carousel",
+      "header": "🧊 Personal Heat Cooling Measures",
+      "message": "Swipe through clinically-verified cooling strategies tailored for hot climate regions:",
+      "carouselCards": [
+        {
+          "id": "card_hydration",
+          "title": "1. ORS & Hydration Plan",
+          "description": "Drink 250ml water every hour. Add 1 sachet Oral Rehydration Salts (ORS) to maintain electrolyte balance.",
+          "imageUrl": "https://images.unsplash.com/photo-1548839140-29a749e1bc4e?q=80&w=600&auto=format&fit=crop",
+          "badge": "Essential",
+          "buttonText": "💧 Log Hydration",
+          "next": "log_hydration_done"
+        },
+        {
+          "id": "card_wet_cloth",
+          "title": "2. Wet Cloth Cooling",
+          "description": "Place damp cloth on back of neck, wrists, and forehead. Use a handheld fan to accelerate evaporative cooling.",
+          "imageUrl": "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=600&auto=format&fit=crop",
+          "badge": "Physical Cooling",
+          "buttonText": "🧊 View Video Guide",
+          "next": "log_hydration_done"
+        },
+        {
+          "id": "card_shading",
+          "title": "3. Indoor Temperature Care",
+          "description": "Keep curtains drawn during daylight. Hang wet towels near open windows to lower ambient room temperature.",
+          "imageUrl": "https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=600&auto=format&fit=crop",
+          "badge": "Environment",
+          "buttonText": "🏠 Indoor Tips",
+          "next": "log_hydration_done"
+        }
+      ],
+      "presentationAutoResponse": {
+        "action": "click_button",
+        "value": "card_hydration",
+        "delayMs": 2500
+      }
+    },
+    "log_hydration_done": {
+      "id": "log_hydration_done",
+      "type": "text",
+      "message": "✅ *Hydration Target Logged for {{weatherData.cityName}}*\n\nGreat job! We have updated your daily health log based on local ambient heat ({{weatherData.temperatureC}}°C). dayli.ai will send a mid-day check-in at 2:00 PM when outdoor heat reaches peak intensity.\n\nStay cool and stay safe! 🌿",
+      "buttons": [
+        {
+          "id": "btn_back_main_menu",
+          "title": "🔄 Return to Main Menu",
+          "next": "start_welcome_template"
+        }
+      ],
+      "presentationAutoResponse": {
+        "action": "click_button",
+        "value": "btn_back_main_menu",
+        "delayMs": 2000
+      }
+    },
+    "show_symptom_form": {
+      "id": "show_symptom_form",
+      "type": "form",
+      "header": "🌡️ Clinical Heat Distress Assessment",
+      "message": "Please mark all symptoms currently present:",
+      "formFields": [
+        {
+          "id": "dizziness",
+          "label": "Severe Dizziness or Fainting",
+          "type": "checkbox",
+          "options": ["Present", "Absent"]
+        },
+        {
+          "id": "fetal_movement",
+          "label": "Reduced Fetal Movement",
+          "type": "radio",
+          "options": ["Normal", "Decreased / Absent"]
+        },
+        {
+          "id": "body_temp",
+          "label": "Hot, Dry Skin (No Sweating)",
+          "type": "checkbox",
+          "options": ["Present", "Absent"]
+        },
+        {
+          "id": "nausea",
+          "label": "Persistent Vomiting / Nausea",
+          "type": "checkbox",
+          "options": ["Present", "Absent"]
+        }
+      ],
+      "buttons": [
+        {
+          "id": "btn_submit_symptoms",
+          "title": "🚨 Submit Symptoms",
+          "next": "symptom_acknowledgement",
+          "variablesToSet": {
+            "symptomDizziness": true,
+            "symptomFetalDecrease": true,
+            "symptomDrySkin": true,
+            "riskScore": "High",
+            "symptomsList": ["Severe Dizziness", "Decreased Fetal Movement", "Hot Dry Skin (High Fever)"]
+          }
+        }
+      ],
+      "presentationAutoResponse": {
+        "action": "submit_form",
+        "value": "btn_submit_symptoms",
+        "delayMs": 2200
+      }
+    },
+    "symptom_acknowledgement": {
+      "id": "symptom_acknowledgement",
+      "type": "interactive_buttons",
+      "header": "📋 Assessment Received",
+      "message": "✅ *Symptom Assessment Submitted Successfully*\n\nThank you *Ananya Sharma*. Your reported heat distress symptoms (*Severe Dizziness, Decreased Fetal Movement, Hot Dry Skin*) have been logged and submitted to the clinical triage system.\n\n⚡ *Evaluating Risk Level & Preparing Emergency Referral Ticket...*",
+      "footer": "dayli.ai WHO/UNICEF Triage Protocol Engine",
+      "buttons": [
+        {
+          "id": "btn_view_referral_ticket",
+          "title": "🎟️ View Emergency Referral Ticket",
+          "next": "eval_risk_score"
+        }
+      ],
+      "presentationAutoResponse": {
+        "action": "click_button",
+        "value": "btn_view_referral_ticket",
+        "delayMs": 1500
+      }
+    },
+    "eval_risk_score": {
+      "id": "eval_risk_score",
+      "type": "condition_branch",
+      "condition": {
+        "variable": "riskScore",
+        "operator": "equals",
+        "value": "High",
+        "nextIfTrue": "call_referral_api",
+        "nextIfFalse": "call_moderate_referral_api"
+      }
+    },
+    "call_referral_api": {
+      "id": "call_referral_api",
+      "type": "api_call",
+      "apiCall": {
+        "service": "referral",
+        "method": "createTriageReferral",
+        "params": {
+          "patientId": "PAT-DAYLI-8842",
+          "patientName": "Ananya Sharma",
+          "symptoms": ["Severe Dizziness", "Decreased Fetal Movement", "Hot Dry Skin"],
+          "riskScore": "High"
+        },
+        "storeResultAs": "referralTicket",
+        "next": "display_high_risk_referral"
+      }
+    },
+    "call_moderate_referral_api": {
+      "id": "call_moderate_referral_api",
+      "type": "api_call",
+      "apiCall": {
+        "service": "referral",
+        "method": "createTriageReferral",
+        "params": {
+          "patientId": "PAT-DAYLI-8842",
+          "patientName": "Ananya Sharma",
+          "symptoms": ["Mild Dizziness"],
+          "riskScore": "Moderate"
+        },
+        "storeResultAs": "referralTicket",
+        "next": "display_high_risk_referral"
+      }
+    },
+    "display_high_risk_referral": {
+      "id": "display_high_risk_referral",
+      "type": "media",
+      "mediaType": "document",
+      "mediaUrl": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      "fileName": "Emergency_Maternal_Referral_Ticket.pdf",
+      "header": "🚨 HIGH RISK TRIAGE ALERT — IMMEDIATE REFERRAL CREATED",
+      "message": "⚠️ *CRITICAL HEALTH ADVISORY*\n\nBased on your reported symptoms (*Decreased Fetal Movement & Severe Heat Strain*), our clinical engine has assigned a *HIGH / EMERGENCY* triage priority.\n\n🎟️ *Referral ID:* `{{referralTicket.referralId}}` \n🏥 *Destination:* {{referralTicket.facilityName}}\n📍 *Address:* {{referralTicket.facilityAddress}}\n👩‍⚕️ *Lead Doctor:* {{referralTicket.doctorAssigned}}\n\n*An emergency triage slot has been reserved for you.*",
+      "footer": "Present Referral ID at hospital intake desk",
+      "buttons": [
+        {
+          "id": "btn_get_directions",
+          "title": "🗺️ Hospital Map & Navigation",
+          "next": "show_hospital_location"
+        }
+      ],
+      "presentationAutoResponse": {
+        "action": "click_button",
+        "value": "btn_get_directions",
+        "delayMs": 2500
+      }
+    },
+    "show_hospital_location": {
+      "id": "show_hospital_location",
+      "type": "location_request",
+      "header": "📍 Emergency Triage Facility",
+      "message": "🏥 *City Maternal Emergency & Heat Triage Center*\nSector 12, Healthcare Boulevard\nDistance: 2.4 km (approx 8 mins drive)\n\n*Emergency Desk Hotline:* +91 1800-DAYLI-EMERGENCY",
+      "buttons": [
+        {
+          "id": "btn_confirm_arrival",
+          "title": "✅ I am en route to Hospital",
+          "next": "confirm_en_route"
+        }
+      ],
+      "presentationAutoResponse": {
+        "action": "click_button",
+        "value": "btn_confirm_arrival",
+        "delayMs": 2000
+      }
+    },
+    "confirm_en_route": {
+      "id": "confirm_en_route",
+      "type": "text",
+      "message": "✅ *Hospital Alerted*\n\nThe emergency intake team at *City Maternal Emergency Center* has been notified of your incoming arrival. Referral ID `{{referralTicket.referralId}}` is active.",
+      "buttons": [
+        {
+          "id": "btn_back_main_menu_2",
+          "title": "🔄 Return to Main Menu",
+          "next": "start_welcome_template"
+        }
+      ],
+      "presentationAutoResponse": {
+        "action": "click_button",
+        "value": "btn_back_main_menu_2",
+        "delayMs": 2000
+      }
+    },
+    "select_supplements": {
+      "id": "select_supplements",
+      "type": "interactive_buttons",
+      "header": "💊 MEDICATION & SUPPLEMENT ADHERENCE",
+      "message": "Good morning *Ananya Sharma*! High temperatures above 35°C degrade prenatal iron, folic acid, and ORS efficacy if stored improperly.\n\nWhich supplements are currently prescribed in your pregnancy plan?",
+      "footer": "dayli.ai Clinical Pharmacy Protection",
+      "buttons": [
+        {
+          "id": "btn_iron_folic",
+          "title": "💊 Iron & Folic Acid (IFA)",
+          "next": "show_storage_warning",
+          "variablesToSet": { "supplement": "Iron & Folic Acid (IFA)" }
+        },
+        {
+          "id": "btn_ors_salts",
+          "title": "🥤 ORS Electrolyte Mix",
+          "next": "show_storage_warning",
+          "variablesToSet": { "supplement": "ORS Electrolyte Mix" }
+        },
+        {
+          "id": "btn_calcium",
+          "title": "🦴 Calcium & Vitamin D3",
+          "next": "show_storage_warning",
+          "variablesToSet": { "supplement": "Calcium & Vitamin D3" }
+        }
+      ],
+      "presentationAutoResponse": {
+        "action": "click_button",
+        "value": "btn_iron_folic",
+        "delayMs": 1500
+      }
+    },
+    "show_storage_warning": {
+      "id": "show_storage_warning",
+      "type": "media",
+      "mediaType": "audio",
+      "mediaUrl": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+      "fileName": "Thermal_Storage_Voice_Guide.mp3",
+      "durationSeconds": 24,
+      "header": "🔥 CRITICAL HEAT STORAGE WARNING",
+      "message": "🔊 *Listen to Clinical Audio Guide (24s)*\n\n⚠️ *DO NOT store {{supplement}} near metal roofs, windows, or kitchens during heatwaves.*\n\n*Storage Rules:*\n1. Store inside cool clay pot or insulated container (<25°C).\n2. Protect from high ambient humidity.\n3. Take IFA tablets with clean water or citrus juice (Vitamin C enhances absorption by 40%).",
+      "footer": "Voice guidance in 6 regional languages available",
+      "buttons": [
+        {
+          "id": "btn_taken_today",
+          "title": "✅ I Took Supplement Today",
+          "next": "api_record_adherence"
+        },
+        {
+          "id": "btn_set_reminders",
+          "title": "⏰ Set Daily Reminders",
+          "next": "api_schedule_reminder"
+        }
+      ],
+      "presentationAutoResponse": {
+        "action": "click_button",
+        "value": "btn_taken_today",
+        "delayMs": 2200
+      }
+    },
+    "api_record_adherence": {
+      "id": "api_record_adherence",
+      "type": "api_call",
+      "apiCall": {
+        "service": "patient",
+        "method": "recordMedicationAdherence",
+        "params": {
+          "patientId": "PAT-DAYLI-8842",
+          "medicationName": "Iron & Folic Acid",
+          "taken": true
+        },
+        "storeResultAs": "adherenceLogged",
+        "next": "display_adherence_success"
+      }
+    },
+    "api_schedule_reminder": {
+      "id": "api_schedule_reminder",
+      "type": "api_call",
+      "apiCall": {
+        "service": "notification",
+        "method": "scheduleAdherenceReminder",
+        "params": {
+          "patientId": "PAT-DAYLI-8842",
+          "time": "09:00 AM",
+          "message": "Daily Heat-Safe Supplement Reminder"
+        },
+        "storeResultAs": "reminderResult",
+        "next": "display_reminder_confirmation"
+      }
+    },
+    "display_adherence_success": {
+      "id": "display_adherence_success",
+      "type": "text",
+      "header": "🌟 ADHERENCE LOGGED SUCCESSFUL",
+      "message": "🎉 *Outstanding Commitment!*\n\nYour 14-day medication adherence score is now *95%*. Consistent Iron & Folic Acid intake protects against maternal anemia exacerbated by high heat sweating.\n\nWe will send your next nudge tomorrow at 9:00 AM.",
+      "buttons": [
+        {
+          "id": "btn_back_main_menu_3",
+          "title": "🔄 Return to Main Menu",
+          "next": "start_welcome_template"
+        }
+      ],
+      "presentationAutoResponse": {
+        "action": "click_button",
+        "value": "btn_back_main_menu_3",
+        "delayMs": 1800
+      }
+    },
+    "display_reminder_confirmation": {
+      "id": "display_reminder_confirmation",
+      "type": "text",
+      "message": "⏰ *Daily Reminder Set for 9:00 AM*\n\ndayli.ai will dispatch automated WhatsApp notifications directly to your phone every morning.",
+      "buttons": [
+        {
+          "id": "btn_back_main_menu_4",
+          "title": "🔄 Return to Main Menu",
+          "next": "start_welcome_template"
+        }
+      ]
+    },
+    "end_care": {
+      "id": "end_care",
+      "type": "end"
+    }
+  }
+}

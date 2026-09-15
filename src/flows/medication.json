@@ -1,0 +1,143 @@
+{
+  "id": "medication",
+  "title": "Medication Adherence & Storage",
+  "description": "Heat-sensitive medicine storage warnings, prenatal supplement tracking, automated daily nudges, and adherence compliance logs.",
+  "category": "Medication & Care",
+  "badge": "Medication Nudge",
+  "estimatedDuration": "1.5 mins",
+  "targetAudience": "Mothers taking heat-vulnerable supplements & chronic medications",
+  "initialNodeId": "select_supplements",
+  "nodes": {
+    "select_supplements": {
+      "id": "select_supplements",
+      "type": "template",
+      "templateName": "dayli_med_adherence_nudge_v1",
+      "header": "💊 MEDICATION & SUPPLEMENT ADHERENCE",
+      "message": "Good morning *Ananya Sharma*! High temperatures above 35°C degrade prenatal iron, folic acid, and ORS efficacy if stored improperly.\n\nWhich supplements are currently prescribed in your pregnancy plan?",
+      "footer": "dayli.ai Clinical Pharmacy Protection",
+      "buttons": [
+        {
+          "id": "btn_iron_folic",
+          "title": "💊 Iron & Folic Acid (IFA)",
+          "next": "show_storage_warning",
+          "variablesToSet": { "supplement": "Iron & Folic Acid (IFA)" }
+        },
+        {
+          "id": "btn_ors_salts",
+          "title": "🥤 ORS Electrolyte Mix",
+          "next": "show_storage_warning",
+          "variablesToSet": { "supplement": "ORS Electrolyte Mix" }
+        },
+        {
+          "id": "btn_calcium",
+          "title": "🦴 Calcium & Vitamin D3",
+          "next": "show_storage_warning",
+          "variablesToSet": { "supplement": "Calcium & Vitamin D3" }
+        }
+      ],
+      "presentationAutoResponse": {
+        "action": "click_button",
+        "value": "btn_iron_folic",
+        "delayMs": 1500
+      }
+    },
+    "show_storage_warning": {
+      "id": "show_storage_warning",
+      "type": "media",
+      "mediaType": "audio",
+      "mediaUrl": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+      "fileName": "Thermal_Storage_Voice_Guide.mp3",
+      "durationSeconds": 24,
+      "message": "🔊 *Thermal Storage Voice Advisory for {{supplement}}*\n\n⚠️ *Heat Degradation Risk:* Keep prenatal supplements stored below *25°C* in a cool, shaded cupboard away from direct sunlight. Do not store in humid kitchens or hot vehicles.",
+      "buttons": [
+        {
+          "id": "btn_log_taken",
+          "title": "✅ Log Today's Dose Taken",
+          "next": "call_patient_api",
+          "variablesToSet": { "doseTaken": true }
+        },
+        {
+          "id": "btn_set_reminder",
+          "title": "⏰ Set Daily Heat Nudge",
+          "next": "call_notification_api",
+          "variablesToSet": { "reminderSet": true }
+        }
+      ],
+      "presentationAutoResponse": {
+        "action": "click_button",
+        "value": "btn_log_taken",
+        "delayMs": 2000
+      }
+    },
+    "call_patient_api": {
+      "id": "call_patient_api",
+      "type": "api_call",
+      "apiCall": {
+        "service": "patient",
+        "method": "recordMedicationAdherence",
+        "params": {
+          "patientId": "PAT-DAYLI-8842",
+          "medicationName": "Iron & Folic Acid",
+          "taken": true
+        },
+        "storeResultAs": "adherenceRecord",
+        "next": "display_adherence_success"
+      }
+    },
+    "call_notification_api": {
+      "id": "call_notification_api",
+      "type": "api_call",
+      "apiCall": {
+        "service": "notification",
+        "method": "scheduleAdherenceReminder",
+        "params": {
+          "patientId": "PAT-DAYLI-8842",
+          "time": "09:00 AM",
+          "message": "Daily Heat-Safe Supplement Reminder"
+        },
+        "storeResultAs": "reminderResult",
+        "next": "display_reminder_confirmation"
+      }
+    },
+    "display_adherence_success": {
+      "id": "display_adherence_success",
+      "type": "interactive_buttons",
+      "header": "🌟 ADHERENCE LOGGED SUCCESSFUL",
+      "message": "🎉 *Outstanding Commitment!*\n\nYour 14-day medication adherence score is now *95%*. Consistent Iron & Folic Acid intake protects against maternal anemia exacerbated by high heat sweating.\n\nWe will send your next nudge tomorrow at 9:00 AM.",
+      "buttons": [
+        {
+          "id": "btn_med_done",
+          "title": "🏠 Return to Main Menu",
+          "next": "start_welcome_template"
+        }
+      ],
+      "presentationAutoResponse": {
+        "action": "click_button",
+        "value": "btn_med_done",
+        "delayMs": 1800
+      }
+    },
+    "display_reminder_confirmation": {
+      "id": "display_reminder_confirmation",
+      "type": "interactive_buttons",
+      "header": "⏰ Daily Reminder Active",
+      "message": "⏰ *Daily Reminder Set for 9:00 AM*\n\ndayli.ai will dispatch automated WhatsApp notifications directly to your phone every morning.",
+      "buttons": [
+        {
+          "id": "btn_reminder_done",
+          "title": "🏠 Return to Main Menu",
+          "next": "start_welcome_template"
+        }
+      ],
+      "presentationAutoResponse": {
+        "action": "click_button",
+        "value": "btn_reminder_done",
+        "delayMs": 1800
+      }
+    },
+    "end_medication": {
+      "id": "end_medication",
+      "type": "end"
+    }
+  }
+}

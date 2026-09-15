@@ -1,0 +1,24 @@
+# Secrets — never commit
+.env
+.env.local
+.env.*.local
+
+# Dependencies
+node_modules/
+whatsapp-bridge/node_modules/
+
+# WhatsApp Web session data (contains an auth token for the linked account)
+whatsapp-bridge/.wwebjs_auth/
+whatsapp-bridge/.wwebjs_cache/
+
+# Build output
+dist/
+.vercel/
+
+# OS / editor noise
+.DS_Store
+*.log
+.vercel
+
+# Local backups
+*.bak

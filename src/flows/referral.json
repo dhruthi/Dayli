@@ -1,0 +1,199 @@
+{
+  "id": "referral",
+  "title": "Clinical Triage & Emergency Referral",
+  "description": "Deterministic clinical safety engine evaluating fetal distress, syncope, high fever, and creating digital emergency hospital referral tickets.",
+  "category": "Clinical Triage",
+  "badge": "Emergency Protocol",
+  "estimatedDuration": "1 min",
+  "targetAudience": "Patients with acute symptoms requiring urgent medical evaluation",
+  "initialNodeId": "ask_referral_intent",
+  "nodes": {
+    "ask_referral_intent": {
+      "id": "ask_referral_intent",
+      "type": "template",
+      "templateName": "dayli_clinical_triage_entry_v1",
+      "header": "🚨 CLINICAL TRIAGE & EMERGENCY REFERRAL",
+      "message": "Welcome to the *dayli.ai Clinical Triage Portal*. If you or your child are experiencing heat stress, dizziness, decreased fetal movement, or high fever, our clinical rule engine will evaluate your risk and issue an emergency hospital intake ticket.\n\nHow can we assist you right now?",
+      "footer": "WHO / UNICEF Heat Vulnerability Clinical Rules Engine",
+      "buttons": [
+        {
+          "id": "btn_start_triage_form",
+          "title": "📋 Start Symptom Assessment",
+          "next": "show_symptom_form",
+          "variablesToSet": { "triageStarted": true }
+        },
+        {
+          "id": "btn_direct_emergency",
+          "title": "📞 Direct Emergency Call",
+          "next": "call_emergency_confirm",
+          "variablesToSet": { "riskScore": "High" }
+        }
+      ],
+      "presentationAutoResponse": {
+        "action": "click_button",
+        "value": "btn_start_triage_form",
+        "delayMs": 1500
+      }
+    },
+    "show_symptom_form": {
+      "id": "show_symptom_form",
+      "type": "form",
+      "header": "🌡️ Clinical Heat Distress Assessment",
+      "message": "Please mark all symptoms currently present:",
+      "formFields": [
+        {
+          "id": "dizziness",
+          "label": "Severe Dizziness or Fainting",
+          "type": "checkbox",
+          "options": ["Present", "Absent"]
+        },
+        {
+          "id": "fetal_movement",
+          "label": "Reduced Fetal Movement",
+          "type": "radio",
+          "options": ["Normal", "Decreased / Absent"]
+        },
+        {
+          "id": "body_temp",
+          "label": "Hot, Dry Skin (No Sweating)",
+          "type": "checkbox",
+          "options": ["Present", "Absent"]
+        },
+        {
+          "id": "nausea",
+          "label": "Persistent Vomiting / Nausea",
+          "type": "checkbox",
+          "options": ["Present", "Absent"]
+        }
+      ],
+      "buttons": [
+        {
+          "id": "btn_submit_symptoms",
+          "title": "🚨 Submit Symptoms",
+          "next": "symptom_acknowledgement",
+          "variablesToSet": {
+            "symptomDizziness": true,
+            "symptomFetalDecrease": true,
+            "symptomDrySkin": true,
+            "riskScore": "High",
+            "symptomsList": ["Severe Dizziness", "Decreased Fetal Movement", "Hot Dry Skin (High Fever)"]
+          }
+        }
+      ],
+      "presentationAutoResponse": {
+        "action": "submit_form",
+        "value": "btn_submit_symptoms",
+        "delayMs": 2200
+      }
+    },
+    "symptom_acknowledgement": {
+      "id": "symptom_acknowledgement",
+      "type": "interactive_buttons",
+      "header": "📋 Assessment Received",
+      "message": "✅ *Symptom Assessment Submitted Successfully*\n\nThank you *Ananya Sharma*. Your reported heat distress symptoms (*Severe Dizziness, Decreased Fetal Movement, Hot Dry Skin*) have been logged and submitted to the clinical triage system.\n\n⚡ *Evaluating Risk Level & Preparing Emergency Referral Ticket...*",
+      "footer": "dayli.ai WHO/UNICEF Triage Protocol Engine",
+      "buttons": [
+        {
+          "id": "btn_view_referral_ticket",
+          "title": "🎟️ View Emergency Referral Ticket",
+          "next": "eval_risk_score"
+        }
+      ],
+      "presentationAutoResponse": {
+        "action": "click_button",
+        "value": "btn_view_referral_ticket",
+        "delayMs": 1500
+      }
+    },
+    "eval_risk_score": {
+      "id": "eval_risk_score",
+      "type": "condition_branch",
+      "condition": {
+        "variable": "riskScore",
+        "operator": "equals",
+        "value": "High",
+        "nextIfTrue": "call_referral_api",
+        "nextIfFalse": "call_moderate_referral_api"
+      }
+    },
+    "call_referral_api": {
+      "id": "call_referral_api",
+      "type": "api_call",
+      "apiCall": {
+        "service": "referral",
+        "method": "createTriageReferral",
+        "params": {
+          "patientId": "PAT-DAYLI-8842",
+          "patientName": "Ananya Sharma",
+          "symptoms": ["Severe Dizziness", "Decreased Fetal Movement", "Hot Dry Skin"],
+          "riskScore": "High"
+        },
+        "storeResultAs": "referralTicket",
+        "next": "display_referral_ticket"
+      }
+    },
+    "call_moderate_referral_api": {
+      "id": "call_moderate_referral_api",
+      "type": "api_call",
+      "apiCall": {
+        "service": "referral",
+        "method": "createTriageReferral",
+        "params": {
+          "patientId": "PAT-DAYLI-8842",
+          "patientName": "Ananya Sharma",
+          "symptoms": ["Moderate Heat Fatigue"],
+          "riskScore": "Moderate"
+        },
+        "storeResultAs": "referralTicket",
+        "next": "display_referral_ticket"
+      }
+    },
+    "display_referral_ticket": {
+      "id": "display_referral_ticket",
+      "type": "interactive_buttons",
+      "header": "🚨 EMERGENCY HOSPITAL REFERRAL TICKET",
+      "message": "⚠️ *HIGH RISK CLINICAL ALERT*\n\nPatient: *Ananya Sharma* (PAT-DAYLI-8842)\nRisk Level: 🔴 *HIGH / CRITICAL*\nFacility Assigned: *City Maternal Emergency Center*\nAssigned Doctor: *Dr. Priya Sundaram (OB-GYN)*\n\nReferral Ticket ID: `{{referralTicket.referralId}}`\n\n🚨 *Instructions:* Please proceed immediately to emergency triage. Show this WhatsApp referral ticket to the intake receptionist for priority priority admission.",
+      "footer": "Issued by dayli.ai Clinical Safety Engine",
+      "buttons": [
+        {
+          "id": "btn_confirm_arrival",
+          "title": "🚗 Confirm En Route to Hospital",
+          "next": "confirm_en_route"
+        }
+      ],
+      "presentationAutoResponse": {
+        "action": "click_button",
+        "value": "btn_confirm_arrival",
+        "delayMs": 2000
+      }
+    },
+    "call_emergency_confirm": {
+      "id": "call_emergency_confirm",
+      "type": "text",
+      "message": "📞 Connecting to Emergency Dispatch (+91 1800-DAYLI-EMERGENCY)... Please stay calm, keep in the shade, and loosen tight clothing.",
+      "next": "start_welcome_template"
+    },
+    "confirm_en_route": {
+      "id": "confirm_en_route",
+      "type": "interactive_buttons",
+      "header": "✅ Hospital Intake Alert Active",
+      "message": "✅ *Hospital Alerted*\n\nThe emergency intake team at *City Maternal Emergency Center* has been notified of your incoming arrival. Referral ID `{{referralTicket.referralId}}` is active.",
+      "buttons": [
+        {
+          "id": "btn_finish_ref",
+          "title": "🏠 Return to Main Menu",
+          "next": "start_welcome_template"
+        }
+      ],
+      "presentationAutoResponse": {
+        "action": "click_button",
+        "value": "btn_finish_ref",
+        "delayMs": 2000
+      }
+    },
+    "end_referral": {
+      "id": "end_referral",
+      "type": "end"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: dayli-ai-whatsapp-bridge
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: node whatsapp-bridge/server.js
+    envVars:
+      - key: META_WHATSAPP_PHONE_NUMBER_ID
+        value: "125054977367240"
+      - key: META_WHATSAPP_VERIFY_TOKEN
+        value: "dayli_climate_copilot_token_2026"
+      - key: PORT
+        value: "10000"
