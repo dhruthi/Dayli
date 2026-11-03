@@ -1,0 +1,87 @@
+{
+  "model_name": "Dayli Router v1 (Human-Scale Linear Classifier)",
+  "feature_space_size": 16384,
+  "model_size_kb": 407.4,
+  "intent_accuracy": 1.0,
+  "intent_macro_f1": 1.0,
+  "urgency_accuracy": 1.0,
+  "urgency_macro_f1": 1.0,
+  "emergency_recall": 1.0,
+  "languages": {
+    "bn": {
+      "samples": 48,
+      "accuracy": 1.0,
+      "macro_f1": 1.0
+    },
+    "bn-Latn": {
+      "samples": 17,
+      "accuracy": 1.0,
+      "macro_f1": 1.0
+    },
+    "en": {
+      "samples": 65,
+      "accuracy": 1.0,
+      "macro_f1": 1.0
+    },
+    "hi": {
+      "samples": 52,
+      "accuracy": 1.0,
+      "macro_f1": 1.0
+    },
+    "hi-Latn": {
+      "samples": 22,
+      "accuracy": 1.0,
+      "macro_f1": 1.0
+    },
+    "kn": {
+      "samples": 47,
+      "accuracy": 1.0,
+      "macro_f1": 1.0
+    },
+    "kn-Latn": {
+      "samples": 17,
+      "accuracy": 1.0,
+      "macro_f1": 1.0
+    },
+    "ml": {
+      "samples": 46,
+      "accuracy": 1.0,
+      "macro_f1": 1.0
+    },
+    "ml-Latn": {
+      "samples": 13,
+      "accuracy": 1.0,
+      "macro_f1": 1.0
+    },
+    "mr": {
+      "samples": 42,
+      "accuracy": 1.0,
+      "macro_f1": 1.0
+    },
+    "mr-Latn": {
+      "samples": 25,
+      "accuracy": 1.0,
+      "macro_f1": 1.0
+    },
+    "ta": {
+      "samples": 48,
+      "accuracy": 1.0,
+      "macro_f1": 1.0
+    },
+    "ta-Latn": {
+      "samples": 16,
+      "accuracy": 1.0,
+      "macro_f1": 1.0
+    },
+    "te": {
+      "samples": 53,
+      "accuracy": 1.0,
+      "macro_f1": 1.0
+    },
+    "te-Latn": {
+      "samples": 20,
+      "accuracy": 1.0,
+      "macro_f1": 1.0
+    }
+  }
+}

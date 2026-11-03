@@ -1,62 +1,50 @@
-# See https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
-
-# compiled output
-dist
-tmp
-out-tsc
-*.tsbuildinfo
-.expo
-.expo-shared
-
-# dependencies
-node_modules
-
-# IDEs and editors
-/.idea
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
-
-# IDE - VSCode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-
-# misc
-/.sass-cache
-/connect.lock
-/coverage
-/libpeerconnection.log
-npm-debug.log
-yarn-error.log
-testem.log
-/typings
-
-# System Files
-.DS_Store
-Thumbs.db
-
-.cursor/rules/nx-rules.mdc
-.github/instructions/nx.instructions.md
-
-# Replit
-.cache/
-.local/
-
-# Private working notes and source uploads (not application assets)
-.agents/
-replit.md
-attached_assets/
+# Secrets — never commit
 .env
-.env.*
-!.env.example
+.env.local
+.env.*.local
 
-# Playwright generated outputs
-test-results/
-playwright-report/
-playwright/.cache/
+# Dependencies
+node_modules/
+whatsapp-bridge/node_modules/
+
+# Residual WhatsApp Web session data from the removed QR-linked bridge
+# (contains an auth token for the linked account — never commit)
+whatsapp-bridge/.wwebjs_auth/
+whatsapp-bridge/.wwebjs_cache/
+
+# Deploy artifacts
+.vercel/
+
+# Python & ML
+.venv/
+ml/.venv/
+__pycache__/
+*.pyc
+*.gguf
+*.bin
+
+# Media & video render outputs (prevent Git repository bloat)
+*.mp4
+*.m4a
+*.wav
+docs/video_documentation/reels_tmp/
+docs/video_documentation/master_output/
+docs/video_documentation/master_synced_output/
+docs/video_documentation/output/
+docs/video_documentation/audio/
+docs/video_documentation/synced_audio/
+docs/video_documentation/reels_audio/
+docs/video_documentation/detailed_audit/
+docs/video_documentation/whatsapp_analysis/
+docs/video_documentation/thumbs_new_web/
+
+# Confidential / Corporate legal authorization PDFs
+Statwig_*.pdf
+*.pdf
+
+# Scratch
+scratch/
+
+# OS / editor noise
+.DS_Store
+*.log

@@ -1,0 +1,61 @@
+version: "3.9"
+
+services:
+  # ─── Redis (Persistent Session State & BullMQ Job Queue) ──────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: dayli_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - dayli_net
+
+  # ─── dayli.ai WhatsApp Climate Health Copilot App ────────────────────────────
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dayli_app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - SESSION_STORE_URL=redis://redis:6379
+      - SESSION_TTL_SECONDS=2592000
+      - META_WHATSAPP_PHONE_NUMBER_ID=${META_WHATSAPP_PHONE_NUMBER_ID}
+      - META_WHATSAPP_VERIFY_TOKEN=${META_WHATSAPP_VERIFY_TOKEN}
+      - META_WHATSAPP_ACCESS_TOKEN=${META_WHATSAPP_ACCESS_TOKEN}
+      - META_WHATSAPP_APP_SECRET=${META_WHATSAPP_APP_SECRET}
+      - META_GRAPH_VERSION=${META_GRAPH_VERSION:-v21.0}
+      - META_REENGAGEMENT_TEMPLATE=${META_REENGAGEMENT_TEMPLATE:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
+      - GROQ_API_KEY=${GROQ_API_KEY:-}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-2.0-flash}
+      - WEATHER_PROVIDER_TYPE=${WEATHER_PROVIDER_TYPE:-real}
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS:-https://dayli.ai}
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - dayli_net
+
+networks:
+  dayli_net:
+    driver: bridge
+
+volumes:
+  redis_data:
+    driver: local
