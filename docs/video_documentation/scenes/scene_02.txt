@@ -1,1 +1,0 @@
-Everything starts with consent. When a user says hi, Dayli AI explains what information is stored and asks for an explicit yes. You can opt out at any time just by typing 'stop'. It then asks only two simple questions: who the guidance is for, and where you are located. Every step is skippable, ensuring no one is ever locked out of asking an urgent health question.

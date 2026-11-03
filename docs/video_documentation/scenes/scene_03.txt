@@ -1,1 +1,0 @@
-Once Dayli AI knows your general location, it automatically checks real-time weather and air quality from Open-Meteo. When a mother asks if it is safe to take her newborn outside, Dayli AI does not give generic advice. It evaluates today's heat index and PM 2.5 levels, translating complex environmental data into clear, protective actions tailored to her baby.

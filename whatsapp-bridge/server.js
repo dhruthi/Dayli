@@ -24,8 +24,6 @@ import {
   stopMetricsFlusher,
 } from './lib/metrics.js';
 import { userActivitySnapshot } from './lib/opsStats.js';
-import { DASHBOARD_HTML } from './lib/opsDashboard.js';
-import { CLIMATE_HEALTH_DASHBOARD_HTML } from './lib/climateHealthDashboard.js';
 import {
   getClimateHealthSnapshot,
   assignUniqueDayliId,
@@ -441,37 +439,26 @@ function curatedFor(cityKey) {
  * every AI call to fail. The new order prevents this permanently.
  */
 function pickAiKey() {
-  const medgemma = (process.env.MEDGEMMA_API_KEY || '').trim();
   const openai = (process.env.OPENAI_API_KEY || '').trim();
   const groq = (process.env.GROQ_API_KEY || '').trim();
   const grok = (process.env.GROK_API_KEY || '').trim();
   const xai = (process.env.XAI_API_KEY || '').trim();
+  const medgemma = (process.env.MEDGEMMA_API_KEY || '').trim();
 
-  // MedGemma takes top precedence
-  if (medgemma) return medgemma;
-  // OpenAI keys start with 'sk-' — prioritized when configured
+  // OpenAI keys start with 'sk-' — prioritized for frontier cloud inference
   if (openai && openai.startsWith('sk-')) return openai;
   // Groq keys start with 'gsk_'
   if (groq && groq.startsWith('gsk_')) return groq;
   // xAI keys start with 'xai-'
   if (xai && xai.startsWith('xai-')) return xai;
   if (grok && grok.startsWith('xai-')) return grok;
-  // Last resort: return whatever is set, even if it might be wrong
-  return medgemma || openai || groq || grok || xai || '';
+  if (medgemma && !medgemma.includes('local')) return medgemma;
+  return openai || groq || grok || xai || medgemma || '';
 }
 
 const AI_API_KEY = pickAiKey();
 
 function resolveAiProvider(key) {
-  if (key.startsWith('medgemma') || key.startsWith('hf_') || process.env.MEDGEMMA_API_KEY) {
-    const rawUrl = process.env.MEDGEMMA_API_URL || 'http://127.0.0.1:11434';
-    const url = rawUrl.includes('/chat/completions') ? rawUrl : `${rawUrl.replace(/\/+$/, '')}/v1/chat/completions`;
-    return {
-      url,
-      model: process.env.MEDGEMMA_MODEL || 'medgemma:latest',
-      label: 'medgemma',
-    };
-  }
   if (key.startsWith('sk-')) {
     return { url: 'https://api.openai.com/v1/chat/completions', model: 'gpt-4o-mini', label: 'openai' };
   }
@@ -480,6 +467,18 @@ function resolveAiProvider(key) {
   }
   if (key.startsWith('xai-')) {
     return { url: 'https://api.x.ai/v1/chat/completions', model: 'grok-2-latest', label: 'xai' };
+  }
+  if (key.startsWith('medgemma') || key.startsWith('hf_')) {
+    const rawUrl = process.env.MEDGEMMA_API_URL || 'http://127.0.0.1:11434';
+    const url = rawUrl.includes('/chat/completions') ? rawUrl : `${rawUrl.replace(/\/+$/, '')}/v1/chat/completions`;
+    return {
+      url,
+      model: process.env.MEDGEMMA_MODEL || 'medgemma:latest',
+      label: 'medgemma',
+    };
+  }
+  if (!key) {
+    return { url: '', model: '', label: 'none' };
   }
   // Unknown key format — default to OpenAI as best guess
   console.warn(`[AI] Unknown key prefix "${key.slice(0, 6)}..." — defaulting to OpenAI endpoint`);
@@ -950,82 +949,8 @@ async function generateAIResponse(userMessage, userName = 'there', locationPaylo
     return composeSafeResponse({ safety, modelText: validated.text });
   };
 
-  // ── LOCAL FIT-FOR-PURPOSE MODE ───────────────────────────────────────
-  // If running in local mode (DAYLI_CORE_MODE=local), zero network requests
-  // are dispatched to commercial frontier models (OpenAI, Groq, Gemini).
-  // The local sparse multilingual model (<250KB) and clinical composer
-  // answer authoritatively with zero external API dependencies.
-  if (isLocalOnly()) {
-    metric('ai.local_router');
-    const localReply = composeDeterministicResponse({
-      intent: routed.intent,
-      confidence: routed.confidence,
-      language: routed.language,
-      userName,
-      userMessage,
-      climateData,
-      forecast5dData,
-      clinicsData,
-      session,
-      safety,
-      routed,
-    });
-
-    if (allowLocalLlm()) {
-      try {
-        const activeModelMeta = resolveActiveModel({ session });
-        const rewritten = await generateWithLocalLlm({
-          userMessage,
-          userName,
-          locale: routed.language || session?.profile?.locale || 'en',
-          profile: session?.profile || {},
-          liveContext: dynamicContext,
-          clinicsData,
-          groundFacts: localReply,
-          safety,
-          history: session?.history || [],
-          model: activeModelMeta.tag,
-        });
-        if (rewritten?.text && rewritten.source === 'local_llm') {
-          metric('ai.local_llm_success');
-          metric(`ai.model.${activeModelMeta.id}`);
-          return finalize(rewritten.text);
-        }
-      } catch (err) {
-        console.warn('[LOCAL LLM] Fallback to deterministic composer:', err.message);
-      }
-    }
-
-    return finalize(localReply);
-  }
-
-  // 1. Primary Attempt: AI provider
-  if (AI_API_KEY && allowFrontier()) {
-    metric('ai.call');
-    const grokReply = await generateGrokResponse(userMessage, userName, fullContext, userId);
-    if (grokReply) return finalize(grokReply);
-    metric('ai.fail');
-  }
-
-  // 2. Secondary Attempt: Google Gemini Fallback
-  if (GEMINI_API_KEY && allowFrontier()) {
-    console.log('[AI FALLBACK] Attempting Gemini fallback...');
-    metric('ai.fallback_gemini');
-    const promptWithContext = userMessage + (fullContext ? `\n\n[Live System Context]:\n${fullContext}` : '');
-    const geminiReply = await generateGeminiFallback(promptWithContext, userName, userId);
-    if (geminiReply) return finalize(geminiReply);
-    metric('ai.fallback_gemini_failed');
-  }
-
-  // Neither provider produced text — fallback to local deterministic composer
-  metric('ai.no_model_reply');
-
-  if (safety.riskLevel === 'emergency' || safety.riskLevel === 'high') {
-    return composeSafeResponse({ safety, modelText: '' });
-  }
-
-  // Local fit-for-purpose deterministic fallback
-  const fallbackReply = composeDeterministicResponse({
+  // ── PRE-COMPOSE DETERMINISTIC BASELINE ──────────────────────────────
+  const localReply = composeDeterministicResponse({
     intent: routed.intent,
     confidence: routed.confidence,
     language: routed.language,
@@ -1038,7 +963,75 @@ async function generateAIResponse(userMessage, userName = 'there', locationPaylo
     safety,
     routed,
   });
-  return finalize(fallbackReply);
+
+  // ── STEP 1: LOCAL OPEN-WEIGHT LLM (MedGemma / BioMistral / Baichuan) ──
+  // If local LLM testing is enabled (via SSH tunnel or local daemon), try it first.
+  if (allowLocalLlm()) {
+    try {
+      const activeModelMeta = resolveActiveModel({ session });
+      const rewritten = await generateWithLocalLlm({
+        userMessage,
+        userName,
+        locale: routed.language || session?.profile?.locale || 'en',
+        profile: session?.profile || {},
+        liveContext: dynamicContext,
+        clinicsData,
+        groundFacts: localReply,
+        safety,
+        history: session?.history || [],
+        model: activeModelMeta.tag,
+      });
+      if (rewritten?.text && rewritten.source === 'local_llm') {
+        metric('ai.local_llm_success');
+        metric(`ai.model.${activeModelMeta.id}`);
+        return finalize(rewritten.text);
+      }
+    } catch (err) {
+      console.warn('[LOCAL LLM] Local model unavailable or tunnel closed:', err.message);
+    }
+  }
+
+  // If in strict local-only mode (zero commercial APIs allowed), return deterministic baseline
+  if (isLocalOnly()) {
+    metric('ai.local_router');
+    return finalize(localReply);
+  }
+
+  // ── STEP 2: CLOUD FRONTIER FALLBACK (OpenAI gpt-4o-mini / Groq) ────────
+  // When local tunnel is stopped, seamlessly handle queries with cloud OpenAI
+  if (AI_API_KEY && allowFrontier()) {
+    metric('ai.call');
+    try {
+      const grokReply = await generateGrokResponse(userMessage, userName, fullContext, userId);
+      if (grokReply) return finalize(grokReply);
+    } catch (err) {
+      console.warn('[AI] Frontier provider error:', err.message);
+    }
+    metric('ai.fail');
+  }
+
+  // ── STEP 3: SECONDARY CLOUD FALLBACK (Google Gemini) ───────────────────
+  if (GEMINI_API_KEY && allowFrontier()) {
+    console.log('[AI FALLBACK] Attempting Gemini fallback...');
+    metric('ai.fallback_gemini');
+    try {
+      const promptWithContext = userMessage + (fullContext ? `\n\n[Live System Context]:\n${fullContext}` : '');
+      const geminiReply = await generateGeminiFallback(promptWithContext, userName, userId);
+      if (geminiReply) return finalize(geminiReply);
+    } catch (err) {
+      console.warn('[AI] Gemini fallback error:', err.message);
+    }
+    metric('ai.fallback_gemini_failed');
+  }
+
+  // ── STEP 4: DETERMINISTIC CLINICAL FALLBACK (Fail-Safe) ─────────────────
+  metric('ai.no_model_reply');
+
+  if (safety.riskLevel === 'emergency' || safety.riskLevel === 'high') {
+    return composeSafeResponse({ safety, modelText: '' });
+  }
+
+  return finalize(localReply);
 }
 
 
@@ -2253,12 +2246,6 @@ function opsAuth(req, res, next) {
   return next();
 }
 
-app.get('/ops/dashboard', opsAuth, (_req, res) => {
-  res.set('Content-Type', 'text/html; charset=utf-8');
-  res.set('Cache-Control', 'no-store');
-  res.send(DASHBOARD_HTML);
-});
-
 // ── Clinical Portal Authentication & Login Routes ─────────────────────
 app.get('/login', (_req, res) => {
   res.set('Content-Type', 'text/html; charset=utf-8');
@@ -2270,29 +2257,12 @@ app.post('/api/auth/login', handleLogin);
 app.post('/api/auth/logout', handleLogout);
 
 /**
- * Dayli AI — Climate & Maternal Health Surveillance Dashboard (Protected by Login Gate).
- * Correlates real-time microclimate shifts (Microsoft Aurora) with pregnant women's health,
- * Zero-PHI Unique IDs (DYL-MAT-XXXX), and Nearest Ready Labour Room routing.
- */
-app.get('/dashboard', requireDashboardAuth, (_req, res) => {
-  res.set('Content-Type', 'text/html; charset=utf-8');
-  res.set('Cache-Control', 'no-store');
-  res.send(CLIMATE_HEALTH_DASHBOARD_HTML);
-});
-
-/**
  * Dayli AI — Executive Pitch for German Partner (Pregnant Women & Extreme Heat Impact).
  */
 app.get('/pitch', requireDashboardAuth, (_req, res) => {
   res.set('Content-Type', 'text/html; charset=utf-8');
   res.set('Cache-Control', 'no-store');
   res.send(GERMAN_PITCH_HTML);
-});
-
-app.get('/ops/climate', opsAuth, (_req, res) => {
-  res.set('Content-Type', 'text/html; charset=utf-8');
-  res.set('Cache-Control', 'no-store');
-  res.send(CLIMATE_HEALTH_DASHBOARD_HTML);
 });
 
 app.get('/api/climate-health/raw-sessions', requireDashboardAuth, async (_req, res) => {
@@ -2748,11 +2718,7 @@ app.get('/health', async (req, res) => {
   });
 });
 
-app.get('/', (req, res) => {
-  // If visited directly in a web browser, redirect to the dashboard
-  if (req.accepts('html') && (req.headers['sec-fetch-dest'] === 'document' || !req.xhr)) {
-    return res.redirect(302, '/dashboard');
-  }
+app.get('/', (_req, res) => {
   // Never expose credentials here — this endpoint is public and unauthenticated.
   res.json({
     status: 'online',
