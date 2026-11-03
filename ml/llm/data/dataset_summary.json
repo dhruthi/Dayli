@@ -1,0 +1,37 @@
+{
+  "total_generated": 267,
+  "validated_passed": 267,
+  "rejections": {},
+  "splits": {
+    "train": 215,
+    "val": 26,
+    "test_holdout": 26
+  },
+  "languages": {
+    "ml": 33,
+    "en": 48,
+    "kn": 31,
+    "mr": 29,
+    "hi": 32,
+    "ta": 22,
+    "bn": 34,
+    "te": 38
+  },
+  "intents": {
+    "daily_brief_subscribe": 76,
+    "feedback_survey": 76,
+    "opt_out_delete": 76,
+    "symptom_pregnancy": 13,
+    "symptom_infant_child": 6,
+    "out_of_scope": 5,
+    "symptom_fever": 3,
+    "heat_hydration": 10,
+    "symptom_general_adult": 1,
+    "air_quality": 1
+  },
+  "paths": {
+    "train": "/Users/yashwanthnayak/Desktop/Dayli AI/ml/llm/data/train.jsonl",
+    "val": "/Users/yashwanthnayak/Desktop/Dayli AI/ml/llm/data/val.jsonl",
+    "test_holdout": "/Users/yashwanthnayak/Desktop/Dayli AI/ml/llm/data/test_holdout.jsonl"
+  }
+}

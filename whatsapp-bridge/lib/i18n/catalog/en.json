@@ -1,0 +1,99 @@
+{
+  "_meta": {
+    "locale": "en",
+    "reviewed": true,
+    "lastUpdated": "2026-11-02"
+  },
+  "lang_menu_header": "🌐 Choose Your Language",
+  "lang_menu_body": "Please select your preferred language. Dayli will reply in the language you choose:",
+  "lang_menu_btn": "Select Language",
+  "lang_menu_section": "Indian Languages",
+  "lang_switched_confirm": "Language set to English 🌸\n\nHow can I support you and your family today?",
+
+  "consent_header": "Step 1 of 3: Consent",
+  "consent_body": "Hello! I'm dayli — a health companion for you and your family, with an eye on the weather where you are.\n\nBefore we start: to give you advice that actually fits, I need to remember a little about you — who I am helping, and roughly where you are.\n\n• I keep it private and never sell it\n• You can say *opt out* or *stop* at any time and I will delete it\n• I'm not a doctor, and I can't diagnose anything\n\nIs that OK?",
+  "consent_yes": "Yes, let's start",
+  "consent_no": "Opt Out 🛑",
+  "consent_terms": "How you use it",
+  "consent_footer": "For emergencies, call 112",
+  "consent_terms_body": "Here is exactly how dayli handles your data:\n\n• *Storage:* Encrypted, anonymized, and never linked to your identity\n• *Sharing:* Zero third-party sharing or advertising\n• *Deletion:* Send *STOP* or *OPT OUT* anytime to permanently erase your data (DPDP Act compliant)\n• *Scope:* Educational triage, hyperlocal weather, and nearest facility routing only\n\nReady to proceed?",
+  "consent_declined_body": "I understand. Your consent has been respected and no profile data has been stored.\n\nIf you ever change your mind or need emergency guidance, simply text *HI* or *START*.\n\n_For urgent medical emergencies, please call 112 immediately._",
+  "stop_confirmation": "🛑 *Data Deleted & Opted Out*\n\nYou have been unsubscribed and all personal data, session history, and cached locations have been permanently deleted in accordance with the DPDP Act.\n\nTo restart anytime, simply text *START* or *HI*.",
+
+  "subject_header": "Step 2 of 3: Profile",
+  "subject_body": "This is the one thing I really need, because the safety rules are different for each.\n\nPick whoever you are asking about most often — you can tell me about someone else any time.",
+  "subject_btn": "Choose",
+  "subject_section": "Who this is for",
+  "subj_infant_title": "My baby",
+  "subj_infant_desc": "Under 1 year old",
+  "subj_child_title": "My older child",
+  "subj_child_desc": "1 to 12 years old",
+  "subj_pregnant_title": "I am pregnant",
+  "subj_pregnant_desc": "Maternal care & alerts",
+  "subj_postpartum_title": "Recently gave birth",
+  "subj_postpartum_desc": "Postpartum care (0–6m)",
+  "subj_adult_title": "For myself",
+  "subj_adult_desc": "General adult health",
+  "subj_unknown_title": "Prefer not to say",
+  "subj_unknown_desc": "I will ask when needed",
+
+  "age_header": "Baby Age",
+  "age_body": "How old is your baby? Safety guidance changes significantly under 6 months:",
+  "age_btn": "Select Age",
+  "age_under3m": "Under 3 months",
+  "age_3to6m": "3 to 6 months",
+  "age_6to12m": "6 to 12 months",
+
+  "preg_header": "Pregnancy Stage",
+  "preg_body": "Which trimester of pregnancy are you currently in?",
+  "preg_btn": "Select Trimester",
+  "preg_tri1": "1st Trimester (1–12w)",
+  "preg_tri2": "2nd Trimester (13–27w)",
+  "preg_tri3": "3rd Trimester (28w+)",
+
+  "loc_header": "Step 3 of 3: Location",
+  "loc_body": "To give you accurate weather warnings, heat alerts, and nearest hospital recommendations, please share your city or send a WhatsApp location pin.\n\nYou can also skip this step.",
+  "loc_skip": "Skip for now",
+
+  "welcome_header": "You're all set! 🌸",
+  "welcome_body": "Hello {userName}! I'm Dayli AI — your maternal, pediatric, and climate-health assistant.\n\nYou can ask me:\n1. ☀️ Weather & heatwave warnings for your area\n2. 💧 Safe hydration & infant care tips\n3. 🏥 Nearest ready labour rooms & pharmacies\n4. 🌡️ Fever & pregnancy symptom guidance\n\nHow can I help you today?",
+
+  "emergency_banner": "🚨 *This needs emergency medical care now*",
+  "emergency_lead": "What you described can become life-threatening quickly.",
+  "emergency_action_112": "Call emergency services now — 112 in India — or go straight to the nearest emergency department.",
+  "emergency_action_upright": "Keep baby upright and supported so the airway stays open. Loosen any tight clothing.",
+  "emergency_action_no_fluids": "Do not give any food, milk, water or ORS while breathing is difficult — it can be inhaled into the lungs.",
+  "emergency_maternal_102": "For maternal emergencies, call 102 (Amma Vodi) or 108 immediately for priority ambulance transport.",
+
+  "out_of_scope_help": "Hello {userName} 🌸\n\nI am Dayli AI — your maternal, pediatric, and climate-health copilot.\n\nHere is how I can support you:\n1. ☀️ *Weather & Heat Alerts:* Real-time temperature, 24h rolling shifts & 5-day outlook\n2. 💧 *Hydration Guidance:* Safe fluids, ORSL & heatwave safety for pregnancy and infants\n3. 🏥 *Facility Routing:* Nearest ready labour rooms, maternity beds & pharmacies\n4. 🩺 *Symptom Guidance:* Fever management & pregnancy danger sign triage\n\nPlease ask your health or climate question (e.g. \"What is the temperature today?\", \"Nearest hospital with labour room\").",
+
+  "weather_update": "📍 *{cityName} Weather Update*\n\n• *Current Temperature:* {temp}°C (Feels like: {feelsLike}°C)\n• *Humidity:* {humidity}%\n• *Air Quality Index (AQI):* {aqi} ({aqiCategory})\n\n💡 *Advice:* Avoid direct afternoon heat exposure between 12:00 PM – 4:00 PM. Drink plenty of safe fluids and stay indoors where ventilated.",
+  "weather_no_loc": "📍 Please share your WhatsApp location pin or name your city to get local climate and heat advisories.",
+  "weather_5day_no_loc": "📅 Please share your location to view the 5-day regional climate forecast.",
+
+  "facility_hospital_header": "🏥 *Nearest Ready Maternity Facilities (Sorted by Distance)*\n\n",
+  "facility_hospital_footer": "_For maternal emergency transport across Telangana, dial *102* (Amma Vodi) or *108* immediately._",
+  "facility_hospital_no_loc": "🏥 Please share your location pin to locate the nearest ready labour room. For emergencies, call 108 immediately.",
+
+  "facility_pharmacy_header": "💊 *Nearby Pharmacies & Medical Stores*\n\n",
+  "facility_pharmacy_no_loc": "💊 Please share your location pin to find nearby pharmacies.",
+
+  "heat_hydration_infant": "💧 *Infant Hydration & Heat Safety (WHO Clinical Protocol)*\n\n• *Babies under 6 months:* Offer breastmilk or formula only. *STRICTLY NO PLAIN WATER* — plain water can cause dangerous electrolyte dilution and water intoxication.\n• Offer frequent nursing feeds during peak afternoon heat.\n• Dress baby in one light layer of breathable cotton.\n• Watch for red flags: sunken fontanelle (soft spot), dry diapers (>6h), or no tears when crying.",
+  "heat_hydration_maternal": "💧 *Maternal & Heatwave Hydration Guidance*\n\n• Drink 2.5–3 liters of safe drinking water throughout the day.\n• Avoid direct sun exposure during peak heat (12:00 PM – 4:00 PM).\n• Keep tender coconut water, buttermilk, or electrolyte ORSL handy.\n• If experiencing heat cramps in legs or dizziness, rest in a cool shaded room immediately.",
+
+  "air_quality_guidance": "🌫️ *Air Quality (AQI) Health Protection*\n\n• Keep pregnant mothers, infants, and elderly family members indoors when AQI is high.\n• Wear a snug-fitting N95 mask if outdoor transit is unavoidable.\n• Keep windows closed during peak traffic hours (8–11 AM, 6–9 PM).\n• Seek immediate medical attention if wheezing, shortness of breath, or chest tightness occurs.",
+
+  "fever_guidance": "🌡️ *Clinical Fever Management*\n\n• *Infants under 3 months:* ANY fever is a medical priority — seek same-day clinical assessment.\n• Sponge with lukewarm water only. Never use cold water, ice packs, or alcohol rubs.\n• Keep well hydrated with frequent small sips.\n⚠️ *I cannot prescribe medication or dosages.* Please consult a doctor or pharmacist for weight-appropriate antipyretics.\n_For emergencies or fever with seizure/stiff neck, dial 112/108 immediately._",
+
+  "pregnancy_guidance": "🌸 *Maternal Pregnancy Guidance*\n\n• Pay close attention to hydration and fetal movements (at least 10 kicks in 2 hours after a meal).\n• Rest in left lateral position (lying on your left side) to improve blood flow to the placenta.\n🚨 *Warning Signs requiring immediate hospital review:*\n  - Any vaginal bleeding or leaking of fluid\n  - Severe abdominal pain or continuous contractions\n  - Severe headache, blurred vision, or sudden facial swelling\n  - Reduced fetal movements\n\nType *HOSPITAL* anytime to find the nearest ready labour room with available beds.",
+
+  "infant_guidance": "👶 *Infant & Pediatric Care Guidance*\n\n• Ensure frequent feeds (breastfeeding every 2–3 hours).\n• Burp baby gently upright after feeds to relieve colic and trapped air.\n• Keep baby in a well-ventilated, shaded space in light cotton.\n🚨 *Red flags:* Grunting breath, blue lips, severe diarrhea (>6 times), sunken soft spot, or extreme lethargy require emergency evaluation.",
+
+  "adult_symptom_guidance": "🩺 *Headache & Adult Symptom Guidance*\n\nHeadaches and fatigue are very commonly triggered by heat exposure, dehydration, eye strain, or physical tension.\n\n• *Hydrate immediately:* Drink a large glass of water or electrolyte fluids (ORS, coconut water, or fresh buttermilk).\n• *Rest in a quiet, dark room:* Lie down, close your eyes, and place a cool, damp cloth on your forehead or the back of your neck.\n• *Screen rest:* Give your eyes a complete break from phones and computer screens.\n• *Maternal check:* If pregnant, a severe or persistent headache with blurred vision or sudden facial swelling requires immediate blood pressure monitoring with a doctor.\n\n🚨 *Call 112 if:* the headache comes on suddenly with explosive pain, stiff neck, high fever, or difficulty speaking.",
+
+  "greeting": "Hello {userName}! 🌸 I am Dayli AI — your maternal and climate-health assistant.\n\nI can provide hyperlocal weather forecasts, heat protection advice, and locate nearest ready labour rooms.\nHow can I support you today?",
+
+  "daily_brief_subscribe": "☀️ *Dayli 7:00 AM Morning Climate Brief*\n\nYou are subscribed to receive daily morning heat wave, temperature, and AQI forecasts tailored to your family.\n\nTo update your location, share a WhatsApp location pin anytime.\nTo stop receiving daily briefs, reply with *UNSUBSCRIBE*.",
+
+  "disclaimer": "_dayli gives general guidance, not a diagnosis. For emergencies call 112._"
+}

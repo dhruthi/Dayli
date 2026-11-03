@@ -1,0 +1,531 @@
+{"text": "doctor: aaj hyderabad me temperature kitna hai?", "intent": "weather_now_24h", "urgency": "routine", "lang": "hi-Latn"}
+{"text": "Dayli AI ला अभिप्राय द्यायचा आहे?", "intent": "feedback_survey", "urgency": "routine", "lang": "mr"}
+{"text": "When will the peak heat hit today?!", "intent": "weather_now_24h", "urgency": "routine", "lang": "en"}
+{"text": "weekly forecast batao", "intent": "weather_5day", "urgency": "routine", "lang": "hi-Latn"}
+{"text": "आज वायु गुणवत्ता (AQI) कितनी है?", "intent": "air_quality", "urgency": "routine", "lang": "hi"}
+{"text": "ഉച്ചയ്ക്ക് കഠിന ചൂട് ഉണ്ടാകുമോ??", "intent": "weather_now_24h", "urgency": "routine", "lang": "ml"}
+{"text": "বাচ্চার দিনে ৬ বার পাতলা পায়খানা হয়েছে ও মাথার তালু বসে গেছে!", "intent": "symptom_infant_child", "urgency": "same_day", "lang": "bn"}
+{"text": "ചൂടിൽ കുഞ്ഞ് ബോധരഹിതനായി അനക്കമില്ലാതെ കിടക്കുന്നു!", "intent": "symptom_infant_child", "urgency": "emergency_signal", "lang": "ml"}
+{"text": "దయచేసి చెప్పండి: 4 నెలల పాపకి ఎండలో నీరు ఇవ్వవచ్చా?", "intent": "heat_hydration", "urgency": "routine", "lang": "te"}
+{"text": "ഡോക്ടർ: 2 മാസത്തിൽ താഴെയുള്ള നവജാതശിശുവിന് 102F പനിയും കഴുത്ത് കോച്ചലും", "intent": "symptom_fever", "urgency": "emergency_signal", "lang": "ml"}
+{"text": "Grandmother collapsed outside in heat with hot dry skin and no sweat!", "intent": "symptom_general_adult", "urgency": "emergency_signal", "lang": "en"}
+{"text": "आजचा क्रिकेट स्कोर काय आहे?", "intent": "out_of_scope", "urgency": "routine", "lang": "mr"}
+{"text": "क्रिकेट स्कोर क्या चल रहा है??", "intent": "out_of_scope", "urgency": "routine", "lang": "hi"}
+{"text": "டாக்டர்: இன்றைய கிரிக்கெட் ஸ்கோர் என்ன?", "intent": "out_of_scope", "urgency": "routine", "lang": "ta"}
+{"text": "Dayli AI ला अभिप्राय द्यायचा आहे!", "intent": "feedback_survey", "urgency": "routine", "lang": "mr"}
+{"text": "उन्हामुळे पायाच्या स्नायूंमध्ये पेटके आणि चक्कर येणे", "intent": "symptom_general_adult", "urgency": "same_day", "lang": "mr"}
+{"text": "Please tell me: Will the heat wave continue for the next few days?", "intent": "weather_5day", "urgency": "routine", "lang": "en"}
+{"text": "Urgent question: Air pollution index and particulate matter pm2.5", "intent": "air_quality", "urgency": "routine", "lang": "en"}
+{"text": "డాక్టర్ గారూ: చిన్నారికి విరేచనాలు మరియు కళ్ళు గుంటలు పడ్డాయి", "intent": "symptom_infant_child", "urgency": "same_day", "lang": "te"}
+{"text": "ಇಂದು ತಾಪಮಾನ ಎಷ್ಟಿದೆ?", "intent": "weather_now_24h", "urgency": "routine", "lang": "kn"}
+{"text": "kya 4 month ke bacche ko paani de sakte hai?!", "intent": "heat_hydration", "urgency": "routine", "lang": "hi-Latn"}
+{"text": "हेलो Dayli!", "intent": "greeting_smalltalk", "urgency": "routine", "lang": "hi"}
+{"text": "സുപ്രഭാതം?", "intent": "greeting_smalltalk", "urgency": "routine", "lang": "ml"}
+{"text": "ഡോക്ടർ: പാൽ കുടിച്ച ശേഷം കുഞ്ഞ് നിർത്താതെ കരയുന്നു ഗ്യാസ് ആണോ?", "intent": "symptom_infant_child", "urgency": "routine", "lang": "ml"}
+{"text": "ದಯವಿಟ್ಟು ತಿಳಿಸಿ: ಮಧ್ಯಾಹ್ನ ಬಿಸಿಲು ಹೆಚ್ಚಿರುತ್ತದೆಯೇ?", "intent": "weather_now_24h", "urgency": "routine", "lang": "kn"}
+{"text": "newborn baby 102 pani convulsions fits vannu!", "intent": "symptom_fever", "urgency": "emergency_signal", "lang": "ml-Latn"}
+{"text": "டாக்டர்: கருத்துக்கணிப்பை தொடங்குங்கள் 5 நட்சத்திர மதிப்பீடு", "intent": "feedback_survey", "urgency": "routine", "lang": "ta"}
+{"text": "Please tell me: 24 hour weather forecast please", "intent": "weather_now_24h", "urgency": "routine", "lang": "en"}
+{"text": "দয়া করে বলুন: কাছের ওষুধের দোকান বা ফার্মেসি কোথায়?", "intent": "facility_pharmacy", "urgency": "routine", "lang": "bn"}
+{"text": "pls tell: 24 hours weather forecast cheppandi", "intent": "weather_now_24h", "urgency": "routine", "lang": "te-Latn"}
+{"text": "गरोदरपणात उन्हाळ्यात किती पाणी प्यावे?", "intent": "heat_hydration", "urgency": "routine", "lang": "mr"}
+{"text": "தயவுசெய்து சொல்லுங்கள்: இன்றைய கிரிக்கெட் ஸ்கோர் என்ன?", "intent": "out_of_scope", "urgency": "routine", "lang": "ta"}
+{"text": "পানি ভেঙে গেছে সবুজ রঙের তরল বের হচ্ছে বাচ্চার নড়াচড়া নেই!", "intent": "symptom_pregnancy", "urgency": "emergency_signal", "lang": "bn"}
+{"text": "newborn balala 102 taap convulsions jhatke yet ahet!", "intent": "symptom_fever", "urgency": "emergency_signal", "lang": "mr-Latn"}
+{"text": "ദയവായി പറയൂ: ഗർഭിണികൾ ചൂടിൽ എത്ര വെള്ളം കുടിക്കണം?", "intent": "heat_hydration", "urgency": "routine", "lang": "ml"}
+{"text": "গরমে বাচ্চা জ্ঞান হারিয়ে নিস্তেজ হয়ে পড়ে আছে", "intent": "symptom_infant_child", "urgency": "emergency_signal", "lang": "bn"}
+{"text": "Can you help: Baby is completely unresponsive and limp in the heat", "intent": "symptom_infant_child", "urgency": "emergency_signal", "lang": "en"}
+{"text": "डॉक्टर: ८ व्या महिन्यात अचानक खूप रक्तस्त्राव आणि तीव्र पोटदुखी होत आहे", "intent": "symptom_pregnancy", "urgency": "emergency_signal", "lang": "mr"}
+{"text": "मदद चाहिए: मुझे 8वें महीने में तेज पेट दर्द और रक्तस्राव (ब्लीडिंग) हो रहा है", "intent": "symptom_pregnancy", "urgency": "emergency_signal", "lang": "hi"}
+{"text": "inathe air quality aqi ethraya?!", "intent": "air_quality", "urgency": "routine", "lang": "ml-Latn"}
+{"text": "సినిమా టికెట్లు బుక్ చేయండి?", "intent": "out_of_scope", "urgency": "routine", "lang": "te"}
+{"text": "Water broke suddenly with greenish fluid, baby is not moving!", "intent": "symptom_pregnancy", "urgency": "emergency_signal", "lang": "en"}
+{"text": "कृपया बताएं: दोपहर में धूप कितनी तेज होगी?", "intent": "weather_now_24h", "urgency": "routine", "lang": "hi"}
+{"text": "ಆಪ್ಟ್-ಔಟ್ ಮಾಡಿ ನನ್ನ ಎಲ್ಲಾ ಡೇಟಾವನ್ನು ತಕ್ಷಣವೇ ಅಳಿಸಿ?", "intent": "opt_out_delete", "urgency": "routine", "lang": "kn"}
+{"text": "शुभ प्रभात!", "intent": "greeting_smalltalk", "urgency": "routine", "lang": "mr"}
+{"text": "हल्का बुखार है पट्टी कैसे करें?!", "intent": "symptom_fever", "urgency": "routine", "lang": "hi"}
+{"text": "doctor: enda debba valla spruha thappipoyaru heat stroke", "intent": "symptom_general_adult", "urgency": "emergency_signal", "lang": "te-Latn"}
+{"text": "2 month balala shwas ghyayla tras hoto otha nile padlet", "intent": "symptom_infant_child", "urgency": "emergency_signal", "lang": "mr-Latn"}
+{"text": "4 ತಿಂಗಳ ಮಗುವಿಗೆ ನೀರು ಕೊಡಬಹುದೇ??", "intent": "heat_hydration", "urgency": "routine", "lang": "kn"}
+{"text": "গরমে বাচ্চা জ্ঞান হারিয়ে নিস্তেজ হয়ে পড়ে আছে?", "intent": "symptom_infant_child", "urgency": "emergency_signal", "lang": "bn"}
+{"text": "ಸಹಾಯ ಬೇಕು: 2 ತಿಂಗಳ ಮಗುವಿಗೆ ಉಸಿರಾಟದ ತೊಂದರೆ ಮತ್ತು ತುಟಿಗಳು ನೀಲಿ ಬಣ್ಣಕ್ಕೆ ತಿರುಗಿವೆ", "intent": "symptom_infant_child", "urgency": "emergency_signal", "lang": "kn"}
+{"text": "வெயிலில் சென்று மயங்கி விழுந்துவிட்டார் தோல் சூடாக உள்ளது வியர்வை இல்லை ஹீட் ஸ்ட்ரோக்!", "intent": "symptom_general_adult", "urgency": "emergency_signal", "lang": "ta"}
+{"text": "3 divasapasun taap kami hot nahiye 101?", "intent": "symptom_fever", "urgency": "same_day", "lang": "mr-Latn"}
+{"text": "Can I drink ORSL or coconut water in this heat??", "intent": "heat_hydration", "urgency": "routine", "lang": "en"}
+{"text": "What is the share price of Tata Motors?", "intent": "out_of_scope", "urgency": "routine", "lang": "en"}
+{"text": "দয়া করে বলুন: হ্যালো Dayli", "intent": "greeting_smalltalk", "urgency": "routine", "lang": "bn"}
+{"text": "help me: 8th month me bleeding aur tez pet dard ho raha hai", "intent": "symptom_pregnancy", "urgency": "emergency_signal", "lang": "hi-Latn"}
+{"text": "ദയവായി പറയൂ: ചൂടിൽ തലകറങ്ങി വീണു ശരീരം ചൂടാണ് വിയർക്കുന്നില്ല ഹീറ്റ് സ്ട്രോക്ക്", "intent": "symptom_general_adult", "urgency": "emergency_signal", "lang": "ml"}
+{"text": "मुझे अब कोई मैसेज न भेजें मेरी जानकारी हटा दें?", "intent": "opt_out_delete", "urgency": "routine", "lang": "hi"}
+{"text": "Please tell me: Mild heat headache and fatigue after working in sun", "intent": "symptom_general_adult", "urgency": "routine", "lang": "en"}
+{"text": "मदत हवी आहे: सर्वेक्षण सुरू करा ५ स्टार रेटिंग", "intent": "feedback_survey", "urgency": "routine", "lang": "mr"}
+{"text": "Hi!", "intent": "greeting_smalltalk", "urgency": "routine", "lang": "en"}
+{"text": "ഡോക്ടർ: രണ്ടാം ത്രൈമാസത്തിൽ നടുവേദനയും ഛർദ്ദിയും", "intent": "symptom_pregnancy", "urgency": "routine", "lang": "ml"}
+{"text": "मदद चाहिए: रोज सुबह आने वाले संदेश बंद कर दीजिए अनसब्सक्राइब", "intent": "daily_brief_subscribe", "urgency": "routine", "lang": "hi"}
+{"text": "నాకు దగ్గరలో ఉన్న ప్రసవ ఆసుపత్రి మరియు లేబర్ రూమ్ ఎక్కడ ఉంది?", "intent": "facility_hospital_labour", "urgency": "same_day", "lang": "te"}
+{"text": "pregnancy madhe kiti pani pyayla pahije?", "intent": "heat_hydration", "urgency": "routine", "lang": "mr-Latn"}
+{"text": "டேலி AI-க்கு கருத்து தெரிவிக்க விரும்புகிறேன்!", "intent": "feedback_survey", "urgency": "routine", "lang": "ta"}
+{"text": "दुसऱ्या तिमाहीत हलकी मळमळ आणि पाठदुखी!", "intent": "symptom_pregnancy", "urgency": "routine", "lang": "mr"}
+{"text": "Send me morning weather forecast daily at 7 AM?", "intent": "daily_brief_subscribe", "urgency": "routine", "lang": "en"}
+{"text": "कृपया बताएं: नजदीकी प्रसूति अस्पताल और लेबर रूम कहां है?", "intent": "facility_hospital_labour", "urgency": "same_day", "lang": "hi"}
+{"text": "uchakku kooduthal choodu undaakumo?!", "intent": "weather_now_24h", "urgency": "routine", "lang": "ml-Latn"}
+{"text": "uchakku kooduthal choodu undaakumo??", "intent": "weather_now_24h", "urgency": "routine", "lang": "ml-Latn"}
+{"text": "pls tell: pregnancy samayathu ethra vellam kudikkanam?", "intent": "heat_hydration", "urgency": "routine", "lang": "ml-Latn"}
+{"text": "Can you help: Infant has watery loose stools 6 times today and sunken fontanelle", "intent": "symptom_infant_child", "urgency": "same_day", "lang": "en"}
+{"text": "24 hours weather forecast jante chai?", "intent": "weather_now_24h", "urgency": "routine", "lang": "bn-Latn"}
+{"text": "doctor: pregnancy madhe kiti pani pyayla pahije?", "intent": "heat_hydration", "urgency": "routine", "lang": "mr-Latn"}
+{"text": "ദയവായി പറയൂ: ഉച്ചയ്ക്ക് കഠിന ചൂട് ഉണ്ടാകുമോ?", "intent": "weather_now_24h", "urgency": "routine", "lang": "ml"}
+{"text": "தினசரி வானிலை மெசேஜ்களை நிறுத்துங்கள் அன்சப்ஸ்கிரைப்", "intent": "daily_brief_subscribe", "urgency": "routine", "lang": "ta"}
+{"text": "Please tell me: Hi", "intent": "greeting_smalltalk", "urgency": "routine", "lang": "en"}
+{"text": "ഡോക്ടർ: നമസ്കാരം", "intent": "greeting_smalltalk", "urgency": "routine", "lang": "ml"}
+{"text": "पास में मेडिकल स्टोर या दवा की दुकान कहां है??", "intent": "facility_pharmacy", "urgency": "routine", "lang": "hi"}
+{"text": "বাচ্চার ৩ দিন ধরে ১০১ ডিগ্রি জ্বর কমছে না?", "intent": "symptom_fever", "urgency": "same_day", "lang": "bn"}
+{"text": "pls tell: unhat behosh padle heat stroke gham yet nahi", "intent": "symptom_general_adult", "urgency": "emergency_signal", "lang": "mr-Latn"}
+{"text": "help me: hattira medical store pharmacy ellide?", "intent": "facility_pharmacy", "urgency": "routine", "lang": "kn-Latn"}
+{"text": "delivery sathi jawalcha hospital labour room kuthe ahe?!", "intent": "facility_hospital_labour", "urgency": "same_day", "lang": "mr-Latn"}
+{"text": "doctor: newborn baby 102 jwara convulsions fits bandide", "intent": "symptom_fever", "urgency": "emergency_signal", "lang": "kn-Latn"}
+{"text": "ദയവായി പറയൂ: ഹലോ ഡേലി", "intent": "greeting_smalltalk", "urgency": "routine", "lang": "ml"}
+{"text": "കഠിനമായ പനിയോടൊപ്പം കുഞ്ഞിന് അപസ്മാരം അല്ലെങ്കിൽ ഫിറ്റ്സ്?", "intent": "symptom_fever", "urgency": "emergency_signal", "lang": "ml"}
+{"text": "24 hours weather update sollunga?", "intent": "weather_now_24h", "urgency": "routine", "lang": "ta-Latn"}
+{"text": "pls tell: inathe air quality aqi ethraya?", "intent": "air_quality", "urgency": "routine", "lang": "ml-Latn"}
+{"text": "என்னை நீக்கு என் தரவை அழி!", "intent": "opt_out_delete", "urgency": "routine", "lang": "ta"}
+{"text": "அருகில் உள்ள மருந்தகம் அல்லது மெடிக்கல் ஷாப் எங்குள்ளது?!", "intent": "facility_pharmacy", "urgency": "routine", "lang": "ta"}
+{"text": "nearest delivery hospital labour room enga irukku?!", "intent": "facility_hospital_labour", "urgency": "same_day", "lang": "ta-Latn"}
+{"text": "aaj air quality aqi koto?", "intent": "air_quality", "urgency": "routine", "lang": "bn-Latn"}
+{"text": "விலகுகிறேன் எனது விவரங்களை உடனடியாக அழிக்கவும்?", "intent": "opt_out_delete", "urgency": "routine", "lang": "ta"}
+{"text": "help me: agle 5 din ka weather kaisa rahega?", "intent": "weather_5day", "urgency": "routine", "lang": "hi-Latn"}
+{"text": "What is the live cricket score India vs Australia??", "intent": "out_of_scope", "urgency": "routine", "lang": "en"}
+{"text": "உதவி வேண்டும்: என்னை நீக்கு என் தரவை அழி", "intent": "opt_out_delete", "urgency": "routine", "lang": "ta"}
+{"text": "15 நிமிடத்திற்கு ஒருமுறை பிரசவ வலி வருகிறது?", "intent": "symptom_pregnancy", "urgency": "same_day", "lang": "ta"}
+{"text": "ದಯವಿಟ್ಟು ತಿಳಿಸಿ: ಹತ್ತಿರದ ಹೆರಿಗೆ ಆಸ್ಪತ್ರೆ ಮತ್ತು ಲೇಬರ್ ರೂಮ್ ಎಲ್ಲಿದೆ?", "intent": "facility_hospital_labour", "urgency": "same_day", "lang": "kn"}
+{"text": "దయచేసి చెప్పండి: శుభోదయం", "intent": "greeting_smalltalk", "urgency": "routine", "lang": "te"}
+{"text": "24 hours weather forecast cheppandi?", "intent": "weather_now_24h", "urgency": "routine", "lang": "te-Latn"}
+{"text": "खूप तापासोबत बाळाला झटके (आचके) येत आहेत?", "intent": "symptom_fever", "urgency": "emergency_signal", "lang": "mr"}
+{"text": "help me: 3 divasapasun taap kami hot nahiye 101", "intent": "symptom_fever", "urgency": "same_day", "lang": "mr-Latn"}
+{"text": "ఓఆర్ఎస్ఎల్ లేదా కొబ్బరి నీళ్ళు తాగవచ్చా?!", "intent": "heat_hydration", "urgency": "routine", "lang": "te"}
+{"text": "doctor: mundina 5 dina weather hegiruthe?", "intent": "weather_5day", "urgency": "routine", "lang": "kn-Latn"}
+{"text": "അടുത്തുള്ള മെഡിക്കൽ ഷോപ്പ് അല്ലെങ്കിൽ ഫാർമസി എവിടെയാണ്?!", "intent": "facility_pharmacy", "urgency": "routine", "lang": "ml"}
+{"text": "বাচ্চার দিনে ৬ বার পাতলা পায়খানা হয়েছে ও মাথার তালু বসে গেছে?", "intent": "symptom_infant_child", "urgency": "same_day", "lang": "bn"}
+{"text": "ఉమ్మనీరు పడిపోయింది పసికందు కదలికలు తెలియడం లేదు", "intent": "symptom_pregnancy", "urgency": "emergency_signal", "lang": "te"}
+{"text": "madhiyam veiyil romba irukkuma??", "intent": "weather_now_24h", "urgency": "routine", "lang": "ta-Latn"}
+{"text": "कृपया सांगा: ऑप्ट आउट करा आणि माझा सर्व डेटा त्वरित हटवा", "intent": "opt_out_delete", "urgency": "routine", "lang": "mr"}
+{"text": "ಅತಿಯಾದ ಜ್ವರದೊಂದಿಗೆ ಮಗುವಿಗೆ ಫಿಟ್ಸ್ ಅಥವಾ ಸೆಳವು ಬರುತ್ತಿದೆ!", "intent": "symptom_fever", "urgency": "emergency_signal", "lang": "kn"}
+{"text": "இன்று சென்னையில் வெப்பநிலை எவ்வளவு?!", "intent": "weather_now_24h", "urgency": "routine", "lang": "ta"}
+{"text": "help me: pregnancy me kitna paani pina chahiye daily?", "intent": "heat_hydration", "urgency": "routine", "lang": "hi-Latn"}
+{"text": "ডাক্তার: Dayli AI কে মতামত বা ফিডব্যাক দিতে চাই", "intent": "feedback_survey", "urgency": "routine", "lang": "bn"}
+{"text": "ivathu temperature estide??", "intent": "weather_now_24h", "urgency": "routine", "lang": "kn-Latn"}
+{"text": "pls tell: najdeeki maternity hospital aur labour room kaha hai?", "intent": "facility_hospital_labour", "urgency": "same_day", "lang": "hi-Latn"}
+{"text": "delivery sathi jawalcha hospital labour room kuthe ahe?", "intent": "facility_hospital_labour", "urgency": "same_day", "lang": "mr-Latn"}
+{"text": "water break aithu baby movements illa", "intent": "symptom_pregnancy", "urgency": "emergency_signal", "lang": "kn-Latn"}
+{"text": "സഹായം വേണം: 2 മാസം പ്രായമുള്ള കുഞ്ഞിന് ശ്വാസതടസ്സം ചുണ്ടുകൾ നീലനിറമായി", "intent": "symptom_infant_child", "urgency": "emergency_signal", "lang": "ml"}
+{"text": "সিনেমার টিকিট বুক করুন?", "intent": "out_of_scope", "urgency": "routine", "lang": "bn"}
+{"text": "தயவுசெய்து சொல்லுங்கள்: டேலி AI-க்கு கருத்து தெரிவிக்க விரும்புகிறேன்", "intent": "feedback_survey", "urgency": "routine", "lang": "ta"}
+{"text": "help me: dhoop me behosh ho gaye heat stroke sweat nahi aa raha", "intent": "symptom_general_adult", "urgency": "emergency_signal", "lang": "hi-Latn"}
+{"text": "पूरे हफ्ते का मौसम पूर्वानुमान बताइए", "intent": "weather_5day", "urgency": "routine", "lang": "hi"}
+{"text": "ദയവായി പറയൂ: കഠിന ചൂട് കാരണം കാലുകളിൽ കോച്ചലും തലകറക്കവും", "intent": "symptom_general_adult", "urgency": "same_day", "lang": "ml"}
+{"text": "ഡോക്ടർ: ഉച്ചയ്ക്ക് കഠിന ചൂട് ഉണ്ടാകുമോ?", "intent": "weather_now_24h", "urgency": "routine", "lang": "ml"}
+{"text": "सिनेमा की टिकट बुक कर दो!", "intent": "out_of_scope", "urgency": "routine", "lang": "hi"}
+{"text": "సహాయం కావాలి: పాలు తాగిన తర్వాత బాబు ఏడుస్తూనే ఉన్నాడు కడుపులో ఉబ్బరమా?", "intent": "symptom_infant_child", "urgency": "routine", "lang": "te"}
+{"text": "मदद चाहिए: 1 महीने के नवजात को 102 बुखार और शरीर में ऐंठन (दौरे) आ रहे हैं", "intent": "symptom_fever", "urgency": "emergency_signal", "lang": "hi"}
+{"text": "Please tell me: Mild fever 99.5F in adult, how to do lukewarm sponging?", "intent": "symptom_fever", "urgency": "routine", "lang": "en"}
+{"text": "कृपया सांगा: उन्हामुळे पायाच्या स्नायूंमध्ये पेटके आणि चक्कर येणे", "intent": "symptom_general_adult", "urgency": "same_day", "lang": "mr"}
+{"text": "कृपया सांगा: दर १५ मिनिटांनी प्रसूती वेदना (कळा) येत आहेत", "intent": "symptom_pregnancy", "urgency": "same_day", "lang": "mr"}
+{"text": "Urgent question: Infant has watery loose stools 6 times today and sunken fontanelle", "intent": "symptom_infant_child", "urgency": "same_day", "lang": "en"}
+{"text": "டாக்டர்: 5 நாள் வானிலை அறிக்கை வேண்டும்", "intent": "weather_5day", "urgency": "routine", "lang": "ta"}
+{"text": "ஹலோ டேலி?", "intent": "greeting_smalltalk", "urgency": "routine", "lang": "ta"}
+{"text": "সাহায্য চাই: গর্ভাবস্থায় গরমে কতটা পানি পান করা উচিত?", "intent": "heat_hydration", "urgency": "routine", "lang": "bn"}
+{"text": "సమీపంలో మెడికల్ షాప్ లేదా ఫార్మసీ ఎక్కడ ఉంది?!", "intent": "facility_pharmacy", "urgency": "routine", "lang": "te"}
+{"text": "സർവേ ആരംഭിക്കൂ 5 സ്റ്റാർ റേറ്റിംഗ്", "intent": "feedback_survey", "urgency": "routine", "lang": "ml"}
+{"text": "What is the 5-day weather forecast??", "intent": "weather_5day", "urgency": "routine", "lang": "en"}
+{"text": "ഗർഭിണികൾ ചൂടിൽ എത്ര വെള്ളം കുടിക്കണം?!", "intent": "heat_hydration", "urgency": "routine", "lang": "ml"}
+{"text": "doctor: pass me medical store ya chemist kaha hai?", "intent": "facility_pharmacy", "urgency": "routine", "lang": "hi-Latn"}
+{"text": "Urgent question: I want to give feedback on Dayli AI", "intent": "feedback_survey", "urgency": "routine", "lang": "en"}
+{"text": "डॉक्टर: दैनिक हवामान संदेश बंद करा अनसबस्क्राईब", "intent": "daily_brief_subscribe", "urgency": "routine", "lang": "mr"}
+{"text": "कृपया सांगा: गर्भाशयाचे पाणी सुटले आहे आणि बाळाची हालचाल जाणवत नाही", "intent": "symptom_pregnancy", "urgency": "emergency_signal", "lang": "mr"}
+{"text": "సహాయం కావాలి: ఎండ తీవ్రత వల్ల కాళ్ళ నొప్పులు మరియు తీవ్రమైన కళ్ళు తిరగడం", "intent": "symptom_general_adult", "urgency": "same_day", "lang": "te"}
+{"text": "2 month bacchar shash koshto thot neel hoye geche", "intent": "symptom_infant_child", "urgency": "emergency_signal", "lang": "bn-Latn"}
+{"text": "ದಯವಿಟ್ಟು ತಿಳಿಸಿ: ಎರಡನೇ ತ್ರೈಮಾಸಿಕದಲ್ಲಿ ಬೆನ್ನು ನೋವು ಮತ್ತು ವಾಕರಿಕೆ", "intent": "symptom_pregnancy", "urgency": "routine", "lang": "kn"}
+{"text": "இன்றைய கிரிக்கெட் ஸ்கோர் என்ன??", "intent": "out_of_scope", "urgency": "routine", "lang": "ta"}
+{"text": "डॉक्टर: उन्हात चक्कर येऊन पडले आहेत त्वचा गरम आहे पण घाम येत नाही हीट स्ट्रोक", "intent": "symptom_general_adult", "urgency": "emergency_signal", "lang": "mr"}
+{"text": "खूप तापासोबत बाळाला झटके (आचके) येत आहेत!", "intent": "symptom_fever", "urgency": "emergency_signal", "lang": "mr"}
+{"text": "ডাক্তার: ৫ দিনের আবহাওয়ার পূর্বাভাস দিন", "intent": "weather_5day", "urgency": "routine", "lang": "bn"}
+{"text": "pregnancy la entha thanni kudikanum?", "intent": "heat_hydration", "urgency": "routine", "lang": "ta-Latn"}
+{"text": "help me: kya 4 month ke bacche ko paani de sakte hai?", "intent": "heat_hydration", "urgency": "routine", "lang": "hi-Latn"}
+{"text": "Urgent question: Tell me the weather prediction for Hyderabad", "intent": "weather_now_24h", "urgency": "routine", "lang": "en"}
+{"text": "ఎండ తీవ్రత వల్ల కాళ్ళ నొప్పులు మరియు తీవ్రమైన కళ్ళు తిరగడం?", "intent": "symptom_general_adult", "urgency": "same_day", "lang": "te"}
+{"text": "ivathina air quality aqi hegiruthe?!", "intent": "air_quality", "urgency": "routine", "lang": "kn-Latn"}
+{"text": "Severe heat cramps in legs and dizzy fainting sensation!", "intent": "symptom_general_adult", "urgency": "same_day", "lang": "en"}
+{"text": "नमस्ते डॉक्टर, ऑप्ट आउट करें और मेरा सारा डेटा तुरंत डिलीट करें", "intent": "opt_out_delete", "urgency": "routine", "lang": "hi"}
+{"text": "லேசான காய்ச்சல் வெதுவெதுப்பான நீரில் துடைப்பது எப்படி??", "intent": "symptom_fever", "urgency": "routine", "lang": "ta"}
+{"text": "সাহায্য চাই: গরমের কারণে পায়ে টান ধরা ও মাথা ঘোরানো", "intent": "symptom_general_adult", "urgency": "same_day", "lang": "bn"}
+{"text": "ದಯವಿಟ್ಟು ತಿಳಿಸಿ: ಮಗುವಿಗೆ 3 ದಿನಗಳಿಂದ 101 ಡಿಗ್ರಿ ಜ್ವರವಿದೆ ಕಡಿಮೆಯಾಗುತ್ತಿಲ್ಲ", "intent": "symptom_fever", "urgency": "same_day", "lang": "kn"}
+{"text": "দয়া করে বলুন: সুপ্রভাত", "intent": "greeting_smalltalk", "urgency": "routine", "lang": "bn"}
+{"text": "प्रदूषण जास्त आहे बाळाला बाहेर नेणे सुरक्षित आहे का??", "intent": "air_quality", "urgency": "routine", "lang": "mr"}
+{"text": "ಇಂದಿನ ಕ್ರಿಕೆಟ್ ಸ್ಕೋರ್ ಎಷ್ಟಾಗಿದೆ?", "intent": "out_of_scope", "urgency": "routine", "lang": "kn"}
+{"text": "pregnant ga unnapudu daily entha water thagali?", "intent": "heat_hydration", "urgency": "routine", "lang": "te-Latn"}
+{"text": "madhyanam enda ekkuva untundha??", "intent": "weather_now_24h", "urgency": "routine", "lang": "te-Latn"}
+{"text": "1 महीने के नवजात को 102 बुखार और शरीर में ऐंठन (दौरे) आ रहे हैं?", "intent": "symptom_fever", "urgency": "emergency_signal", "lang": "hi"}
+{"text": "దయచేసి చెప్పండి: మధ్యాహ్నం ఎండ తీవ్రత ఎలా ఉంటుంది?", "intent": "weather_now_24h", "urgency": "routine", "lang": "te"}
+{"text": "రోజూ ఉదయం వచ్చే మెసేజ్‌లు ఆపండి!", "intent": "daily_brief_subscribe", "urgency": "routine", "lang": "te"}
+{"text": "দয়া করে বলুন: ২৪ ঘণ্টার আবহাওয়ার পূর্বাভাস জানান", "intent": "weather_now_24h", "urgency": "routine", "lang": "bn"}
+{"text": "help me: 3 din se 101 fever bukhar hai kam nahi ho raha", "intent": "symptom_fever", "urgency": "same_day", "lang": "hi-Latn"}
+{"text": "aaj air quality aqi koto?!", "intent": "air_quality", "urgency": "routine", "lang": "bn-Latn"}
+{"text": "డాక్టర్ గారూ: ప్రభుత్వ మెటర్నిటీ హాస్పిటల్ బెడ్స్ ఎక్కడ అందుబాటులో ఉన్నాయి?", "intent": "facility_hospital_labour", "urgency": "same_day", "lang": "te"}
+{"text": "bukhar me patti kaise kare gungune pani se?!", "intent": "symptom_fever", "urgency": "routine", "lang": "hi-Latn"}
+{"text": "doctor: 24 hours weather update tharumo", "intent": "weather_now_24h", "urgency": "routine", "lang": "ml-Latn"}
+{"text": "Find the nearest ready labour room in Hyderabad?", "intent": "facility_hospital_labour", "urgency": "same_day", "lang": "en"}
+{"text": "पूरे हफ्ते का मौसम पूर्वानुमान बताइए!", "intent": "weather_5day", "urgency": "routine", "lang": "hi"}
+{"text": "ഹലോ ഡേലി", "intent": "greeting_smalltalk", "urgency": "routine", "lang": "ml"}
+{"text": "When will the peak heat hit today?", "intent": "weather_now_24h", "urgency": "routine", "lang": "en"}
+{"text": "സഹായം വേണം: ഡേലി AI-ക്ക് ഫീഡ്ബാക്ക് നൽകാൻ ആഗ്രഹിക്കുന്നു", "intent": "feedback_survey", "urgency": "routine", "lang": "ml"}
+{"text": "Urgent question: Severe headache and blurred vision with swollen feet in 3rd trimester", "intent": "symptom_pregnancy", "urgency": "same_day", "lang": "en"}
+{"text": "সাহায্য চাই: ৪ মাসের শিশুকে কি গরমে পানি খাওয়ানো যাবে?", "intent": "heat_hydration", "urgency": "routine", "lang": "bn"}
+{"text": "నమస్కారం!", "intent": "greeting_smalltalk", "urgency": "routine", "lang": "te"}
+{"text": "డాక్టర్ గారూ: 2 నెలల పసికందుకి ఊపిరి తీసుకోవడం కష్టంగా ఉంది పెదవులు నీలంగా మారాయి", "intent": "symptom_infant_child", "urgency": "emergency_signal", "lang": "te"}
+{"text": "ಡಾಕ್ಟರ್: ಸಮೀಕ್ಷೆಯನ್ನು ಪ್ರಾರಂಭಿಸಿ 5 ಸ್ಟಾರ್ ರೇಟಿಂಗ್", "intent": "feedback_survey", "urgency": "routine", "lang": "kn"}
+{"text": "సహాయం కావాలి: చిన్నారికి విరేచనాలు మరియు కళ్ళు గుంటలు పడ్డాయి", "intent": "symptom_infant_child", "urgency": "same_day", "lang": "te"}
+{"text": "அருகில் உள்ள பிரசவ மருத்துவமனை மற்றும் லேபர் ரூம் எங்குள்ளது??", "intent": "facility_hospital_labour", "urgency": "same_day", "lang": "ta"}
+{"text": "தினமும் காலை 7 மணிக்கு வானிலை அறிக்கை அனுப்புங்கள் சப்ஸ்கிரைப்!", "intent": "daily_brief_subscribe", "urgency": "routine", "lang": "ta"}
+{"text": "గర్భిణీ స్త్రీలు ఎండలో ఎంత నీరు తాగాలి?!", "intent": "heat_hydration", "urgency": "routine", "lang": "te"}
+{"text": "Should I give water to my 4 month old baby in hot weather?", "intent": "heat_hydration", "urgency": "routine", "lang": "en"}
+{"text": "ಸಹಾಯ ಬೇಕು: 24 ಗಂಟೆಗಳ ಹವಾಮಾನ ಮುನ್ಸೂಚನೆ ನೀಡಿ", "intent": "weather_now_24h", "urgency": "routine", "lang": "kn"}
+{"text": "water break aithu baby movements illa!", "intent": "symptom_pregnancy", "urgency": "emergency_signal", "lang": "kn-Latn"}
+{"text": "दुपारी ऊन खूप जास्त असेल का??", "intent": "weather_now_24h", "urgency": "routine", "lang": "mr"}
+{"text": "दररोज सकाळी ७ वाजता हवामान अंदाज पाठवा सबस्क्राईब!", "intent": "daily_brief_subscribe", "urgency": "routine", "lang": "mr"}
+{"text": "పాలు తాగిన తర్వాత బాబు ఏడుస్తూనే ఉన్నాడు కడుపులో ఉబ్బరమా??", "intent": "symptom_infant_child", "urgency": "routine", "lang": "te"}
+{"text": "दर १५ मिनिटांनी प्रसूती वेदना (कळा) येत आहेत", "intent": "symptom_pregnancy", "urgency": "same_day", "lang": "mr"}
+{"text": "ಡಾಕ್ಟರ್: ಬಿಸಿಲಿನಲ್ಲಿ ಹೋಗಿ ಪ್ರಜ್ಞೆ ತಪ್ಪಿ ಬಿದ್ದಿದ್ದಾರೆ ಮೈ ಬಿಸಿಯಾಗಿದೆ ಬೆವರುತ್ತಿಲ್ಲ ಹೀಟ್ ಸ್ಟ್ರೋಕ್", "intent": "symptom_general_adult", "urgency": "emergency_signal", "lang": "kn"}
+{"text": "2 month baby breathing kashtam lips blue aachu", "intent": "symptom_infant_child", "urgency": "emergency_signal", "lang": "ta-Latn"}
+{"text": "My 2 month old baby is turning blue and struggling to breathe?", "intent": "symptom_infant_child", "urgency": "emergency_signal", "lang": "en"}
+{"text": "help me: 24 hours weather update tharumo", "intent": "weather_now_24h", "urgency": "routine", "lang": "ml-Latn"}
+{"text": "pls tell: delivery pains vasthunnayi 15 mins ki okasari", "intent": "symptom_pregnancy", "urgency": "same_day", "lang": "te-Latn"}
+{"text": "नमस्ते डॉक्टर, धूप में काम करने के बाद सिरदर्द और थकान हो रही है", "intent": "symptom_general_adult", "urgency": "routine", "lang": "hi"}
+{"text": "ഡാറ്റ ഡിലീറ്റ് ചെയ്യുക സന്ദേശങ്ങൾ നിർത്തുക", "intent": "opt_out_delete", "urgency": "routine", "lang": "ml"}
+{"text": "8 mahine pregnant khup bleeding ani potat tivra vedna!", "intent": "symptom_pregnancy", "urgency": "emergency_signal", "lang": "mr-Latn"}
+{"text": "weekly forecast batao?", "intent": "weather_5day", "urgency": "routine", "lang": "hi-Latn"}
+{"text": "ದಯವಿಟ್ಟು ತಿಳಿಸಿ: ಸಾಮಾನ್ಯ ಜ್ವರಕ್ಕೆ ಉಗುರುಬೆಚ್ಚಗಿನ ನೀರಿನಿಂದ ಮೈ ಒರೆಸುವುದು ಹೇಗೆ?", "intent": "symptom_fever", "urgency": "routine", "lang": "kn"}
+{"text": "doctor: 3 divasapasun taap kami hot nahiye 101", "intent": "symptom_fever", "urgency": "same_day", "lang": "mr-Latn"}
+{"text": "मदत हवी आहे: ५ दिवसांचा हवामान अंदाज द्या", "intent": "weather_5day", "urgency": "routine", "lang": "mr"}
+{"text": "pls tell: pudhcha 5 divasacha hawaman kasa rahil?", "intent": "weather_5day", "urgency": "routine", "lang": "mr-Latn"}
+{"text": "டாக்டர்: கர்ப்பிணி பெண்கள் வெயிலில் எவ்வளவு தண்ணீர் குடிக்க வேண்டும்?", "intent": "heat_hydration", "urgency": "routine", "lang": "ta"}
+{"text": "doctor: dophar me garmi kitni hogi?", "intent": "weather_now_24h", "urgency": "routine", "lang": "hi-Latn"}
+{"text": "मदद चाहिए: गर्भावस्था के पांचवें महीने में कमर दर्द और उल्टी जैसा लग रहा है", "intent": "symptom_pregnancy", "urgency": "routine", "lang": "hi"}
+{"text": "मदद चाहिए: दोपहर में धूप कितनी तेज होगी?", "intent": "weather_now_24h", "urgency": "routine", "lang": "hi"}
+{"text": "pregnant ga unnapudu daily entha water thagali??", "intent": "heat_hydration", "urgency": "routine", "lang": "te-Latn"}
+{"text": "Where is the closest government maternity hospital with bed availability?", "intent": "facility_hospital_labour", "urgency": "same_day", "lang": "en"}
+{"text": "ಸಹಾಯ ಬೇಕು: ಬಿಸಿಲಿನ ತೀವ್ರತೆಯಿಂದ ಕಾಲು ಸೆಳೆತ ಮತ್ತು ತಲೆಸುತ್ತು", "intent": "symptom_general_adult", "urgency": "same_day", "lang": "kn"}
+{"text": "সরকারি মাতৃসদনে কি বেড ফাঁকা আছে??", "intent": "facility_hospital_labour", "urgency": "same_day", "lang": "bn"}
+{"text": "Please tell me: Having mild contractions every 15 minutes in 38th week", "intent": "symptom_pregnancy", "urgency": "same_day", "lang": "en"}
+{"text": "ദയവായി പറയൂ: 4 മാസം പ്രായമുള്ള കുഞ്ഞിന് വെള്ളം കൊടുക്കാമോ?", "intent": "heat_hydration", "urgency": "routine", "lang": "ml"}
+{"text": "సహాయం కావాలి: సాధారణ జ్వరం వస్తే తడిగుడ్డతో ఎలా తుడవాలి?", "intent": "symptom_fever", "urgency": "routine", "lang": "te"}
+{"text": "नमस्ते डॉक्टर, गर्मी में बच्चा बिल्कुल बेहोश जैसा हो गया है प्रतिक्रिया नहीं दे रहा", "intent": "symptom_infant_child", "urgency": "emergency_signal", "lang": "hi"}
+{"text": "দয়া করে বলুন: সিনেমার টিকিট বুক করুন", "intent": "out_of_scope", "urgency": "routine", "lang": "bn"}
+{"text": "veiyil la behosh fainting heat stroke no sweat?", "intent": "symptom_general_adult", "urgency": "emergency_signal", "lang": "ta-Latn"}
+{"text": "आज की गर्मी के लिए क्या सावधानियां हैं??", "intent": "weather_now_24h", "urgency": "routine", "lang": "hi"}
+{"text": "कृपया बताएं: पानी की थैली फट गई है और शिशु की हलचल बंद हो गई है", "intent": "symptom_pregnancy", "urgency": "emergency_signal", "lang": "hi"}
+{"text": "Can you show me the weekly forecast?", "intent": "weather_5day", "urgency": "routine", "lang": "en"}
+{"text": "ডাক্তার: নমস্কার", "intent": "greeting_smalltalk", "urgency": "routine", "lang": "bn"}
+{"text": "Toddler has 101F fever for 3 days and is refusing to eat?", "intent": "symptom_fever", "urgency": "same_day", "lang": "en"}
+{"text": "Can you help: Will there be evening showers today?", "intent": "weather_now_24h", "urgency": "routine", "lang": "en"}
+{"text": "जवळचे मेडिकल स्टोअर किंवा औषधांचे दुकान कुठे आहे??", "intent": "facility_pharmacy", "urgency": "routine", "lang": "mr"}
+{"text": "2 month balala shwas ghyayla tras hoto otha nile padlet?", "intent": "symptom_infant_child", "urgency": "emergency_signal", "lang": "mr-Latn"}
+{"text": "2 ತಿಂಗಳ ಒಳಗಿನ ನವಜಾತ ಶಿಶುವಿಗೆ 102F ಜ್ವರ ಮತ್ತು ಕುತ್ತಿಗೆ ಬಿಗಿತ", "intent": "symptom_fever", "urgency": "emergency_signal", "lang": "kn"}
+{"text": "Dayli AI ला अभिप्राय द्यायचा आहे", "intent": "feedback_survey", "urgency": "routine", "lang": "mr"}
+{"text": "ಸಹಾಯ ಬೇಕು: ಹಲೋ ಡೇಲಿ", "intent": "greeting_smalltalk", "urgency": "routine", "lang": "kn"}
+{"text": "मदद चाहिए: सरकारी डिलीवरी अस्पताल में खाली बेड की जानकारी दें", "intent": "facility_hospital_labour", "urgency": "same_day", "lang": "hi"}
+{"text": "దయచేసి చెప్పండి: 2 నెలల పసికందుకి ఊపిరి తీసుకోవడం కష్టంగా ఉంది పెదవులు నీలంగా మారాయి", "intent": "symptom_infant_child", "urgency": "emergency_signal", "lang": "te"}
+{"text": "24 മണിക്കൂർ കാലാവസ്ഥാ പ്രവചനം വേണം", "intent": "weather_now_24h", "urgency": "routine", "lang": "ml"}
+{"text": "পরবর্তী ৫ দিনের আবহাওয়া কেমন থাকবে?!", "intent": "weather_5day", "urgency": "routine", "lang": "bn"}
+{"text": "doctor: 3 days nundi jvaram taggatam ledu 101 undi", "intent": "symptom_fever", "urgency": "same_day", "lang": "te-Latn"}
+{"text": "ডাক্তার: দুধ খাওয়ার পর বাচ্চা একটানা কাঁদছে পেটে গ্যাস হয়েছে কি?", "intent": "symptom_infant_child", "urgency": "routine", "lang": "bn"}
+{"text": "मदद चाहिए: ओआरएस या नारियल पानी पीने की सलाह दीजिए", "intent": "heat_hydration", "urgency": "routine", "lang": "hi"}
+{"text": "15 நிமிடத்திற்கு ஒருமுறை பிரசவ வலி வருகிறது", "intent": "symptom_pregnancy", "urgency": "same_day", "lang": "ta"}
+{"text": "தயவுசெய்து சொல்லுங்கள்: தினசரி வானிலை மெசேஜ்களை நிறுத்துங்கள் அன்சப்ஸ்கிரைப்", "intent": "daily_brief_subscribe", "urgency": "routine", "lang": "ta"}
+{"text": "4 month balala pani deu ka garmi madhe??", "intent": "heat_hydration", "urgency": "routine", "lang": "mr-Latn"}
+{"text": "അടുത്തുള്ള പ്രസവാശുപത്രിയും ലേബർ റൂമും എവിടെയാണ്?", "intent": "facility_hospital_labour", "urgency": "same_day", "lang": "ml"}
+{"text": "ಬಿಸಿಲಿನ ತೀವ್ರತೆಯಿಂದ ಕಾಲು ಸೆಳೆತ ಮತ್ತು ತಲೆಸುತ್ತು?", "intent": "symptom_general_adult", "urgency": "same_day", "lang": "kn"}
+{"text": "ദയവായി പറയൂ: ഇന്നത്തെ വായു നിലവാരം (AQI) എത്രയാണ്?", "intent": "air_quality", "urgency": "routine", "lang": "ml"}
+{"text": "help me: pass me medical store ya chemist kaha hai?", "intent": "facility_pharmacy", "urgency": "routine", "lang": "hi-Latn"}
+{"text": "help me: 8 months pregnant severe bleeding and sharp stomach pain", "intent": "symptom_pregnancy", "urgency": "emergency_signal", "lang": "kn-Latn"}
+{"text": "नमस्ते डॉक्टर, शिशु को दिन में 6 बार दस्त हुए हैं और तालू धंस गया है", "intent": "symptom_infant_child", "urgency": "same_day", "lang": "hi"}
+{"text": "हर 15 मिनट में प्रसव पीड़ा (संकुचन) हो रही है", "intent": "symptom_pregnancy", "urgency": "same_day", "lang": "hi"}
+{"text": "டாக்டர்: இன்று சென்னையில் வெப்பநிலை எவ்வளவு?", "intent": "weather_now_24h", "urgency": "routine", "lang": "ta"}
+{"text": "হালকা জ্বর হলে কুসুম গরম পানিতে শরীর স্পঞ্জ করব কীভাবে??", "intent": "symptom_fever", "urgency": "routine", "lang": "bn"}
+{"text": "Urgent question: Grandmother collapsed outside in heat with hot dry skin and no sweat", "intent": "symptom_general_adult", "urgency": "emergency_signal", "lang": "en"}
+{"text": "శుభోదయం?", "intent": "greeting_smalltalk", "urgency": "routine", "lang": "te"}
+{"text": "ডাক্তার: তীব্র জ্বরের সাথে বাচ্চার খিঁচুনি বা কাঁপুনি উঠছে", "intent": "symptom_fever", "urgency": "emergency_signal", "lang": "bn"}
+{"text": "২৪ ঘণ্টার আবহাওয়ার পূর্বাভাস জানান!", "intent": "weather_now_24h", "urgency": "routine", "lang": "bn"}
+{"text": "कृपया बताएं: सिनेमा की टिकट बुक कर दो", "intent": "out_of_scope", "urgency": "routine", "lang": "hi"}
+{"text": "डॉक्टर: पुढील ५ दिवसांचे हवामान कसे राहील?", "intent": "weather_5day", "urgency": "routine", "lang": "mr"}
+{"text": "ivathina air quality aqi hegiruthe?", "intent": "air_quality", "urgency": "routine", "lang": "kn-Latn"}
+{"text": "ಡಾಕ್ಟರ್: ಇಂದು ತಾಪಮಾನ ಎಷ್ಟಿದೆ?", "intent": "weather_now_24h", "urgency": "routine", "lang": "kn"}
+{"text": "help me: pregnant ga unnapudu daily entha water thagali?", "intent": "heat_hydration", "urgency": "routine", "lang": "te-Latn"}
+{"text": "ಸಹಾಯ ಬೇಕು: ಸಾಮಾನ್ಯ ಜ್ವರಕ್ಕೆ ಉಗುರುಬೆಚ್ಚಗಿನ ನೀರಿನಿಂದ ಮೈ ಒರೆಸುವುದು ಹೇಗೆ?", "intent": "symptom_fever", "urgency": "routine", "lang": "kn"}
+{"text": "സഹായം വേണം: വായു മലിനീകരണം ഉള്ളതിനാൽ കുഞ്ഞിനെ പുറത്തിറക്കാമോ?", "intent": "air_quality", "urgency": "routine", "lang": "ml"}
+{"text": "क्या 5 महीने के बच्चे को गर्मी में पानी देना चाहिए?!", "intent": "heat_hydration", "urgency": "routine", "lang": "hi"}
+{"text": "help me: delivery sathi jawalcha hospital labour room kuthe ahe?", "intent": "facility_hospital_labour", "urgency": "same_day", "lang": "mr-Latn"}
+{"text": "8th month me bleeding aur tez pet dard ho raha hai?", "intent": "symptom_pregnancy", "urgency": "emergency_signal", "lang": "hi-Latn"}
+{"text": "baby ki jwaram 100 undi em cheyali?", "intent": "symptom_fever", "urgency": "same_day", "lang": "te-Latn"}
+{"text": "Please tell me: Tell me the weather prediction for Hyderabad", "intent": "weather_now_24h", "urgency": "routine", "lang": "en"}
+{"text": "దయచేసి చెప్పండి: నమస్కారం", "intent": "greeting_smalltalk", "urgency": "routine", "lang": "te"}
+{"text": "অপ্ট আউট করুন এবং আমার সমস্ত তথ্য এখনই মুছে ফেলুন", "intent": "opt_out_delete", "urgency": "routine", "lang": "bn"}
+{"text": "দয়া করে বলুন: ২ মাসের কম বয়সী নবজাতকের ১০২ ডিগ্রি জ্বর ও ঘাড় শক্ত হয়ে গেছে", "intent": "symptom_fever", "urgency": "emergency_signal", "lang": "bn"}
+{"text": "డాక్టర్ గారూ: ఇకపై సందేశాలు పంపవద్దు నా డేటా డిలీట్ చేయండి", "intent": "opt_out_delete", "urgency": "routine", "lang": "te"}
+{"text": "माझे खाते काढून टाका मेसेज पाठवू नका!", "intent": "opt_out_delete", "urgency": "routine", "lang": "mr"}
+{"text": "ivathu temperature estide?!", "intent": "weather_now_24h", "urgency": "routine", "lang": "kn-Latn"}
+{"text": "ಸಾಮಾನ್ಯ ಜ್ವರಕ್ಕೆ ಉಗುರುಬೆಚ್ಚಗಿನ ನೀರಿನಿಂದ ಮೈ ಒರೆಸುವುದು ಹೇಗೆ??", "intent": "symptom_fever", "urgency": "routine", "lang": "kn"}
+{"text": "தயவுசெய்து சொல்லுங்கள்: லேசான காய்ச்சல் வெதுவெதுப்பான நீரில் துடைப்பது எப்படி?", "intent": "symptom_fever", "urgency": "routine", "lang": "ta"}
+{"text": "doctor: fever undi cold sponge ela cheyali?", "intent": "symptom_fever", "urgency": "routine", "lang": "te-Latn"}
+{"text": "সাহায্য চাই: Dayli AI কে মতামত বা ফিডব্যাক দিতে চাই", "intent": "feedback_survey", "urgency": "routine", "lang": "bn"}
+{"text": "24 hours weather forecast jante chai!", "intent": "weather_now_24h", "urgency": "routine", "lang": "bn-Latn"}
+{"text": "డాక్టర్ గారూ: హలో డేలీ", "intent": "greeting_smalltalk", "urgency": "routine", "lang": "te"}
+{"text": "ದಯವಿಟ್ಟು ತಿಳಿಸಿ: ವಾರದ ಹವಾಮಾನ ಮುನ್ಸೂಚನೆ ನೀಡಿ", "intent": "weather_5day", "urgency": "routine", "lang": "kn"}
+{"text": "24 മണിക്കൂർ കാലാവസ്ഥാ പ്രവചനം വേണം?", "intent": "weather_now_24h", "urgency": "routine", "lang": "ml"}
+{"text": "Urgent question: Mild heat headache and fatigue after working in sun", "intent": "symptom_general_adult", "urgency": "routine", "lang": "en"}
+{"text": "hattira medical store pharmacy ellide?", "intent": "facility_pharmacy", "urgency": "routine", "lang": "kn-Latn"}
+{"text": "help me: newborn baby ko 102 bukhar hai aur jhatke aa rahe hai", "intent": "symptom_fever", "urgency": "emergency_signal", "lang": "hi-Latn"}
+{"text": "Please tell me: Severe headache and blurred vision with swollen feet in 3rd trimester", "intent": "symptom_pregnancy", "urgency": "same_day", "lang": "en"}
+{"text": "அருகில் உள்ள மருந்தகம் அல்லது மெடிக்கல் ஷாப் எங்குள்ளது??", "intent": "facility_pharmacy", "urgency": "routine", "lang": "ta"}
+{"text": "I want to give feedback on Dayli AI", "intent": "feedback_survey", "urgency": "routine", "lang": "en"}
+{"text": "నాకు దగ్గరలో ఉన్న ప్రసవ ఆసుపత్రి మరియు లేబర్ రూమ్ ఎక్కడ ఉంది??", "intent": "facility_hospital_labour", "urgency": "same_day", "lang": "te"}
+{"text": "fever undi cold sponge ela cheyali?", "intent": "symptom_fever", "urgency": "routine", "lang": "te-Latn"}
+{"text": "உதவி வேண்டும்: 2 மாதத்திற்கு உட்பட்ட பச்சிளம் குழந்தைக்கு 102F காய்ச்சல் மற்றும் கழுத்து விறைப்பு", "intent": "symptom_fever", "urgency": "emergency_signal", "lang": "ta"}
+{"text": "Send me morning weather forecast daily at 7 AM!", "intent": "daily_brief_subscribe", "urgency": "routine", "lang": "en"}
+{"text": "doctor: 8 months pregnant heavy bleeding severe stomach pain", "intent": "symptom_pregnancy", "urgency": "emergency_signal", "lang": "ml-Latn"}
+{"text": "poroborti 5 diner abhawa kemon thakbe?!", "intent": "weather_5day", "urgency": "routine", "lang": "bn-Latn"}
+{"text": "doctor: kacher osudher dokan pharmacy kothay?", "intent": "facility_pharmacy", "urgency": "routine", "lang": "bn-Latn"}
+{"text": "ಮುಂದಿನ 5 ದಿನಗಳ ಹವಾಮಾನ ಹೇಗಿರುತ್ತದೆ?", "intent": "weather_5day", "urgency": "routine", "lang": "kn"}
+{"text": "८ व्या महिन्यात अचानक खूप रक्तस्त्राव आणि तीव्र पोटदुखी होत आहे", "intent": "symptom_pregnancy", "urgency": "emergency_signal", "lang": "mr"}
+{"text": "eroju hyderabad lo temperature entha undi??", "intent": "weather_now_24h", "urgency": "routine", "lang": "te-Latn"}
+{"text": "24 hours hawaman andaj sanga", "intent": "weather_now_24h", "urgency": "routine", "lang": "mr-Latn"}
+{"text": "Air pollution index and particulate matter pm2.5?", "intent": "air_quality", "urgency": "routine", "lang": "en"}
+{"text": "ডাক্তার: রোদে মাথা ঘুরে পড়ে গেছেন ত্বক গরম কিন্তু ঘাম হচ্ছে না হিট স্ট্রোক", "intent": "symptom_general_adult", "urgency": "emergency_signal", "lang": "bn"}
+{"text": "২ মাসের বাচ্চার শ্বাসকষ্ট হচ্ছে ও ঠোঁট নীল হয়ে গেছে!", "intent": "symptom_infant_child", "urgency": "emergency_signal", "lang": "bn"}
+{"text": "సహాయం కావాలి: మధ్యాహ్నం ఎండ తీవ్రత ఎలా ఉంటుంది?", "intent": "weather_now_24h", "urgency": "routine", "lang": "te"}
+{"text": "3 divasapasun taap kami hot nahiye 101!", "intent": "symptom_fever", "urgency": "same_day", "lang": "mr-Latn"}
+{"text": "madhiyam veiyil romba irukkuma?", "intent": "weather_now_24h", "urgency": "routine", "lang": "ta-Latn"}
+{"text": "आज की गर्मी के लिए क्या सावधानियां हैं?", "intent": "weather_now_24h", "urgency": "routine", "lang": "hi"}
+{"text": "ಸಹಾಯ ಬೇಕು: ಮುಂದಿನ 5 ದಿನಗಳ ಹವಾಮಾನ ಹೇಗಿರುತ್ತದೆ?", "intent": "weather_5day", "urgency": "routine", "lang": "kn"}
+{"text": "దయచేసి చెప్పండి: ఈరోజు హైదరాబాద్‌లో ఉష్ణోగ్రత ఎంత?", "intent": "weather_now_24h", "urgency": "routine", "lang": "te"}
+{"text": "ಇಂದಿನ ಗಾಳಿಯ ಗುಣಮಟ್ಟ (AQI) ಎಷ್ಟಿದೆ?!", "intent": "air_quality", "urgency": "routine", "lang": "kn"}
+{"text": "ഡോക്ടർ: സർവേ ആരംഭിക്കൂ 5 സ്റ്റാർ റേറ്റിംഗ്", "intent": "feedback_survey", "urgency": "routine", "lang": "ml"}
+{"text": "Find medical store near me?", "intent": "facility_pharmacy", "urgency": "routine", "lang": "en"}
+{"text": "ದಯವಿಟ್ಟು ತಿಳಿಸಿ: 2 ತಿಂಗಳ ಒಳಗಿನ ನವಜಾತ ಶಿಶುವಿಗೆ 102F ಜ್ವರ ಮತ್ತು ಕುತ್ತಿಗೆ ಬಿಗಿತ", "intent": "symptom_fever", "urgency": "emergency_signal", "lang": "kn"}
+{"text": "3 din se 101 fever bukhar hai kam nahi ho raha?", "intent": "symptom_fever", "urgency": "same_day", "lang": "hi-Latn"}
+{"text": "doctor: 2 months baby usirata problem lips neeli aagide", "intent": "symptom_infant_child", "urgency": "emergency_signal", "lang": "kn-Latn"}
+{"text": "రాబోయే 5 రోజుల వాతావరణం ఎలా ఉంటుంది??", "intent": "weather_5day", "urgency": "routine", "lang": "te"}
+{"text": "Severe heat cramps in legs and dizzy fainting sensation?", "intent": "symptom_general_adult", "urgency": "same_day", "lang": "en"}
+{"text": "help me: eroju air quality aqi entha undi?", "intent": "air_quality", "urgency": "routine", "lang": "te-Latn"}
+{"text": "5 ദിവസത്തെ കാലാവസ്ഥ റിപ്പോർട്ട്", "intent": "weather_5day", "urgency": "routine", "lang": "ml"}
+{"text": "தயவுசெய்து சொல்லுங்கள்: 2 மாதத்திற்கு உட்பட்ட பச்சிளம் குழந்தைக்கு 102F காய்ச்சல் மற்றும் கழுத்து விறைப்பு", "intent": "symptom_fever", "urgency": "emergency_signal", "lang": "ta"}
+{"text": "വായു മലിനീകരണം ഉള്ളതിനാൽ കുഞ്ഞിനെ പുറത്തിറക്കാമോ?!", "intent": "air_quality", "urgency": "routine", "lang": "ml"}
+{"text": "ಡಾಕ್ಟರ್: ಉಮ್ಮಿನೀರು ಒಡೆದು ಹಸಿರು ದ್ರವ ಬರುತ್ತಿದೆ ಮಗುವಿನ ಚಲನೆ ನಿಂತಿದೆ", "intent": "symptom_pregnancy", "urgency": "emergency_signal", "lang": "kn"}
+{"text": "হ্যালো Dayli!", "intent": "greeting_smalltalk", "urgency": "routine", "lang": "bn"}
+{"text": "24 മണിക്കൂർ കാലാവസ്ഥാ പ്രവചനം വേണം!", "intent": "weather_now_24h", "urgency": "routine", "lang": "ml"}
+{"text": "ഡോക്ടർ: ഗർഭിണികൾ ചൂടിൽ എത്ര വെള്ളം കുടിക്കണം?", "intent": "heat_hydration", "urgency": "routine", "lang": "ml"}
+{"text": "pls tell: enda debba valla spruha thappipoyaru heat stroke", "intent": "symptom_general_adult", "urgency": "emergency_signal", "lang": "te-Latn"}
+{"text": "Grandmother collapsed outside in heat with hot dry skin and no sweat", "intent": "symptom_general_adult", "urgency": "emergency_signal", "lang": "en"}
+{"text": "సహాయం కావాలి: ఈ రాత్రికి వర్షం పడే అవకాశం ఉందా?", "intent": "weather_now_24h", "urgency": "routine", "lang": "te"}
+{"text": "8 months pregnant bleeding avthundi kadupu noppi ekkuva undi!", "intent": "symptom_pregnancy", "urgency": "emergency_signal", "lang": "te-Latn"}
+{"text": "२ महिन्यांच्या बाळाला श्वास घेण्यास त्रास होतोय आणि ओठ निळे पडले आहेत", "intent": "symptom_infant_child", "urgency": "emergency_signal", "lang": "mr"}
+{"text": "దయచేసి చెప్పండి: ఈ వారం వాతావరణ నివేదిక ఇవ్వండి", "intent": "weather_5day", "urgency": "routine", "lang": "te"}
+{"text": "क्या बाहर प्रदूषण शिशु के लिए सुरक्षित है?!", "intent": "air_quality", "urgency": "routine", "lang": "hi"}
+{"text": "டாக்டர்: வெயில் தாக்கத்தால் கால்களில் தசைப்பிடிப்பு மற்றும் மயக்கம்", "intent": "symptom_general_adult", "urgency": "same_day", "lang": "ta"}
+{"text": "pls tell: air quality aqi level evvalavu?", "intent": "air_quality", "urgency": "routine", "lang": "ta-Latn"}
+{"text": "मदत हवी आहे: दूध पिल्यानंतर बाळ सतत रडत आहे गॅस झाला आहे का?", "intent": "symptom_infant_child", "urgency": "routine", "lang": "mr"}
+{"text": "नमस्ते डॉक्टर, नमस्ते", "intent": "greeting_smalltalk", "urgency": "routine", "lang": "hi"}
+{"text": "ఇకపై సందేశాలు పంపవద్దు నా డేటా డిలీట్ చేయండి", "intent": "opt_out_delete", "urgency": "routine", "lang": "te"}
+{"text": "డాక్టర్ గారూ: వాతావరణం ఎలా ఉంది ఈరోజు?", "intent": "weather_now_24h", "urgency": "routine", "lang": "te"}
+{"text": "कृपया सांगा: दैनिक हवामान संदेश बंद करा अनसबस्क्राईब", "intent": "daily_brief_subscribe", "urgency": "routine", "lang": "mr"}
+{"text": "baby ki water ivvocha 3 months unte?!", "intent": "heat_hydration", "urgency": "routine", "lang": "te-Latn"}
+{"text": "pls tell: adutha 5 days kaalavastha enganeyanu?", "intent": "weather_5day", "urgency": "routine", "lang": "ml-Latn"}
+{"text": "సర్వే చేయండి రేటింగ్ ఇస్తాను?", "intent": "feedback_survey", "urgency": "routine", "lang": "te"}
+{"text": "दोपहर में धूप कितनी तेज होगी?!", "intent": "weather_now_24h", "urgency": "routine", "lang": "hi"}
+{"text": "४ महिन्यांच्या बाळाला उन्हात पाणी पाजावे का?", "intent": "heat_hydration", "urgency": "routine", "lang": "mr"}
+{"text": "ದಯವಿಟ್ಟು ತಿಳಿಸಿ: ಹಾಲು ಕುಡಿದ ನಂತರ ಮಗು ನಿರಂತರವಾಗಿ ಅಳುತ್ತಿದೆ ಗ್ಯಾಸ್ ಸಮಸ್ಯೆಯೇ?", "intent": "symptom_infant_child", "urgency": "routine", "lang": "kn"}
+{"text": "क्या बाहर प्रदूषण शिशु के लिए सुरक्षित है?", "intent": "air_quality", "urgency": "routine", "lang": "hi"}
+{"text": "ದಯವಿಟ್ಟು ತಿಳಿಸಿ: 2 ತಿಂಗಳ ಮಗುವಿಗೆ ಉಸಿರಾಟದ ತೊಂದರೆ ಮತ್ತು ತುಟಿಗಳು ನೀಲಿ ಬಣ್ಣಕ್ಕೆ ತಿರುಗಿವೆ", "intent": "symptom_infant_child", "urgency": "emergency_signal", "lang": "kn"}
+{"text": "கருத்துக்கணிப்பை தொடங்குங்கள் 5 நட்சத்திர மதிப்பீடு?", "intent": "feedback_survey", "urgency": "routine", "lang": "ta"}
+{"text": "Stop sending daily morning forecast messages", "intent": "daily_brief_subscribe", "urgency": "routine", "lang": "en"}
+{"text": "कृपया सांगा: उन्हात काम केल्यावर डोकेदुखी आणि थकवा", "intent": "symptom_general_adult", "urgency": "routine", "lang": "mr"}
+{"text": "ডাক্তার: ৮ মাসের গর্ভবতী হঠাৎ অতিরিক্ত রক্তক্ষরণ এবং তীব্র পেটে ব্যথা", "intent": "symptom_pregnancy", "urgency": "emergency_signal", "lang": "bn"}
+{"text": "సహాయం కావాలి: 24 గంటల వాతావరణ మార్పుల వివరాలు కావాలి", "intent": "weather_now_24h", "urgency": "routine", "lang": "te"}
+{"text": "ദയവായി പറയൂ: കുഞ്ഞിന് ഇന്ന് 6 തവണ വയറിളക്കം ഉണ്ടായി നെറുക താഴ്ന്നുപോയി", "intent": "symptom_infant_child", "urgency": "same_day", "lang": "ml"}
+{"text": "ഒഴിവാക്കുക എന്റെ വിവരങ്ങൾ ഉടനടി നീക്കം ചെയ്യുക", "intent": "opt_out_delete", "urgency": "routine", "lang": "ml"}
+{"text": "Urgent question: What can you do?", "intent": "greeting_smalltalk", "urgency": "routine", "lang": "en"}
+{"text": "డాక్టర్ గారూ: 4 నెలల పాపకి ఎండలో నీరు ఇవ్వవచ్చా?", "intent": "heat_hydration", "urgency": "routine", "lang": "te"}
+{"text": "ದಯವಿಟ್ಟು ತಿಳಿಸಿ: ನಮಸ್ಕಾರ", "intent": "greeting_smalltalk", "urgency": "routine", "lang": "kn"}
+{"text": "मुझे 8वें महीने में तेज पेट दर्द और रक्तस्राव (ब्लीडिंग) हो रहा है", "intent": "symptom_pregnancy", "urgency": "emergency_signal", "lang": "hi"}
+{"text": "డాక్టర్ గారూ: రోజూ ఉదయం వచ్చే మెసేజ్‌లు ఆపండి", "intent": "daily_brief_subscribe", "urgency": "routine", "lang": "te"}
+{"text": "দয়া করে বলুন: আজকের ক্রিকেট স্কোর কত?", "intent": "out_of_scope", "urgency": "routine", "lang": "bn"}
+{"text": "Urgent question: What are the recommended actions for today's weather?", "intent": "weather_now_24h", "urgency": "routine", "lang": "en"}
+{"text": "pass me medical store ya chemist kaha hai??", "intent": "facility_pharmacy", "urgency": "routine", "lang": "hi-Latn"}
+{"text": "Drinking water, tender coconut water, and ORSL in heat!", "intent": "heat_hydration", "urgency": "routine", "lang": "en"}
+{"text": "ಹಲೋ ಡೇಲಿ?", "intent": "greeting_smalltalk", "urgency": "routine", "lang": "kn"}
+{"text": "ഡോക്ടർ: കഠിന ചൂട് കാരണം കാലുകളിൽ കോച്ചലും തലകറക്കവും", "intent": "symptom_general_adult", "urgency": "same_day", "lang": "ml"}
+{"text": "Please tell me: Is the air quality safe for a newborn baby outside?", "intent": "air_quality", "urgency": "routine", "lang": "en"}
+{"text": "డాక్టర్ గారూ: పాలు తాగిన తర్వాత బాబు ఏడుస్తూనే ఉన్నాడు కడుపులో ఉబ్బరమా?", "intent": "symptom_infant_child", "urgency": "routine", "lang": "te"}
+{"text": "आज तापमान किती आहे??", "intent": "weather_now_24h", "urgency": "routine", "lang": "mr"}
+{"text": "সাহায্য চাই: বাচ্চার দিনে ৬ বার পাতলা পায়খানা হয়েছে ও মাথার তালু বসে গেছে", "intent": "symptom_infant_child", "urgency": "same_day", "lang": "bn"}
+{"text": "dupure ki khub gorom porbe?", "intent": "weather_now_24h", "urgency": "routine", "lang": "bn-Latn"}
+{"text": "मदद चाहिए: रोजाना सुबह 7 बजे मुझे मौसम का पूर्वानुमान भेजिए", "intent": "daily_brief_subscribe", "urgency": "routine", "lang": "hi"}
+{"text": "Urgent question: What is the live cricket score India vs Australia?", "intent": "out_of_scope", "urgency": "routine", "lang": "en"}
+{"text": "സഹായം വേണം: ചെറിയ പനിക്ക് ചെറുചൂടുവെള്ളത്തിൽ തുണി നനച്ചു തുടയ്ക്കുന്നത് എങ്ങനെ?", "intent": "symptom_fever", "urgency": "routine", "lang": "ml"}
+{"text": "help me: aaj hyderabad me temperature kitna hai?", "intent": "weather_now_24h", "urgency": "routine", "lang": "hi-Latn"}
+{"text": "ivathu temperature estide?", "intent": "weather_now_24h", "urgency": "routine", "lang": "kn-Latn"}
+{"text": "സിനിമ ടിക്കറ്റ് ബുക്ക് ചെയ്യുക", "intent": "out_of_scope", "urgency": "routine", "lang": "ml"}
+{"text": "സഹായം വേണം: പാൽ കുടിച്ച ശേഷം കുഞ്ഞ് നിർത്താതെ കരയുന്നു ഗ്യാസ് ആണോ?", "intent": "symptom_infant_child", "urgency": "routine", "lang": "ml"}
+{"text": "मदद चाहिए: ऑप्ट आउट करें और मेरा सारा डेटा तुरंत डिलीट करें", "intent": "opt_out_delete", "urgency": "routine", "lang": "hi"}
+{"text": "24 గంటల వాతావరణ మార్పుల వివరాలు కావాలి?", "intent": "weather_now_24h", "urgency": "routine", "lang": "te"}
+{"text": "സഹായം വേണം: നമസ്കാരം", "intent": "greeting_smalltalk", "urgency": "routine", "lang": "ml"}
+{"text": "ओआरएस या नारियल पानी पीने की सलाह दीजिए", "intent": "heat_hydration", "urgency": "routine", "lang": "hi"}
+{"text": "ದಯವಿಟ್ಟು ತಿಳಿಸಿ: ಉಮ್ಮಿನೀರು ಒಡೆದು ಹಸಿರು ದ್ರವ ಬರುತ್ತಿದೆ ಮಗುವಿನ ಚಲನೆ ನಿಂತಿದೆ", "intent": "symptom_pregnancy", "urgency": "emergency_signal", "lang": "kn"}
+{"text": "விலகுகிறேன் எனது விவரங்களை உடனடியாக அழிக்கவும்", "intent": "opt_out_delete", "urgency": "routine", "lang": "ta"}
+{"text": "1 महीने के नवजात को 102 बुखार और शरीर में ऐंठन (दौरे) आ रहे हैं!", "intent": "symptom_fever", "urgency": "emergency_signal", "lang": "hi"}
+{"text": "8 mahine pregnant khup bleeding ani potat tivra vedna?", "intent": "symptom_pregnancy", "urgency": "emergency_signal", "lang": "mr-Latn"}
+{"text": "मदद चाहिए: अगले 5 दिनों का मौसम कैसा रहेगा?", "intent": "weather_5day", "urgency": "routine", "lang": "hi"}
+{"text": "সাহায্য চাই: তীব্র জ্বরের সাথে বাচ্চার খিঁচুনি বা কাঁপুনি উঠছে", "intent": "symptom_fever", "urgency": "emergency_signal", "lang": "bn"}
+{"text": "டாக்டர்: தினமும் காலை 7 மணிக்கு வானிலை அறிக்கை அனுப்புங்கள் சப்ஸ்கிரைப்", "intent": "daily_brief_subscribe", "urgency": "routine", "lang": "ta"}
+{"text": "സഹായം വേണം: അടുത്തുള്ള പ്രസവാശുപത്രിയും ലേബർ റൂമും എവിടെയാണ്?", "intent": "facility_hospital_labour", "urgency": "same_day", "lang": "ml"}
+{"text": "पुढील ५ दिवसांचे हवामान कसे राहील?", "intent": "weather_5day", "urgency": "routine", "lang": "mr"}
+{"text": "नमस्ते डॉक्टर, हेलो Dayli", "intent": "greeting_smalltalk", "urgency": "routine", "lang": "hi"}
+{"text": "ಡಾಕ್ಟರ್: ಅತಿಯಾದ ಜ್ವರದೊಂದಿಗೆ ಮಗುವಿಗೆ ಫಿಟ್ಸ್ ಅಥವಾ ಸೆಳವು ಬರುತ್ತಿದೆ", "intent": "symptom_fever", "urgency": "emergency_signal", "lang": "kn"}
+{"text": "help me: 4 month baby ku thanni tharalama?", "intent": "heat_hydration", "urgency": "routine", "lang": "ta-Latn"}
+{"text": "help me: 24 hours hawaman andaj sanga", "intent": "weather_now_24h", "urgency": "routine", "lang": "mr-Latn"}
+{"text": "உதவி வேண்டும்: 4 மாத குழந்தைக்கு வெயிலில் தண்ணீர் கொடுக்கலாமா?", "intent": "heat_hydration", "urgency": "routine", "lang": "ta"}
+{"text": "inathe air quality aqi ethraya??", "intent": "air_quality", "urgency": "routine", "lang": "ml-Latn"}
+{"text": "pregnancy la entha thanni kudikanum?!", "intent": "heat_hydration", "urgency": "routine", "lang": "ta-Latn"}
+{"text": "సహాయం కావాలి: మూడు రోజులుగా 101 డిగ్రీల జ్వరం ఉంది ఏ మందు వేయాలి?", "intent": "symptom_fever", "urgency": "same_day", "lang": "te"}
+{"text": "Please tell me: Will there be evening showers today?", "intent": "weather_now_24h", "urgency": "routine", "lang": "en"}
+{"text": "हर 15 मिनट में प्रसव पीड़ा (संकुचन) हो रही है!", "intent": "symptom_pregnancy", "urgency": "same_day", "lang": "hi"}
+{"text": "doctor: daggara delivery hospital labour room ellide?", "intent": "facility_hospital_labour", "urgency": "same_day", "lang": "kn-Latn"}
+{"text": "pudhcha 5 divasacha hawaman kasa rahil?!", "intent": "weather_5day", "urgency": "routine", "lang": "mr-Latn"}
+{"text": "உதவி வேண்டும்: அரசு மகப்பேறு மருத்துவமனையில் படுக்கைகள் உள்ளதா?", "intent": "facility_hospital_labour", "urgency": "same_day", "lang": "ta"}
+{"text": "வெயிலில் குழந்தை மயங்கி அசைவற்று கிடக்கிறது?", "intent": "symptom_infant_child", "urgency": "emergency_signal", "lang": "ta"}
+{"text": "jawalcha medical store pharmacy kuthe ahe?!", "intent": "facility_pharmacy", "urgency": "routine", "lang": "mr-Latn"}
+{"text": "doctor: newborn baby 102 fever convulsions seizure valippu", "intent": "symptom_fever", "urgency": "emergency_signal", "lang": "ta-Latn"}
+{"text": "pls tell: aaj temperature kiti ahe?", "intent": "weather_now_24h", "urgency": "routine", "lang": "mr-Latn"}
+{"text": "adutha 5 days weather eppadi irukkum?!", "intent": "weather_5day", "urgency": "routine", "lang": "ta-Latn"}
+{"text": "नमस्ते डॉक्टर, पूरे हफ्ते का मौसम पूर्वानुमान बताइए", "intent": "weather_5day", "urgency": "routine", "lang": "hi"}
+{"text": "నమస్కారం", "intent": "greeting_smalltalk", "urgency": "routine", "lang": "te"}
+{"text": "দয়া করে বলুন: গরমের কারণে পায়ে টান ধরা ও মাথা ঘোরানো", "intent": "symptom_general_adult", "urgency": "same_day", "lang": "bn"}
+{"text": "ఎండలో నడిచి స్పృహ తప్పి పడిపోయారు చర్మం వేడిగా ఉంది చెమట పట్టట్లేదు?", "intent": "symptom_general_adult", "urgency": "emergency_signal", "lang": "te"}
+{"text": "help me: poroborti 5 diner abhawa kemon thakbe?", "intent": "weather_5day", "urgency": "routine", "lang": "bn-Latn"}
+{"text": "సహాయం కావాలి: ప్రభుత్వ మెటర్నిటీ హాస్పిటల్ బెడ్స్ ఎక్కడ అందుబాటులో ఉన్నాయి?", "intent": "facility_hospital_labour", "urgency": "same_day", "lang": "te"}
+{"text": "गर्भाशयाचे पाणी सुटले आहे आणि बाळाची हालचाल जाणवत नाही?", "intent": "symptom_pregnancy", "urgency": "emergency_signal", "lang": "mr"}
+{"text": "doctor: 4 months maguvige neeru kodabahuda?", "intent": "heat_hydration", "urgency": "routine", "lang": "kn-Latn"}
+{"text": "Can you help: Severe headache and blurred vision with swollen feet in 3rd trimester", "intent": "symptom_pregnancy", "urgency": "same_day", "lang": "en"}
+{"text": "ದೈನಂದಿನ ಹವಾಮಾನ ಸಂದೇಶಗಳನ್ನು ನಿಲ್ಲಿಸಿ ಅನ್‌ಸಬ್‌ಸ್ಕ್ರೈಬ್", "intent": "daily_brief_subscribe", "urgency": "routine", "lang": "kn"}
+{"text": "குழந்தைகளை வெளியே அழைத்துச் செல்லலாமா காற்று மாசு அதிகம்??", "intent": "air_quality", "urgency": "routine", "lang": "ta"}
+{"text": "हल्का ताप आहे कोमट पाण्याने अंग कसे पुसावे??", "intent": "symptom_fever", "urgency": "routine", "lang": "mr"}
+{"text": "దయచేసి చెప్పండి: హలో డేలీ", "intent": "greeting_smalltalk", "urgency": "routine", "lang": "te"}
+{"text": "panikudam broken green fluid baby movement illa!", "intent": "symptom_pregnancy", "urgency": "emergency_signal", "lang": "ta-Latn"}
+{"text": "ವಾರದ ಹವಾಮಾನ ಮುನ್ಸೂಚನೆ ನೀಡಿ", "intent": "weather_5day", "urgency": "routine", "lang": "kn"}
+{"text": "உதவி வேண்டும்: லேசான காய்ச்சல் வெதுவெதுப்பான நீரில் துடைப்பது எப்படி?", "intent": "symptom_fever", "urgency": "routine", "lang": "ta"}
+{"text": "गर्मी में बच्चा बिल्कुल बेहोश जैसा हो गया है प्रतिक्रिया नहीं दे रहा!", "intent": "symptom_infant_child", "urgency": "emergency_signal", "lang": "hi"}
+{"text": "ವಾರದ ಹವಾಮಾನ ಮುನ್ಸೂಚನೆ ನೀಡಿ?", "intent": "weather_5day", "urgency": "routine", "lang": "kn"}
+{"text": "नमस्ते डॉक्टर, हर 15 मिनट में प्रसव पीड़ा (संकुचन) हो रही है", "intent": "symptom_pregnancy", "urgency": "same_day", "lang": "hi"}
+{"text": "கர்ப்பிணி பெண்கள் வெயிலில் எவ்வளவு தண்ணீர் குடிக்க வேண்டும்?!", "intent": "heat_hydration", "urgency": "routine", "lang": "ta"}
+{"text": "দ্বিতীয় ত্রৈমাসিকে হালকা পিঠে ব্যথা ও বমি ভাব?", "intent": "symptom_pregnancy", "urgency": "routine", "lang": "bn"}
+{"text": "ಮಗುವಿಗೆ ದಿನಕ್ಕೆ 6 ಬಾರಿ ಭೇದಿಯಾಗಿದ್ದು ನೆತ್ತಿ ಕುಸಿದಿದೆ!", "intent": "symptom_infant_child", "urgency": "same_day", "lang": "kn"}
+{"text": "Can you help: Where is the nearest 24/7 chemist pharmacy?", "intent": "facility_pharmacy", "urgency": "routine", "lang": "en"}
+{"text": "help me: 3 divasam aayi pani maarunnilla 101", "intent": "symptom_fever", "urgency": "same_day", "lang": "ml-Latn"}
+{"text": "2 மாத குழந்தைக்கு மூச்சு திணறல் மற்றும் உதடுகள் நீல நிறமாக மாறியுள்ளது?", "intent": "symptom_infant_child", "urgency": "emergency_signal", "lang": "ta"}
+{"text": "pls tell: 2 month bacchar shash koshto thot neel hoye geche", "intent": "symptom_infant_child", "urgency": "emergency_signal", "lang": "bn-Latn"}
+{"text": "delivery r jonno kacher hospital labour room kothay?", "intent": "facility_hospital_labour", "urgency": "same_day", "lang": "bn-Latn"}
+{"text": "ಡಾಕ್ಟರ್: 2 ತಿಂಗಳ ಮಗುವಿಗೆ ಉಸಿರಾಟದ ತೊಂದರೆ ಮತ್ತು ತುಟಿಗಳು ನೀಲಿ ಬಣ್ಣಕ್ಕೆ ತಿರುಗಿವೆ", "intent": "symptom_infant_child", "urgency": "emergency_signal", "lang": "kn"}
+{"text": "దయచేసి చెప్పండి: ఈరోజు గాలి నాణ్యత (AQI) ఎలా ఉంది?", "intent": "air_quality", "urgency": "routine", "lang": "te"}
+{"text": "డాక్టర్ గారూ: మధ్యాహ్నం ఎండ తీవ్రత ఎలా ఉంటుంది?", "intent": "weather_now_24h", "urgency": "routine", "lang": "te"}
+{"text": "ദയവായി പറയൂ: കഠിനമായ പനിയോടൊപ്പം കുഞ്ഞിന് അപസ്മാരം അല്ലെങ്കിൽ ഫിറ്റ്സ്", "intent": "symptom_fever", "urgency": "emergency_signal", "lang": "ml"}
+{"text": "ചൂടിൽ കുഞ്ഞ് ബോധരഹിതനായി അനക്കമില്ലാതെ കിടക്കുന്നു?", "intent": "symptom_infant_child", "urgency": "emergency_signal", "lang": "ml"}
+{"text": "दर १५ मिनिटांनी प्रसूती वेदना (कळा) येत आहेत!", "intent": "symptom_pregnancy", "urgency": "same_day", "lang": "mr"}
+{"text": "సహాయం కావాలి: క్రికెట్ స్కోర్ ఎంత?", "intent": "out_of_scope", "urgency": "routine", "lang": "te"}
+{"text": "8 മാസം ഗർഭിണിയാണ് കഠിനമായ രക്തസ്രാവവും വയറുവേദനയും?", "intent": "symptom_pregnancy", "urgency": "emergency_signal", "lang": "ml"}
+{"text": "aaj aqi level kaisa hai pollution kitna hai?!", "intent": "air_quality", "urgency": "routine", "lang": "hi-Latn"}
+{"text": "Can you help: When will the peak heat hit today?", "intent": "weather_now_24h", "urgency": "routine", "lang": "en"}
+{"text": "doctor: pregnancy te gorome koto ta jol khabo?", "intent": "heat_hydration", "urgency": "routine", "lang": "bn-Latn"}
+{"text": "naaku daggara unna labour room delivery hospital ekkada?", "intent": "facility_hospital_labour", "urgency": "same_day", "lang": "te-Latn"}
+{"text": "मदत हवी आहे: चित्रपटाचे तिकीट बुक करा", "intent": "out_of_scope", "urgency": "routine", "lang": "mr"}
+{"text": "సహాయం కావాలి: రెండవ త్రైమాసికంలో నడుము నొప్పి సాధారణమేనా?", "intent": "symptom_pregnancy", "urgency": "routine", "lang": "te"}
+{"text": "டாக்டர்: டேலி AI-க்கு கருத்து தெரிவிக்க விரும்புகிறேன்", "intent": "feedback_survey", "urgency": "routine", "lang": "ta"}
+{"text": "जवळचे प्रसूती रुग्णालय आणि लेबर रूम कुठे आहे?", "intent": "facility_hospital_labour", "urgency": "same_day", "lang": "mr"}
+{"text": "தயவுசெய்து சொல்லுங்கள்: என்னை நீக்கு என் தரவை அழி", "intent": "opt_out_delete", "urgency": "routine", "lang": "ta"}
+{"text": "డాక్టర్ గారూ: మూడు రోజులుగా 101 డిగ్రీల జ్వరం ఉంది ఏ మందు వేయాలి?", "intent": "symptom_fever", "urgency": "same_day", "lang": "te"}
+{"text": "hattira medical store pharmacy ellide?!", "intent": "facility_pharmacy", "urgency": "routine", "lang": "kn-Latn"}
+{"text": "ಸಹಾಯ ಬೇಕು: 8 ತಿಂಗಳ ಗರ್ಭಿಣಿಗೆ ತೀವ್ರ ರಕ್ತಸ್ರಾವ ಮತ್ತು ಅತಿಯಾದ ಹೊಟ್ಟೆನೋವು", "intent": "symptom_pregnancy", "urgency": "emergency_signal", "lang": "kn"}
+{"text": "8 months pregnant heavy bleeding severe abdominal pain", "intent": "symptom_pregnancy", "urgency": "emergency_signal", "lang": "ta-Latn"}
+{"text": "সাহায্য চাই: অপ্ট আউট করুন এবং আমার সমস্ত তথ্য এখনই মুছে ফেলুন", "intent": "opt_out_delete", "urgency": "routine", "lang": "bn"}
+{"text": "കഠിന ചൂട് കാരണം കാലുകളിൽ കോച്ചലും തലകറക്കവും?", "intent": "symptom_general_adult", "urgency": "same_day", "lang": "ml"}
+{"text": "ডাক্তার: কাছের ওষুধের দোকান বা ফার্মেসি কোথায়?", "intent": "facility_pharmacy", "urgency": "routine", "lang": "bn"}
+{"text": "உதவி வேண்டும்: பனிக்குடம் உடைந்து பச்சை நிற நீர் வெளியேறுகிறது குழந்தையின் அசைவு இல்லை", "intent": "symptom_pregnancy", "urgency": "emergency_signal", "lang": "ta"}
+{"text": "Urgent question: I am 34 weeks pregnant and have severe vaginal bleeding with sharp pain", "intent": "symptom_pregnancy", "urgency": "emergency_signal", "lang": "en"}
+{"text": "बच्चे को 3 दिन से 101 डिग्री बुखार है उतर नहीं रहा!", "intent": "symptom_fever", "urgency": "same_day", "lang": "hi"}
+{"text": "2 மாதத்திற்கு உட்பட்ட பச்சிளம் குழந்தைக்கு 102F காய்ச்சல் மற்றும் கழுத்து விறைப்பு!", "intent": "symptom_fever", "urgency": "emergency_signal", "lang": "ta"}
+{"text": "உதவி வேண்டும்: வெயிலில் வேலை செய்த பிறகு தலைவலி மற்றும் சோர்வு", "intent": "symptom_general_adult", "urgency": "routine", "lang": "ta"}
+{"text": "नमस्ते डॉक्टर, सर्वे शुरू करें रेटिंग देनी है", "intent": "feedback_survey", "urgency": "routine", "lang": "hi"}
+{"text": "हर 15 मिनट में प्रसव पीड़ा (संकुचन) हो रही है?", "intent": "symptom_pregnancy", "urgency": "same_day", "lang": "hi"}
+{"text": "রোদে কাজ করার পর মাথা ব্যথা ও ক্লান্তি?", "intent": "symptom_general_adult", "urgency": "routine", "lang": "bn"}
+{"text": "ಶುಭೋದಯ?", "intent": "greeting_smalltalk", "urgency": "routine", "lang": "kn"}
+{"text": "সাহায্য চাই: ৮ মাসের গর্ভবতী হঠাৎ অতিরিক্ত রক্তক্ষরণ এবং তীব্র পেটে ব্যথা", "intent": "symptom_pregnancy", "urgency": "emergency_signal", "lang": "bn"}
+{"text": "അടുത്തുള്ള മെഡിക്കൽ ഷോപ്പ് അല്ലെങ്കിൽ ഫാർമസി എവിടെയാണ്?", "intent": "facility_pharmacy", "urgency": "routine", "lang": "ml"}
+{"text": "aaj temperature kiti ahe??", "intent": "weather_now_24h", "urgency": "routine", "lang": "mr-Latn"}
+{"text": "help me: delivery r jonno kacher hospital labour room kothay?", "intent": "facility_hospital_labour", "urgency": "same_day", "lang": "bn-Latn"}
+{"text": "मदद चाहिए: गर्भावस्था में दिन में कितना पानी पीना चाहिए?", "intent": "heat_hydration", "urgency": "routine", "lang": "hi"}
+{"text": "Water broke suddenly with greenish fluid, baby is not moving", "intent": "symptom_pregnancy", "urgency": "emergency_signal", "lang": "en"}
+{"text": "What can you do??", "intent": "greeting_smalltalk", "urgency": "routine", "lang": "en"}
+{"text": "Urgent question: Toddler has 101F fever for 3 days and is refusing to eat", "intent": "symptom_fever", "urgency": "same_day", "lang": "en"}
+{"text": "Stop sending daily morning forecast messages!", "intent": "daily_brief_subscribe", "urgency": "routine", "lang": "en"}
+{"text": "రోజూ ఉదయం వచ్చే మెసేజ్‌లు ఆపండి?", "intent": "daily_brief_subscribe", "urgency": "routine", "lang": "te"}
+{"text": "pls tell: madhyanam enda ekkuva untundha?", "intent": "weather_now_24h", "urgency": "routine", "lang": "te-Latn"}
+{"text": "ಮಧ್ಯಾಹ್ನ ಬಿಸಿಲು ಹೆಚ್ಚಿರುತ್ತದೆಯೇ?!", "intent": "weather_now_24h", "urgency": "routine", "lang": "kn"}
+{"text": "রোদে মাথা ঘুরে পড়ে গেছেন ত্বক গরম কিন্তু ঘাম হচ্ছে না হিট স্ট্রোক", "intent": "symptom_general_adult", "urgency": "emergency_signal", "lang": "bn"}
+{"text": "कृपया सांगा: उन्हात चक्कर येऊन पडले आहेत त्वचा गरम आहे पण घाम येत नाही हीट स्ट्रोक", "intent": "symptom_general_adult", "urgency": "emergency_signal", "lang": "mr"}
+{"text": "pls tell: aaj aqi level kaisa hai pollution kitna hai?", "intent": "air_quality", "urgency": "routine", "lang": "hi-Latn"}
+{"text": "4 மாத குழந்தைக்கு வெயிலில் தண்ணீர் கொடுக்கலாமா?!", "intent": "heat_hydration", "urgency": "routine", "lang": "ta"}
+{"text": "రెండవ త్రైమాసికంలో నడుము నొప్పి సాధారణమేనా?", "intent": "symptom_pregnancy", "urgency": "routine", "lang": "te"}
+{"text": "ದೈನಂದಿನ ಹವಾಮಾನ ಸಂದೇಶಗಳನ್ನು ನಿಲ್ಲಿಸಿ ಅನ್‌ಸಬ್‌ಸ್ಕ್ರೈಬ್!", "intent": "daily_brief_subscribe", "urgency": "routine", "lang": "kn"}
+{"text": "டாக்டர்: இரண்டாவது காலாண்டில் லேசான முதுகு வலி மற்றும் குமட்டல்", "intent": "symptom_pregnancy", "urgency": "routine", "lang": "ta"}
+{"text": "doctor: aaj air quality aqi koto?", "intent": "air_quality", "urgency": "routine", "lang": "bn-Latn"}
+{"text": "doctor: ivathu temperature estide?", "intent": "weather_now_24h", "urgency": "routine", "lang": "kn-Latn"}
+{"text": "உதவி வேண்டும்: குழந்தைக்கு இன்று 6 முறை வயிற்றுப்போக்கு மற்றும் உச்சி குழி விழுந்துள்ளது", "intent": "symptom_infant_child", "urgency": "same_day", "lang": "ta"}
+{"text": "இன்று காற்றின் தரம் (AQI) எப்படி உள்ளது?!", "intent": "air_quality", "urgency": "routine", "lang": "ta"}
+{"text": "मदद चाहिए: मैं Dayli AI को फीडबैक देना चाहता हूं", "intent": "feedback_survey", "urgency": "routine", "lang": "hi"}
+{"text": "చిన్నారికి విరేచనాలు మరియు కళ్ళు గుంటలు పడ్డాయి?", "intent": "symptom_infant_child", "urgency": "same_day", "lang": "te"}
+{"text": "pls tell: aduthulla medical shop pharmacy evideya?", "intent": "facility_pharmacy", "urgency": "routine", "lang": "ml-Latn"}
+{"text": "doctor: baby ki water ivvocha 3 months unte?", "intent": "heat_hydration", "urgency": "routine", "lang": "te-Latn"}
+{"text": "What is the share price of Tata Motors??", "intent": "out_of_scope", "urgency": "routine", "lang": "en"}
+{"text": "air quality aqi level evvalavu?!", "intent": "air_quality", "urgency": "routine", "lang": "ta-Latn"}
+{"text": "Urgent question: What is the share price of Tata Motors?", "intent": "out_of_scope", "urgency": "routine", "lang": "en"}
+{"text": "Can you help: Grandmother collapsed outside in heat with hot dry skin and no sweat", "intent": "symptom_general_adult", "urgency": "emergency_signal", "lang": "en"}
+{"text": "help me: pregnancy te gorome koto ta jol khabo?", "intent": "heat_hydration", "urgency": "routine", "lang": "bn-Latn"}
+{"text": "doctor: 2 month balala shwas ghyayla tras hoto otha nile padlet", "intent": "symptom_infant_child", "urgency": "emergency_signal", "lang": "mr-Latn"}
+{"text": "ನನ್ನ ಖಾತೆ ಮತ್ತು ವಿವರಗಳನ್ನು ತೆಗೆದುಹಾಕಿ!", "intent": "opt_out_delete", "urgency": "routine", "lang": "kn"}
+{"text": "ডাক্তার: হালকা জ্বর হলে কুসুম গরম পানিতে শরীর স্পঞ্জ করব কীভাবে?", "intent": "symptom_fever", "urgency": "routine", "lang": "bn"}
+{"text": "ನನ್ನ ಖಾತೆ ಮತ್ತು ವಿವರಗಳನ್ನು ತೆಗೆದುಹಾಕಿ?", "intent": "opt_out_delete", "urgency": "routine", "lang": "kn"}
+{"text": "Send me morning weather forecast daily at 7 AM", "intent": "daily_brief_subscribe", "urgency": "routine", "lang": "en"}
+{"text": "Air pollution index and particulate matter pm2.5!", "intent": "air_quality", "urgency": "routine", "lang": "en"}
+{"text": "সাহায্য চাই: ২ মাসের বাচ্চার শ্বাসকষ্ট হচ্ছে ও ঠোঁট নীল হয়ে গেছে", "intent": "symptom_infant_child", "urgency": "emergency_signal", "lang": "bn"}
+{"text": "Severe headache and blurred vision with swollen feet in 3rd trimester", "intent": "symptom_pregnancy", "urgency": "same_day", "lang": "en"}
+{"text": "ಇಂದಿನ ಕ್ರಿಕೆಟ್ ಸ್ಕೋರ್ ಎಷ್ಟಾಗಿದೆ?!", "intent": "out_of_scope", "urgency": "routine", "lang": "kn"}
+{"text": "जवळचे प्रसूती रुग्णालय आणि लेबर रूम कुठे आहे?!", "intent": "facility_hospital_labour", "urgency": "same_day", "lang": "mr"}
+{"text": "Please tell me: Good morning", "intent": "greeting_smalltalk", "urgency": "routine", "lang": "en"}
+{"text": "Urgent question: Newborn baby under 2 months has 102F fever and stiff neck", "intent": "symptom_fever", "urgency": "emergency_signal", "lang": "en"}
+{"text": "தயவுசெய்து சொல்லுங்கள்: விலகுகிறேன் எனது விவரங்களை உடனடியாக அழிக்கவும்", "intent": "opt_out_delete", "urgency": "routine", "lang": "ta"}
+{"text": "कृपया बताएं: 1 महीने के नवजात को 102 बुखार और शरीर में ऐंठन (दौरे) आ रहे हैं", "intent": "symptom_fever", "urgency": "emergency_signal", "lang": "hi"}
+{"text": "आज हैदराबाद में तापमान कितना है?", "intent": "weather_now_24h", "urgency": "routine", "lang": "hi"}
+{"text": "आज तापमान किती आहे?!", "intent": "weather_now_24h", "urgency": "routine", "lang": "mr"}
+{"text": "পানি ভেঙে গেছে সবুজ রঙের তরল বের হচ্ছে বাচ্চার নড়াচড়া নেই", "intent": "symptom_pregnancy", "urgency": "emergency_signal", "lang": "bn"}
+{"text": "Urgent question: Can you show me the weekly forecast?", "intent": "weather_5day", "urgency": "routine", "lang": "en"}
+{"text": "4 month baby ke jol deya jabe ki??", "intent": "heat_hydration", "urgency": "routine", "lang": "bn-Latn"}
+{"text": "নিকটস্থ প্রসূতি হাসপাতাল এবং লেবার রুম কোথায়?!", "intent": "facility_hospital_labour", "urgency": "same_day", "lang": "bn"}
+{"text": "దయచేసి చెప్పండి: ప్రభుత్వ మెటర్నిటీ హాస్పిటల్ బెడ్స్ ఎక్కడ అందుబాటులో ఉన్నాయి?", "intent": "facility_hospital_labour", "urgency": "same_day", "lang": "te"}
+{"text": "मदद चाहिए: गर्मी की वजह से मांसपेशियों में ऐंठन और तेज चक्कर आ रहे हैं", "intent": "symptom_general_adult", "urgency": "same_day", "lang": "hi"}
+{"text": "ഇന്ന് താപനില എത്രയാണ്??", "intent": "weather_now_24h", "urgency": "routine", "lang": "ml"}
+{"text": "ದಯವಿಟ್ಟು ತಿಳಿಸಿ: ಪ್ರತಿದಿನ ಬೆಳಿಗ್ಗೆ 7 ಗಂಟೆಗೆ ಹವಾಮಾನ ವರದಿ ಕಳುಹಿಸಿ ಸಬ್‌ಸ್ಕ್ರೈಬ್", "intent": "daily_brief_subscribe", "urgency": "routine", "lang": "kn"}
+{"text": "pudhcha 5 divasacha hawaman kasa rahil?", "intent": "weather_5day", "urgency": "routine", "lang": "mr-Latn"}
+{"text": "সাহায্য চাই: দূষণ খুব বেশি বাচ্চাকে কি বাইরে নিয়ে যাওয়া যাবে?", "intent": "air_quality", "urgency": "routine", "lang": "bn"}
+{"text": "সাহায্য চাই: সিনেমার টিকিট বুক করুন", "intent": "out_of_scope", "urgency": "routine", "lang": "bn"}
+{"text": "ಡಾಕ್ಟರ್: ಹತ್ತಿರದ ಹೆರಿಗೆ ಆಸ್ಪತ್ರೆ ಮತ್ತು ಲೇಬರ್ ರೂಮ್ ಎಲ್ಲಿದೆ?", "intent": "facility_hospital_labour", "urgency": "same_day", "lang": "kn"}
+{"text": "pls tell: pregnancy te gorome koto ta jol khabo?", "intent": "heat_hydration", "urgency": "routine", "lang": "bn-Latn"}
+{"text": "সরকারি মাতৃসদনে কি বেড ফাঁকা আছে?", "intent": "facility_hospital_labour", "urgency": "same_day", "lang": "bn"}
+{"text": "2 month baby breathing kashtam lips blue aachu!", "intent": "symptom_infant_child", "urgency": "emergency_signal", "lang": "ta-Latn"}

@@ -1,0 +1,1 @@
+Safety is never left to chance. Every single response passes through a deterministic clinical safety core before being dispatched. If a message contains red flags like infant respiratory distress or severe dehydration, Dayli AI immediately issues urgent escalation guidance. The underlying AI model cannot override these clinical guardrails.

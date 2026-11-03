@@ -1,0 +1,108 @@
+version: "3.9"
+
+services:
+  caddy:
+    image: caddy:2-alpine
+    container_name: dayli_caddy_prod
+    restart: always
+    environment:
+      - DOMAIN_NAME=${DOMAIN_NAME:-localhost}
+      - ACME_EMAIL=${ACME_EMAIL:-admin@dayli.ai}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - app
+    networks:
+      - dayli_internal_net
+
+  redis:
+    image: redis:7-alpine
+    container_name: dayli_redis_prod
+    restart: always
+    command: redis-server --appendonly yes --save 60 1 --loglevel notice
+    volumes:
+      - redis_prod_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    networks:
+      - dayli_internal_net
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: dayli_ollama_prod
+    restart: always
+    volumes:
+      - ollama_prod_data:/root/.ollama
+    ports:
+      - "127.0.0.1:11434:11434"
+    healthcheck:
+      test: ["CMD-SHELL", "ollama list >/dev/null 2>&1 || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    networks:
+      - dayli_internal_net
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dayli_app_prod
+    restart: always
+    expose:
+      - "3000"
+    ports:
+      # Expose 3000 locally as well for direct inspection if needed
+      - "127.0.0.1:3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - SESSION_STORE_URL=redis://redis:6379
+      - SESSION_TTL_SECONDS=2592000
+      - DAYLI_CORE_MODE=${DAYLI_CORE_MODE:-local}
+      - DAYLI_LOCAL_LLM=${DAYLI_LOCAL_LLM:-on}
+      - DAYLI_LOCAL_MODEL=${DAYLI_LOCAL_MODEL:-medgemma:latest}
+      - DAYLI_OLLAMA_URL=${DAYLI_OLLAMA_URL:-http://ollama:11434}
+      - META_WHATSAPP_PHONE_NUMBER_ID=${META_WHATSAPP_PHONE_NUMBER_ID}
+      - META_WHATSAPP_VERIFY_TOKEN=${META_WHATSAPP_VERIFY_TOKEN}
+      - META_WHATSAPP_ACCESS_TOKEN=${META_WHATSAPP_ACCESS_TOKEN}
+      - META_WHATSAPP_APP_SECRET=${META_WHATSAPP_APP_SECRET}
+      - META_GRAPH_VERSION=${META_GRAPH_VERSION:-v21.0}
+      - META_REENGAGEMENT_TEMPLATE=${META_REENGAGEMENT_TEMPLATE:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
+      - GROQ_API_KEY=${GROQ_API_KEY:-}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-2.0-flash}
+      - DAYLI_INTERNAL_API_KEY=${DAYLI_INTERNAL_API_KEY:-}
+      - WEATHER_PROVIDER_TYPE=${WEATHER_PROVIDER_TYPE:-real}
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS:-https://dayli.ai}
+    depends_on:
+      redis:
+        condition: service_healthy
+      ollama:
+        condition: service_healthy
+    networks:
+      - dayli_internal_net
+
+networks:
+  dayli_internal_net:
+    driver: bridge
+
+volumes:
+  redis_prod_data:
+    driver: local
+  caddy_data:
+    driver: local
+  caddy_config:
+    driver: local
+  ollama_prod_data:
+    driver: local

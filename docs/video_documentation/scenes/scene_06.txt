@@ -1,0 +1,1 @@
+Behind the scenes, the Dayli AI dashboard provides public health teams with live population-level intelligence. Operators can monitor heat and air quality surveillance maps, track consent audit compliance, analyze symptom trends, and test conversational flows live in the observatory sandbox.
