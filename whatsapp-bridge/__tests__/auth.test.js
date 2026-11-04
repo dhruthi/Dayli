@@ -35,6 +35,8 @@ describe('Clinical Dashboard Login & Auth Gate (lib/auth.js)', () => {
 
   it('validates default and environment clinical credentials', () => {
     expect(validateCredentials('clinical@dayli.ai', 'DayliAurora2026!')).toBe(true);
+    expect(validateCredentials('admin@dayli.ai', 'D@yli#Clinical2026!Secure')).toBe(true);
+    expect(validateCredentials('admin@dayli.ai', 'wrongpass')).toBe(false);
     expect(validateCredentials('clinical@dayli.ai', 'wrongpass')).toBe(false);
   });
 

@@ -24,6 +24,8 @@ import {
   stopMetricsFlusher,
 } from './lib/metrics.js';
 import { userActivitySnapshot } from './lib/opsStats.js';
+import { DASHBOARD_HTML } from './lib/opsDashboard.js';
+import { CLIMATE_HEALTH_DASHBOARD_HTML } from './lib/climateHealthDashboard.js';
 import {
   getClimateHealthSnapshot,
   assignUniqueDayliId,
@@ -2491,6 +2493,12 @@ function opsAuth(req, res, next) {
   return next();
 }
 
+app.get('/ops/dashboard', opsAuth, (_req, res) => {
+  res.set('Content-Type', 'text/html; charset=utf-8');
+  res.set('Cache-Control', 'no-store');
+  res.send(DASHBOARD_HTML);
+});
+
 // ── Clinical Portal Authentication & Login Routes ─────────────────────
 app.get('/login', (_req, res) => {
   res.set('Content-Type', 'text/html; charset=utf-8');
@@ -2502,12 +2510,29 @@ app.post('/api/auth/login', handleLogin);
 app.post('/api/auth/logout', handleLogout);
 
 /**
+ * Dayli AI — Climate & Maternal Health Surveillance Dashboard (Protected by Login Gate).
+ * Correlates real-time microclimate shifts (Microsoft Aurora) with pregnant women's health,
+ * Zero-PHI Unique IDs (DYL-MAT-XXXX), and Nearest Ready Labour Room routing.
+ */
+app.get('/dashboard', requireDashboardAuth, (_req, res) => {
+  res.set('Content-Type', 'text/html; charset=utf-8');
+  res.set('Cache-Control', 'no-store');
+  res.send(CLIMATE_HEALTH_DASHBOARD_HTML);
+});
+
+/**
  * Dayli AI — Executive Pitch for German Partner (Pregnant Women & Extreme Heat Impact).
  */
 app.get('/pitch', requireDashboardAuth, (_req, res) => {
   res.set('Content-Type', 'text/html; charset=utf-8');
   res.set('Cache-Control', 'no-store');
   res.send(GERMAN_PITCH_HTML);
+});
+
+app.get('/ops/climate', opsAuth, (_req, res) => {
+  res.set('Content-Type', 'text/html; charset=utf-8');
+  res.set('Cache-Control', 'no-store');
+  res.send(CLIMATE_HEALTH_DASHBOARD_HTML);
 });
 
 app.get('/api/climate-health/raw-sessions', requireDashboardAuth, async (_req, res) => {
@@ -2963,7 +2988,18 @@ app.get('/health', async (req, res) => {
   });
 });
 
-app.get('/', (_req, res) => {
+app.get('/', (req, res) => {
+  // If visited directly in a web browser, redirect to the dashboard
+  if (req.accepts('html') && (req.headers['sec-fetch-dest'] === 'document' || !req.xhr)) {
+    return res.redirect(302, '/dashboard');
+  }
+
+  // If accessed directly on the dashboard domain, redirect to dashboard
+  const host = String(req.headers['x-forwarded-host'] || req.headers.host || '').toLowerCase();
+  if (host.startsWith('dashboard.')) {
+    return res.redirect(302, '/dashboard');
+  }
+
   // Never expose credentials here — this endpoint is public and unauthenticated.
   res.json({
     status: 'online',
