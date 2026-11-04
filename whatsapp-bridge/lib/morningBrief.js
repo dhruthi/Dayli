@@ -43,7 +43,16 @@ export function isDailyForecastSubscriptionQuery(text) {
     q.includes('रोज नको') ||
     q.includes('हवामान नको') ||
     q.includes('দৈনিক বন্ধ') ||
-    q.includes('আবহাওয়া লাগবে না')
+    q.includes('আবহাওয়া লাগবে না') ||
+    q.includes('إيقاف التوقعات اليومية') ||
+    q.includes('إلغاء التوقعات') ||
+    q.includes('arrêter météo quotidienne') ||
+    q.includes('stop météo') ||
+    q.includes('acha utabiri wa kila siku') ||
+    q.includes('dakatar da hasashen yau da kullum') ||
+    q.includes('da duro ojoojumo') ||
+    q.includes('የዕለት ትንበያ አቁም') ||
+    q.includes('misa isibikezelo sansukuzonke')
   ) {
     return 'unsubscribe';
   }
@@ -81,7 +90,18 @@ export function isDailyForecastSubscriptionQuery(text) {
     q.includes('रोज हवामान पाठवा') ||
     q.includes('দৈনিক আবহাওয়া') ||
     q.includes('প্রতিদিনের আবহাওয়া') ||
-    q.includes('প্রতিদিন আপডেট')
+    q.includes('প্রতিদিন আপডেট') ||
+    q.includes('الطقس اليومي') ||
+    q.includes('توقعات يومية') ||
+    q.includes('توقعات الطقس') ||
+    q.includes('météo quotidienne') ||
+    q.includes('prévisions quotidiennes') ||
+    q.includes('utabiri wa kila siku') ||
+    q.includes('hali ya hewa kila siku') ||
+    q.includes('hasashen yanayi na yau da kullum') ||
+    q.includes('ojú ọjọ́ ojoojúmọ́') ||
+    q.includes('የዕለት ተዕለት የአየር ሁኔታ') ||
+    q.includes('isibikezelo sansukuzonke')
   ) {
     return 'subscribe';
   }
@@ -156,6 +176,62 @@ export function subjectTip(profile = {}, locale = 'en') {
       pregnant_person:
         'দুপুর ১২টা থেকে ৪টার মধ্যে সরাসরি রোদে যাওয়া এড়িয়ে চলুন এবং ডাবের পানি বা ঘোল খান।',
       default: 'সারাদিন পর্যাপ্ত নিরাপদ পানি পান করুন এবং হাইড্রেটেড থাকুন।',
+    },
+    ar: {
+      infant:
+        'ألبسي الرضيع ملابس قطنية خفيفة ومريحة وقدمي الرضاعة الطبيعية بانتظام (لا تعطِ ماءً عادياً لمن هم دون 6 أشهر).',
+      child: 'احرص على بقاء الأطفال في أماكن مظللة أثناء اللعب واصطحب زجاجة ماء.',
+      pregnant_person:
+        'تجنبي التعرض المباشر لأشعة الشمس بين الساعة 12 ظهراً و4 عصراً واحرصي على شرب السوائل بانتظام.',
+      default: 'حافظ على ترطيب جسمك واشرب كميات كافية من الماء والسوائل طوال اليوم.',
+    },
+    fr: {
+      infant:
+        'Habillez bébé avec des vêtements en coton légers et allaitez fréquemment (pas d\'eau pure avant 6 mois).',
+      child: 'Privilégiez les aires de jeu ombragées à l\'extérieur et gardez une gourde d\'eau.',
+      pregnant_person:
+        'Évitez l\'exposition directe au soleil entre 12h et 16h et buvez beaucoup de liquides.',
+      default: 'Restez bien hydraté et buvez suffisamment d\'eau tout au long de la journée.',
+    },
+    sw: {
+      infant:
+        'Mvishe mtoto nguo nyepesi za pamba na umnyonyeshe mara kwa mara (usimpe maji ya kawaida chini ya miezi 6).',
+      child: 'Hakikisha watoto wanacheza kwenye kivuli na kubeba chupa ya maji.',
+      pregnant_person:
+        'Epuka jua kali kati ya saa 6 mchana na saa 10 jioni na unywe maji ya kutosha au madafu.',
+      default: 'Kunywa maji ya kutosha na uendelee kuwa na maji mwilini siku nzima.',
+    },
+    ha: {
+      infant:
+        'Sanya wa jariri tufafi masu sauƙi na auduga kuma a shayar da shi akai-akai (kada a ba da ruwa zalla ƙasa da watanni 6).',
+      child: 'A tabbatar yara suna wasa a wuraren da ke da inuwa kuma a ba su ruwa.',
+      pregnant_person:
+        'A guji shiga rana kai tsaye tsakanin karfe 12 na rana zuwa 4 na yamma kuma a sha ruwa sosai.',
+      default: 'A riƙa shan isasshen ruwa a ko da yaushe don samun lafiyar jiki.',
+    },
+    yo: {
+      infant:
+        'Wọ ọmọ ni awọn aṣọ owu tinrin ki o si fun ni ọmú déédé (má ṣe fún ọmọ lábẹ́ oṣù 6 ní omi lásán).',
+      child: 'Jẹ ki awọn ọmọde ṣere ni awọn agbegbe ti o ni iboji ki o si fun wọn ni omi.',
+      pregnant_person:
+        'Yẹra fun oòrùn tààrà láàrín aago 12 ọ̀sán sí 4 ìrọ̀lẹ́ kí o sì mu omi dáadáa.',
+      default: 'Mu omi to pọ ki o si tọju ara rẹ ni gbogbo ọjọ.',
+    },
+    am: {
+      infant:
+        'ለህፃኑ ቀላል የጥጥ ልብሶችን ይልበሱ እና አዘውትረው ያጥቡት (ከ 6 ወር በታች ለሆኑ ህፃናት ተራ ውሃ አይስጡ)።',
+      child: 'ልጆች ከቤት ውጭ ሲጫወቱ በጥላ ሥር እንዲሆኑ ያድርጉ እና የውሃ ጠርሙስ ይያዙ።',
+      pregnant_person:
+        'ከቀኑ 6፡00 እስከ 10፡00 ሰዓት ድረስ ለቀጥታ ፀሐይ ከመጋለጥ ይቆጠቡ እና በቂ ፈሳሽ ይውሰዱ።',
+      default: 'ቀኑን ሙሉ በቂ ውሃ እና ፈሳሽ በመጠጣት ሰውነትዎን ይጠብቁ።',
+    },
+    zu: {
+      infant:
+        'Gqolisa ingane izingubo zikakotini ezilula futhi uyincelise njalo (ungayiniki amanzi angenalutho ngaphansi kwezinyanga eziyisi-6).',
+      child: 'Gcina izingane zidlala emthunzini uma zingaphandle futhi ziphathe amanzi.',
+      pregnant_person:
+        'Gwema ukushiswa yilanga ngqo phakathi kuka-12:00 no-16:00 ntambama futhi uphuze uketshezi olwanele.',
+      default: 'Hlala unamanzi emzimbeni ngokuthi uphuze uketshezi oluningi usuku lonke.',
     },
     en: {
       infant:
@@ -234,6 +310,48 @@ export function composeFirstTip(session, climate) {
     return `${line}💡 আপনার প্রথম পরামর্শ:\n${tip}`;
   }
 
+  if (locale === 'ar') {
+    const where = cityName ? `📍 ${cityName}` : '📍 منطقتك';
+    const line = hasWeather ? `${where}: ${temp}°C الآن (تشعر وكأنها: ${feelsLike}°C)\n\n` : '';
+    return `${line}💡 نصيحتك الأولى:\n${tip}`;
+  }
+
+  if (locale === 'fr') {
+    const where = cityName ? `📍 ${cityName}` : '📍 Votre région';
+    const line = hasWeather ? `${where} : ${temp}°C actuellement (ressenti : ${feelsLike}°C)\n\n` : '';
+    return `${line}💡 Votre premier conseil :\n${tip}`;
+  }
+
+  if (locale === 'sw') {
+    const where = cityName ? `📍 ${cityName}` : '📍 Eneo lako';
+    const line = hasWeather ? `${where}: ${temp}°C sasa hivi (inajisikia kama ${feelsLike}°C)\n\n` : '';
+    return `${line}💡 Ushauri wako wa kwanza:\n${tip}`;
+  }
+
+  if (locale === 'ha') {
+    const where = cityName ? `📍 ${cityName}` : '📍 Yankinku';
+    const line = hasWeather ? `${where}: ${temp}°C a yanzu (ana jin kamar ${feelsLike}°C)\n\n` : '';
+    return `${line}💡 Shawararku ta farko:\n${tip}`;
+  }
+
+  if (locale === 'yo') {
+    const where = cityName ? `📍 ${cityName}` : '📍 Agbègbè rẹ';
+    const line = hasWeather ? `${where}: ${temp}°C ni bayi (o dabi ${feelsLike}°C)\n\n` : '';
+    return `${line}💡 Imọran akọkọ rẹ:\n${tip}`;
+  }
+
+  if (locale === 'am') {
+    const where = cityName ? `📍 ${cityName}` : '📍 አካባቢዎ';
+    const line = hasWeather ? `${where}: በአሁኑ ጊዜ ${temp}°C (የሚሰማው: ${feelsLike}°C)\n\n` : '';
+    return `${line}💡 የመጀመሪያ ምክርዎ:\n${tip}`;
+  }
+
+  if (locale === 'zu') {
+    const where = cityName ? `📍 ${cityName}` : '📍 Indawo yakho';
+    const line = hasWeather ? `${where}: ${temp}°C manje (kuzwakala njengo-${feelsLike}°C)\n\n` : '';
+    return `${line}💡 Ithiphu lakho lokuqala:\n${tip}`;
+  }
+
   const where = cityName ? `📍 ${cityName}` : '📍 Your area';
   const line = hasWeather ? `${where}: ${temp}°C right now (feels like ${feelsLike}°C)\n\n` : '';
   return `${line}💡 Your first tip:\n${tip}`;
@@ -292,6 +410,150 @@ export function composeMorningBrief(session, climate) {
       `• वायु गुणवत्ता (AQI): ${aqi} | UV इंडेक्स: ${uv}/11\n\n` +
       `💡 *आज की स्वास्थ्य सलाह:*\n${tip}\n\n` +
       `आपका दिन शुभ और स्वस्थ रहे! 🌸`
+    );
+  }
+
+  if (locale === 'ta') {
+    const tip = subjectTip(profile, 'ta');
+    return (
+      `காலை வணக்கம்${greetingName}! ☀️\n\n` +
+      `📍 *${cityName} இன்றைய வானிலை:*\n` +
+      `• வெப்பநிலை: ${temp}°C (உணரப்படுவது: ${feelsLike}°C)\n` +
+      `• காற்று தரம் (AQI): ${aqi} | UV குறியீடு: ${uv}/11\n\n` +
+      `💡 *இன்றைய ஆரோக்கிய ஆலோசனை:*\n${tip}\n\n` +
+      `இனிய நாளாக அமைய வாழ்த்துகள்! 🌸`
+    );
+  }
+
+  if (locale === 'kn') {
+    const tip = subjectTip(profile, 'kn');
+    return (
+      `ಶುಭೋದಯ${greetingName}! ☀️\n\n` +
+      `📍 *${cityName} ಇಂದಿನ ಹವಾಮಾನ:*\n` +
+      `• ತಾಪಮಾನ: ${temp}°C (ಅನಿಸುವುದು: ${feelsLike}°C)\n` +
+      `• ವಾಯು ಗುಣಮಟ್ಟ (AQI): ${aqi} | UV ಸೂಚ್ಯಂಕ: ${uv}/11\n\n` +
+      `💡 *ಇಂದಿನ ಆರೋಗ್ಯ ಸಲಹೆ:*\n${tip}\n\n` +
+      `ನಿಮ್ಮ ದಿನ ಶುಭವಾಗಿರಲಿ! 🌸`
+    );
+  }
+
+  if (locale === 'ml') {
+    const tip = subjectTip(profile, 'ml');
+    return (
+      `സുപ്രഭാതം${greetingName}! ☀️\n\n` +
+      `📍 *${cityName} ഇന്നത്തെ കാലാവസ്ഥ:*\n` +
+      `• താപനില: ${temp}°C (അനുഭവപ്പെടുന്നത്: ${feelsLike}°C)\n` +
+      `• വായു ഗുണനിലവാരം (AQI): ${aqi} | UV സൂചിക: ${uv}/11\n\n` +
+      `💡 *ഇന്നത്തെ ആരോഗ്യ നിർദ്ദേശം:*\n${tip}\n\n` +
+      `നല്ലൊരു ദിവസം ആശംസിക്കുന്നു! 🌸`
+    );
+  }
+
+  if (locale === 'mr') {
+    const tip = subjectTip(profile, 'mr');
+    return (
+      `शुभ सकाळ${greetingName}! ☀️\n\n` +
+      `📍 *${cityName} चे आजचे हवामान:*\n` +
+      `• तापमान: ${temp}°C (भासणारा: ${feelsLike}°C)\n` +
+      `• हवा गुणवत्ता (AQI): ${aqi} | UV निर्देशांक: ${uv}/11\n\n` +
+      `💡 *आजचा आरोग्य सल्ला:*\n${tip}\n\n` +
+      `आपला दिवस छान जावो! 🌸`
+    );
+  }
+
+  if (locale === 'bn') {
+    const tip = subjectTip(profile, 'bn');
+    return (
+      `সুপ্রভাত${greetingName}! ☀️\n\n` +
+      `📍 *${cityName}-এ আজকের আবহাওয়া:*\n` +
+      `• তাপমাত্রা: ${temp}°C (অনুভূত: ${feelsLike}°C)\n` +
+      `• বাতাসের মান (AQI): ${aqi} | UV সূচক: ${uv}/11\n\n` +
+      `💡 *আজকের স্বাস্থ্য পরামর্শ:*\n${tip}\n\n` +
+      `আপনার দিনটি শুভ হোক! 🌸`
+    );
+  }
+
+  if (locale === 'ar') {
+    const tip = subjectTip(profile, 'ar');
+    return (
+      `صباح الخير${greetingName}! ☀️\n\n` +
+      `📍 *طقس اليوم في ${cityName}:*\n` +
+      `• درجة الحرارة: ${temp}°C (تشعر وكأنها: ${feelsLike}°C)\n` +
+      `• جودة الهواء (AQI): ${aqi} | مؤشر الأشعة فوق البنفسجية: ${uv}/11\n\n` +
+      `💡 *نصيحة اليوم الصحية:*\n${tip}\n\n` +
+      `نتمنى لك يوماً صحياً وموفقاً! 🌸`
+    );
+  }
+
+  if (locale === 'fr') {
+    const tip = subjectTip(profile, 'fr');
+    return (
+      `Bonjour${greetingName} ! ☀️\n\n` +
+      `📍 *Aujourd'hui à ${cityName} :*\n` +
+      `• Température : ${temp}°C (ressenti : ${feelsLike}°C)\n` +
+      `• Qualité de l'air (IQA) : ${aqi} | Indice UV : ${uv}/11\n\n` +
+      `💡 *Conseil santé du jour :*\n${tip}\n\n` +
+      `Passez une excellente journée en pleine santé ! 🌸`
+    );
+  }
+
+  if (locale === 'sw') {
+    const tip = subjectTip(profile, 'sw');
+    return (
+      `Habari ya asubuhi${greetingName}! ☀️\n\n` +
+      `📍 *Hali ya hewa leo huko ${cityName}:*\n` +
+      `• Halijoto: ${temp}°C (inajisikia kama: ${feelsLike}°C)\n` +
+      `• Ubora wa hewa (AQI): ${aqi} | Kielezo cha UV: ${uv}/11\n\n` +
+      `💡 *Ushauri wa afya wa leo:*\n${tip}\n\n` +
+      `Tunakutakia siku njema na yenye afya! 🌸`
+    );
+  }
+
+  if (locale === 'ha') {
+    const tip = subjectTip(profile, 'ha');
+    return (
+      `Barka da asuba${greetingName}! ☀️\n\n` +
+      `📍 *Yanayin yau a ${cityName}:*\n` +
+      `• Zafin rana: ${temp}°C (ana jin kamar: ${feelsLike}°C)\n` +
+      `• Ingancin iska (AQI): ${aqi} | Ma'aunin UV: ${uv}/11\n\n` +
+      `💡 *Shawarar lafiya ta yau:*\n${tip}\n\n` +
+      `Fatan samun rana mai cike da lafiya! 🌸`
+    );
+  }
+
+  if (locale === 'yo') {
+    const tip = subjectTip(profile, 'yo');
+    return (
+      `Ẹ kú àárọ̀${greetingName}! ☀️\n\n` +
+      `📍 *Ojú ọjọ́ lónìí ní ${cityName}:*\n` +
+      `• Ìwọ̀n ooru: ${temp}°C (o dabi: ${feelsLike}°C)\n` +
+      `• Dídára afẹ́fẹ́ (AQI): ${aqi} | Atọka UV: ${uv}/11\n\n` +
+      `💡 *Ìmọ̀ràn ìlera ti òní:*\n${tip}\n\n` +
+      `A fẹ́ kí ọjọ́ rẹ dára púpọ̀! 🌸`
+    );
+  }
+
+  if (locale === 'am') {
+    const tip = subjectTip(profile, 'am');
+    return (
+      `እንደምን አደሩ${greetingName}! ☀️\n\n` +
+      `📍 *የዛሬው የአየር ሁኔታ በ${cityName}:*\n` +
+      `• የሙቀት መጠን: ${temp}°C (የሚሰማው: ${feelsLike}°C)\n` +
+      `• የአየር ጥራት (AQI): ${aqi} | የ UV መረጃ ጠቋሚ: ${uv}/11\n\n` +
+      `💡 *የዛሬው የጤና ምክር:*\n${tip}\n\n` +
+      `መልካም እና ጤናማ ቀን ይሁንልዎ! 🌸`
+    );
+  }
+
+  if (locale === 'zu') {
+    const tip = subjectTip(profile, 'zu');
+    return (
+      `Sawubona ekuseni${greetingName}! ☀️\n\n` +
+      `📍 *Isimo sezulu sanamuhla e-${cityName}:*\n` +
+      `• Izinga lokushisa: ${temp}°C (kuzwakala njengo: ${feelsLike}°C)\n` +
+      `• Izinga lomoya (AQI): ${aqi} | Inkomba ye-UV: ${uv}/11\n\n` +
+      `💡 *Ithiphu lezempilo lanamuhla:*\n${tip}\n\n` +
+      `Sikufisela usuku oluhle olunempilo! 🌸`
     );
   }
 

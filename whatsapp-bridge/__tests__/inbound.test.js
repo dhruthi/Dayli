@@ -3,6 +3,7 @@ import { normalizeWebhook, isUnreadableMedia } from '../lib/inbound.js';
 import { CloudApiClient } from '../lib/cloudApi.js';
 import { Store, SERVICE_WINDOW_MS } from '../lib/store.js';
 import * as onboarding from '../lib/onboarding.js';
+import { composeFirstTip } from '../lib/morningBrief.js';
 
 const wrap = (value) => ({
   object: 'whatsapp_business_account',
@@ -327,5 +328,66 @@ describe('onboarding', () => {
 
   it('never asks a question in the consent copy without stating the emergency route', () => {
     expect(onboarding.consentPrompt().footer).toMatch(/112/);
+  });
+
+  it('delivers fully localized completionMessage and firstTip for Arabic (no English fallback)', () => {
+    const arabicSession = {
+      profile: {
+        name: 'Fatima',
+        locale: 'ar',
+        subjectType: 'pregnant_person',
+        pregnancyWeeks: 28,
+        location: { latitude: 24.7136, longitude: 46.6753, name: 'Riyadh' },
+      },
+      consent: { granted: true },
+      onboardingStep: onboarding.STEPS.LOCATION,
+    };
+
+    const completion = onboarding.completionMessage(arabicSession);
+    expect(completion.kind).toBe('text');
+    expect(completion.body).toContain('تم كل شيء');
+    expect(completion.body).toContain('حملك في Riyadh');
+    expect(completion.body).not.toContain("All set — I'll keep your pregnancy");
+
+    const climate = { temperature: 32, feelsLike: 35, cityName: 'Riyadh' };
+    const firstTip = composeFirstTip(arabicSession, climate);
+    expect(firstTip).toContain('📍 Riyadh: 32°C الآن');
+    expect(firstTip).toContain('💡 نصيحتك الأولى:');
+    expect(firstTip).not.toContain('Your first tip');
+  });
+
+  it('delivers non-English completionMessage across all 14 non-English locales', () => {
+    const locales = ['hi', 'te', 'ta', 'kn', 'ml', 'mr', 'bn', 'ar', 'fr', 'sw', 'ha', 'yo', 'am', 'zu'];
+    for (const loc of locales) {
+      const sess = {
+        profile: {
+          locale: loc,
+          subjectType: 'infant',
+          location: { latitude: 10, longitude: 20, name: 'TestCity' },
+        },
+      };
+      const msg = onboarding.completionMessage(sess);
+      expect(msg.body).not.toContain("All set — I'll keep");
+      expect(msg.body).not.toContain('You can ask me things like:');
+
+      const tip = composeFirstTip(sess, { temperature: 25, feelsLike: 26, cityName: 'TestCity' });
+      expect(tip).not.toContain('Your first tip:');
+      expect(tip).not.toContain('right now (feels like');
+    }
+  });
+
+  it('advancing at LOCATION step with pin in Arabic returns Arabic completionMessage', () => {
+    const s = {
+      profile: { locale: 'ar', subjectType: 'pregnant_person' },
+      consent: { granted: true },
+      onboardingStep: onboarding.STEPS.LOCATION,
+    };
+    const r = onboarding.advance(s, {
+      location: { latitude: 24.71, longitude: 46.67, name: 'Almasguda' },
+    });
+    expect(r.complete).toBe(true);
+    expect(r.reply.body).toContain('تم كل شيء');
+    expect(r.reply.body).toContain('Almasguda');
+    expect(r.reply.body).not.toContain("All set");
   });
 });

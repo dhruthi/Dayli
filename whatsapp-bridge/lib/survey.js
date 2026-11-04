@@ -180,6 +180,83 @@ export function surveyInvitePrompt(locale = 'en') {
     };
   }
 
+  if (locale === 'ar') {
+    return {
+      kind: 'buttons',
+      body: '🌸 ساعدنا في تحسين Dayli AI للأمهات والعائلات من خلال استطلاع سريع لمدة 30 ثانية!',
+      buttons: [
+        { id: SURVEY_IDS.start, title: 'بدء الاستطلاع 📋' },
+        { id: SURVEY_IDS.skip, title: 'تخطي ⏭️' },
+      ],
+    };
+  }
+
+  if (locale === 'fr') {
+    return {
+      kind: 'buttons',
+      body: '🌸 Aidez-nous à améliorer Dayli AI pour les mères et les familles grâce à une enquête rapide de 30 secondes !',
+      buttons: [
+        { id: SURVEY_IDS.start, title: 'Participer 📋' },
+        { id: SURVEY_IDS.skip, title: 'Passer ⏭️' },
+      ],
+    };
+  }
+
+  if (locale === 'sw') {
+    return {
+      kind: 'buttons',
+      body: '🌸 Tusaidie kuboresha Dayli AI kwa ajili ya akina mama na familia kwa kushiriki utafiti mfupi wa sekunde 30!',
+      buttons: [
+        { id: SURVEY_IDS.start, title: 'Anza Utafiti 📋' },
+        { id: SURVEY_IDS.skip, title: 'Ruka ⏭️' },
+      ],
+    };
+  }
+
+  if (locale === 'ha') {
+    return {
+      kind: 'buttons',
+      body: '🌸 Taimaka mana inganta Dayli AI don iyaye mata da iyalai tare da ɗan binciken gaggawa na daƙiƙa 30!',
+      buttons: [
+        { id: SURVEY_IDS.start, title: 'Fara Bincike 📋' },
+        { id: SURVEY_IDS.skip, title: 'Tsallake ⏭️' },
+      ],
+    };
+  }
+
+  if (locale === 'yo') {
+    return {
+      kind: 'buttons',
+      body: '🌸 Ran wa lọwọ lati mu Dayli AI dara si fun awọn iya ati awọn idile pẹlu iwadii iṣẹju 30 ti o yara!',
+      buttons: [
+        { id: SURVEY_IDS.start, title: 'Bẹrẹ Iwadii 📋' },
+        { id: SURVEY_IDS.skip, title: 'Fojufo ⏭️' },
+      ],
+    };
+  }
+
+  if (locale === 'am') {
+    return {
+      kind: 'buttons',
+      body: '🌸 እናቶችና ቤተሰቦችን ለመደገፍ Dayli AIን ለማሻሻል ፈጣን የ30 ሰከንድ የዳሰሳ ጥናት ይውሰዱ!',
+      buttons: [
+        { id: SURVEY_IDS.start, title: 'ጥናት ጀምር 📋' },
+        { id: SURVEY_IDS.skip, title: 'ዝለል ⏭️' },
+      ],
+    };
+  }
+
+  if (locale === 'zu') {
+    return {
+      kind: 'buttons',
+      body: '🌸 Sisize sithuthukise i-Dayli AI yomama nemindeni ngenhlolovo esheshayo yemizuzwana engama-30!',
+      buttons: [
+        { id: SURVEY_IDS.start, title: 'Qala Inhlolovo 📋' },
+        { id: SURVEY_IDS.skip, title: 'Yeqa ⏭️' },
+      ],
+    };
+  }
+
   return {
     kind: 'buttons',
     body: '🌸 Help us improve Dayli AI for mothers and families with a quick 30-second feedback survey!',

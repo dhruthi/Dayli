@@ -1081,6 +1081,90 @@ export function greetingReply(session) {
     };
   }
 
+  if (locale === 'ar') {
+    return {
+      kind: 'text',
+      body:
+        `مرحبًا${name}! 🌸 أنا هنا لمساعدتك.\n\n` +
+        'يمكنك سؤالي عن أشياء مثل:\n' +
+        '• "طفلي يعاني من الحمى، ماذا أفعل؟"\n' +
+        '• "كيف هو الطقس اليوم؟"\n' +
+        '• "أين أقرب مستشفى إليّ؟"',
+    };
+  }
+
+  if (locale === 'fr') {
+    return {
+      kind: 'text',
+      body:
+        `Bonjour${name} ! 🌸 Je suis là pour vous aider.\n\n` +
+        'Vous pouvez me demander :\n' +
+        '• « Mon bébé a de la fièvre, que faire ? »\n' +
+        '• « Quel temps fait-il aujourd\'hui ? »\n' +
+        '• « Où est l\'hôpital le plus proche ? »',
+    };
+  }
+
+  if (locale === 'sw') {
+    return {
+      kind: 'text',
+      body:
+        `Hujambo${name}! 🌸 Nipo hapa kukusaidia.\n\n` +
+        'Unaweza kuniuliza mambo kama:\n' +
+        '• "Mtoto wangu ana homa, nifanye nini?"\n' +
+        '• "Hali ya hewa ikoje leo?"\n' +
+        '• "Wapi hospitali ya karibu?"',
+    };
+  }
+
+  if (locale === 'ha') {
+    return {
+      kind: 'text',
+      body:
+        `Sannu${name}! 🌸 Ina nan don taimaka muku.\n\n` +
+        'Kuna iya tambayata abubuwa kamar:\n' +
+        '• "Jaririna na zazzabi, me ya kamata in yi?"\n' +
+        '• "Yaya yanayi yake a yau?"\n' +
+        '• "Ina asibiti mafi kusa?"',
+    };
+  }
+
+  if (locale === 'yo') {
+    return {
+      kind: 'text',
+      body:
+        `Pẹlẹ o${name}! 🌸 Mo wa nibi lati ran ọ lọwọ.\n\n` +
+        'O le bi mi ni awọn ibeere bii:\n' +
+        '• "Ọmọ mi ni ibà, kí ni kí n ṣe?"\n' +
+        '• "Báwo ni ojú ọjọ́ ṣe rí lónìí?"\n' +
+        '• "Níbo ni ilé-ìwòsàn tí ó súnmọ́ jùlọ wà?"',
+    };
+  }
+
+  if (locale === 'am') {
+    return {
+      kind: 'text',
+      body:
+        `ሰላም${name}! 🌸 እርስዎን ለመርዳት እዚህ አለሁ።\n\n` +
+        'እንደነዚህ ያሉ ጥያቄዎችን መጠየቅ ይችላሉ፡\n' +
+        '• "ልጄ ትኩሳት አለበት፣ ምን ማድረግ አለብኝ?"\n' +
+        '• "የዛሬው የአየር ሁኔታ ምን ይመስላል?"\n' +
+        '• "በአቅራቢያዬ ሆስፒታል የየት አለ?"',
+    };
+  }
+
+  if (locale === 'zu') {
+    return {
+      kind: 'text',
+      body:
+        `Sawubona${name}! 🌸 Ngilapha ukukusiza.\n\n` +
+        'Ungangibuza izinto ezinjengalezi:\n' +
+        '• "Ingane yami inomkhuhlane, kumele ngenzeni?"\n' +
+        '• "Linjani izulu namhlanje?"\n' +
+        '• "Ikuphi isibhedlela esiseduze?"',
+    };
+  }
+
   return {
     kind: 'text',
     body:
@@ -1482,6 +1566,188 @@ export function completionMessage(session) {
     };
   }
 
+  if (locale === 'ar') {
+    const who =
+      p.subjectType === 'infant'
+        ? 'طفلك الرضيع'
+        : p.subjectType === 'child'
+        ? 'طفلك'
+        : p.subjectType === 'pregnant_person'
+        ? 'حملك'
+        : p.subjectType === 'postpartum_person'
+        ? 'صحتك بعد الولادة'
+        : 'صحتك';
+    const where = p.location?.name ? ` في ${p.location.name}` : p.location ? ' في موقعك' : '';
+
+    return {
+      kind: 'text',
+      body:
+        `تم كل شيء! سأضع ${who}${where} في الاعتبار دائمًا. 🌸\n\n` +
+        'يمكنك سؤالي عن أشياء مثل:\n' +
+        '• "طفلي يعاني من الحمى، ماذا أفعل؟"\n' +
+        '• "هل الخروج بعد ظهر اليوم آمن؟"\n' +
+        '• "أين أقرب مستشفى إليّ؟"\n\n' +
+        'أرسل *stop* في أي وقت لحذف جميع بياناتك المحفوظة.\n\n' +
+        '_أقدم إرشادات صحية عامة وليس تشخيصًا طبيًا. في حالات الطوارئ اتصل بالرقم 112._',
+    };
+  }
+
+  if (locale === 'fr') {
+    const who =
+      p.subjectType === 'infant'
+        ? 'votre bébé'
+        : p.subjectType === 'child'
+        ? 'votre enfant'
+        : p.subjectType === 'pregnant_person'
+        ? 'votre grossesse'
+        : p.subjectType === 'postpartum_person'
+        ? 'votre santé post-partum'
+        : 'votre santé';
+    const where = p.location?.name ? ` à ${p.location.name}` : p.location ? ' à votre position' : '';
+
+    return {
+      kind: 'text',
+      body:
+        `Tout est prêt ! Je garderai ${who}${where} à l'esprit. 🌸\n\n` +
+        'Vous pouvez me poser des questions comme :\n' +
+        '• « Mon bébé a de la fièvre, que dois-je faire ? »\n' +
+        '• « Puis-je sortir cet après-midi en toute sécurité ? »\n' +
+        '• « Où se trouve l\'hôpital le plus proche ? »\n\n' +
+        'Envoyez *stop* à tout moment pour effacer toutes vos données enregistrées.\n\n' +
+        '_Je fournis des conseils généraux, pas un diagnostic. En cas d\'urgence, appelez le 112._',
+    };
+  }
+
+  if (locale === 'sw') {
+    const who =
+      p.subjectType === 'infant'
+        ? 'mtoto wako mchanga'
+        : p.subjectType === 'child'
+        ? 'mtoto wako'
+        : p.subjectType === 'pregnant_person'
+        ? 'ujauzito wako'
+        : p.subjectType === 'postpartum_person'
+        ? 'afya yako baada ya kujifungua'
+        : 'afya yako';
+    const where = p.location?.name ? ` huko ${p.location.name}` : p.location ? ' eneo lako' : '';
+
+    return {
+      kind: 'text',
+      body:
+        `Kila kitu kiko tayari! Nitazingatia ${who}${where}. 🌸\n\n` +
+        'Unaweza kuniuliza mambo kama:\n' +
+        '• "Mtoto wangu ana homa, nifanye nini?"\n' +
+        '• "Je, ni salama kutoka nje mchana wa leo?"\n' +
+        '• "Wapi hospitali ya karibu?"\n\n' +
+        'Tuma neno *stop* wakati wowote kufuta taarifa zako zote zilizohifadhiwa.\n\n' +
+        '_Huu ni ushauri wa jumla wa afya, si utambuzi wa matibabu. Kwa dharura piga 112._',
+    };
+  }
+
+  if (locale === 'ha') {
+    const who =
+      p.subjectType === 'infant'
+        ? 'jaririnku'
+        : p.subjectType === 'child'
+        ? 'yaronku'
+        : p.subjectType === 'pregnant_person'
+        ? 'cikinku'
+        : p.subjectType === 'postpartum_person'
+        ? 'lafiyarku bayan haihuwa'
+        : 'lafiyarku';
+    const where = p.location?.name ? ` a ${p.location.name}` : p.location ? ' a wurinku' : '';
+
+    return {
+      kind: 'text',
+      body:
+        `Komai ya daidaita! Zan kula da ${who}${where}. 🌸\n\n` +
+        'Kuna iya tambayata abubuwa kamar:\n' +
+        '• "Jaririna na zazzabi, me ya kamata in yi?"\n' +
+        '• "Shin yana da lafiya fita waje a yau da rana?"\n' +
+        '• "Ina asibiti mafi kusa?"\n\n' +
+        'Aika *stop* a kowane lokaci don share duk bayanan da aka ajiye.\n\n' +
+        '_Wannan shawarar lafiya ce ta gaba ɗaya, ba binciken likita ba. Don gaggawa kira 112._',
+    };
+  }
+
+  if (locale === 'yo') {
+    const who =
+      p.subjectType === 'infant'
+        ? 'ọmọ tuntun rẹ'
+        : p.subjectType === 'child'
+        ? 'ọmọ rẹ'
+        : p.subjectType === 'pregnant_person'
+        ? 'oyun rẹ'
+        : p.subjectType === 'postpartum_person'
+        ? 'ìlera rẹ lẹhin ibimọ'
+        : 'ìlera rẹ';
+    const where = p.location?.name ? ` ní ${p.location.name}` : p.location ? ' ní agbègbè rẹ' : '';
+
+    return {
+      kind: 'text',
+      body:
+        `Gbogbo rẹ ti ṣetán! Emi yoo ranti ${who}${where}. 🌸\n\n` +
+        'O le bi mi ni awọn ibeere bii:\n' +
+        '• "Ọmọ mi ni ibà, kí ni kí n ṣe?"\n' +
+        '• "Ṣe o ni aabo lati jade lọ ni ọsan yii?"\n' +
+        '• "Nibo ni ile-iwosan ti o sunmọ julọ wa?"\n\n' +
+        'Fi *stop* ránṣẹ́ nigbakugba lati pa gbogbo alaye rẹ ti o ti fipamọ rẹ́.\n\n' +
+        '_Itọsọna ilera gbogbogbo ni eyi, kii ṣe ayẹwo dokita. Fun pajawiri pe 112._',
+    };
+  }
+
+  if (locale === 'am') {
+    const who =
+      p.subjectType === 'infant'
+        ? 'የጨቅላ ህፃንዎን'
+        : p.subjectType === 'child'
+        ? 'የልጅዎን'
+        : p.subjectType === 'pregnant_person'
+        ? 'የእርግዝናዎን'
+        : p.subjectType === 'postpartum_person'
+        ? 'ከወሊድ በኋላ ጤናዎን'
+        : 'ጤናዎን';
+    const where = p.location?.name ? ` በ${p.location.name}` : p.location ? ' በአካባቢዎ' : '';
+
+    return {
+      kind: 'text',
+      body:
+        `ሁሉም ተዘጋጅቷል! ${who}${where} ከግምት ውስጥ አስገባለሁ። 🌸\n\n` +
+        'እንደነዚህ ያሉ ጥያቄዎችን መጠየቅ ይችላሉ፡\n' +
+        '• "ልጄ ትኩሳት አለበት፣ ምን ማድረግ አለብኝ?"\n' +
+        '• "ዛሬ ከሰዓት በኋላ ወደ ውጭ መውጣት ደህንነቱ የተጠበቀ ነው?"\n' +
+        '• "በአቅራቢያ የሚገኝ ሆስፒታል የት አለ?"\n\n' +
+        'የተቀመጠውን መረጃ በሙሉ ለመሰረዝ በማንኛውም ጊዜ *stop* ብለው ይላኩ።\n\n' +
+        '_ይህ አጠቃላይ የጤና መመሪያ እንጂ የህክምና ምርመራ አይደለም። ለአደጋ ጊዜ ወደ 112 ይደውሉ።_',
+    };
+  }
+
+  if (locale === 'zu') {
+    const who =
+      p.subjectType === 'infant'
+        ? 'ingane yakho'
+        : p.subjectType === 'child'
+        ? 'umntwana wakho'
+        : p.subjectType === 'pregnant_person'
+        ? 'ukukhulelwa kwakho'
+        : p.subjectType === 'postpartum_person'
+        ? 'impilo yakho ngemuva kokubeletha'
+        : 'impilo yakho';
+    const where = p.location?.name ? ` e-${p.location.name}` : p.location ? ' endaweni yakho' : '';
+
+    return {
+      kind: 'text',
+      body:
+        `Konke sekumi ngomumo! Ngizokhumbula ${who}${where}. 🌸\n\n` +
+        'Ungangibuza izinto ezinjengalezi:\n' +
+        '• "Ingane yami inomkhuhlane, kumele ngenzeni?"\n' +
+        '• "Kuphephile yini ukuphuma ntambama namhlanje?"\n' +
+        '• "Ikuphi isibhedlela esiseduze?"\n\n' +
+        'Thumela *stop* noma nini ukuze ususe yonke imininingwane egciniwe.\n\n' +
+        '_Lokhu kungukuqondiswa kwezempilo okuvamile, hhayi ukuxilongwa kodokotela. Esimeni esiphuthumayo shayela ku-112._',
+    };
+  }
+
   const who =
     p.subjectType === 'infant'
       ? 'your baby'
@@ -1578,6 +1844,76 @@ export function stopConfirmation(locale = 'en') {
         'সম্পন্ন — আপনি অপ্ট-আউট করেছেন এবং আপনার সমস্ত তথ্য স্থায়ীভাবে মুছে ফেলা হয়েছে। 🛑\n\n' +
         'আবার শুরু করতে *start* লিখুন।\n\n' +
         'নিজের যত্ন নিন! 🌸',
+    };
+  }
+
+  if (loc === 'ar') {
+    return {
+      kind: 'text',
+      body:
+        'تم بنجاح — تم إلغاء اشتراكك وحذف جميع بياناتك الشخصية وسجل محادثاتك نهائيًا. 🛑\n\n' +
+        'لن أتواصل معك مجددًا إلا إذا أرسلت رسالة جديدة. إذا أردت البدء من جديد، أرسل *start*.\n\n' +
+        'دمت بصحة وعافية! 🌸',
+    };
+  }
+
+  if (loc === 'fr') {
+    return {
+      kind: 'text',
+      body:
+        'C\'est fait — vous vous êtes désabonné(e) et toutes vos données personnelles ont été définitivement supprimées. 🛑\n\n' +
+        'Je ne vous recontacterai plus à moins que vous ne m\'écriviez. Si vous souhaitez recommencer, envoyez *start*.\n\n' +
+        'Prenez bien soin de vous ! 🌸',
+    };
+  }
+
+  if (loc === 'sw') {
+    return {
+      kind: 'text',
+      body:
+        'Imekamilika — umejiondoa na taarifa zako zote binafsi zimefutwa kabisa. 🛑\n\n' +
+        'Sitawasiliana nawe tena isipokuwa ukituma ujumbe. Ukitaka kuanza upya, tuma neno *start*.\n\n' +
+        'Kila la heri na afya njema! 🌸',
+    };
+  }
+
+  if (loc === 'ha') {
+    return {
+      kind: 'text',
+      body:
+        'An gama — kun fita daga tsarin kuma an goge duk bayanan sirrinku gaba daya. 🛑\n\n' +
+        'Ba zan sake tuntuɓarku ba sai idan kun aiko da sako. Idan kuna son sake farawa, aiko da *start*.\n\n' +
+        'A kula da lafiya! 🌸',
+    };
+  }
+
+  if (loc === 'yo') {
+    return {
+      kind: 'text',
+      body:
+        'O ti parí — o ti jáde kúrò nínú ètò náà àti pé gbogbo àwọn àlàyé rẹ ti parẹ́ pátápátá. 🛑\n\n' +
+        'N kò ní kàn sí ọ mọ́ àfi tí o bá kọ̀wé sí mi. Tí o bá fẹ́ bẹ̀rẹ̀ lẹ́ẹ̀kansi, kọ *start*.\n\n' +
+        'Tọ́jú ara rẹ dáadáa! 🌸',
+    };
+  }
+
+  if (loc === 'am') {
+    return {
+      kind: 'text',
+      body:
+        'ተጠናቋል — ከአገልግሎቱ ወጥተዋል እና የግል መረጃዎ በሙሉ በቋሚነት ተሰርዟል። 🛑\n\n' +
+        'እርስዎ መልእክት ካልላኩ በስተቀር ዳግም አላገኝዎትም። እንደገና ለመጀመር *start* ብለው ይላኩ።\n\n' +
+        'ጤናዎ ይጠበቅ! 🌸',
+    };
+  }
+
+  if (loc === 'zu') {
+    return {
+      kind: 'text',
+      body:
+        'Kwenziwe — uphumile ohlelweni futhi yonke imininingwane yakho isusiwe unomphela. 🛑\n\n' +
+        'Ngeke ngiphinde ngikuthinte ngaphandle uma uthumela umyalezo. Uma ufuna ukuqala phansi, thumela *start*.\n\n' +
+        'Zinakekele kahle! 🌸',
     };
   }
 

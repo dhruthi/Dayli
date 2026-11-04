@@ -1324,6 +1324,20 @@ async function handleMessageEvent(event) {
         ? 'मदत झाल्याचे समजून आनंद झाला! अधिक माहितीसाठी आपण कधीही विचारू शकता. 🌸'
         : locale === 'bn'
         ? 'সাহায্য করতে পেরে আনন্দিত! আরো তথ্যের জন্য যেকোনো সময় জিজ্ঞাসা করতে পারেন। 🌸'
+        : locale === 'ar'
+        ? 'يسعدني سماع ذلك! لا تتردد في السؤال متى احتجت إلى مزيد من الإرشادات. 🌸'
+        : locale === 'fr'
+        ? 'Ravi(e) que cela ait pu vous aider ! N\'hésitez pas à poser vos questions dès que vous en avez besoin. 🌸'
+        : locale === 'sw'
+        ? 'Nimefurahi kusikia hilo limemsaidia! Jisikie huru kuuliza wakati wowote unahitaji mwongozo zaidi. 🌸'
+        : locale === 'ha'
+        ? 'Ina farin cikin jin cewa wannan ya taimaka! Ku saki jiki ku yi tambaya a duk lokacin da kuke bukatar shawara. 🌸'
+        : locale === 'yo'
+        ? 'Inu mi dun lati gbọ pe iyẹn ṣe iranlọwọ! Ni ominira lati beere nigbakugba ti o ba nilo itọsọna diẹ sii. 🌸'
+        : locale === 'am'
+        ? 'ይህ እንደረዳዎት በመስማቴ ደስ ብሎኛል! ተጨማሪ መመሪያ በፈለጉበት ጊዜ ሁሉ ለመጠየቅ ነፃነት ይሰማዎ። 🌸'
+        : locale === 'zu'
+        ? 'Kuyajabulisa ukuzwa ukuthi lokho kusizile! Zizwe ukhululekile ukubuza noma nini lapho udinga isiqondiso esengeziwe. 🌸'
         : 'Glad to hear that helped! Feel free to ask whenever you need more guidance. 🌸';
     await deliver(from, { kind: 'text', body: msg });
     // Offer optional 30-second MCQ Care Quality Survey
@@ -1348,6 +1362,20 @@ async function handleMessageEvent(event) {
         ? 'कळवल्याबद्दल धन्यवाद. चांगल्या सेवेसाठी कृपया आपला अभिप्राय सांगा.'
         : locale === 'bn'
         ? 'জানানোর জন্য ধন্যবাদ। আরও উন্নত সেবার জন্য আপনার মতামত দিন।'
+        : locale === 'ar'
+        ? 'شكرًا لإبلاغنا. يرجى إخبارنا برأيك لنتمكن من تقديم خدمة أفضل.'
+        : locale === 'fr'
+        ? 'Merci de nous en informer. N\'hésitez pas à nous faire part de vos remarques pour nous aider à nous améliorer.'
+        : locale === 'sw'
+        ? 'Asante kwa kutujulisha. Tafadhali shiriki maoni yako ili tuweze kukuhudumia vizuri zaidi.'
+        : locale === 'ha'
+        ? 'Mun gode da sanar da mu. Da fatan za a ba da shawarwarku don mu inganta hidimarmu.'
+        : locale === 'yo'
+        ? 'O ṣeun fun fifi to wa leti. Jọwọ pin ero rẹ ki a le ṣe iranṣẹ fun ọ daradara.'
+        : locale === 'am'
+        ? 'ስላሳወቁን እናመሰግናለን። የተሻለ አገልግሎት መስጠት እንድንችል እባክዎን አስተያየትዎን ያጋሩ።'
+        : locale === 'zu'
+        ? 'Siyabonga ngokusazisa. Sicela wabelane ngempendulo yakho ukuze sikusize kangcono.'
         : 'Thank you for letting us know. Please share your feedback so we can serve you better.';
     await deliver(from, { kind: 'text', body: msg });
     // Offer optional 30-second MCQ Care Quality Survey
@@ -1493,9 +1521,40 @@ async function handleMessageEvent(event) {
       }
     } else {
       // Non-voice-note media (images, videos, documents) — cannot process
+      const imageRejectMsg =
+        locale === 'te'
+          ? 'క్షమించండి, నేను ఇంకా చిత్రాలను చూడలేను.\n\nదయచేసి మీ సమస్యను సందేశంలో వివరించగలరా?\n\n_అత్యవసరమైతే 112 కు కాల్ చేయండి._'
+          : locale === 'hi'
+          ? 'माफ़ करें, मैं अभी तस्वीरें नहीं देख सकती।\n\nक्या आप लिखकर बता सकते हैं कि क्या समस्या है?\n\n_आपात स्थिति में 112 पर कॉल करें।_'
+          : locale === 'ta'
+          ? 'மன்னிக்கவும், என்னால் இன்னும் படங்களைப் பார்க்க முடியாது.\n\nநீங்கள் காண்பதை ஒரு செய்தியில் விவரிக்க முடியுமா?\n\n_அவசரநிலை என்றால் 112 ஐ அழைக்கவும்._'
+          : locale === 'kn'
+          ? 'ಕ್ಷಮಿಸಿ, ನಾನು ಇನ್ನೂ ಚಿತ್ರಗಳನ್ನು ನೋಡಲು ಸಾಧ್ಯವಿಲ್ಲ.\n\nದಯವಿಟ್ಟು ನಿಮ್ಮ ಸಮಸ್ಯೆಯನ್ನು ಸಂದೇಶದಲ್ಲಿ ವಿವರಿಸಬಹುದೇ?\n\n_ತುರ್ತು ಸಂದರ್ಭದಲ್ಲಿ 112 ಗೆ ಕರೆ ಮಾಡಿ._'
+          : locale === 'ml'
+          ? 'ക്ഷമിക്കണം, എനിക്ക് ചിത്രങ്ങൾ പരിശോധിക്കാൻ കഴിയില്ല.\n\nനിങ്ങൾ കാണുന്നത് ഒരു സന്ദേശമായി വിവരിക്കാമോ?\n\n_അടിയന്തിര സാഹചര്യങ്ങളിൽ 112 എന്ന നമ്പറിൽ വിളിക്കുക._'
+          : locale === 'mr'
+          ? 'क्षमस्व, मी अजून फोटो पाहू शकत नाही.\n\nआपण काय पाहत आहात ते संदेशात सांगू शकाल का?\n\n_तातडीच्या वेळी 112 वर कॉल करा._'
+          : locale === 'bn'
+          ? 'দুঃখিত, আমি এখনো ছবি দেখতে পারি না।\n\nআপনি যা দেখছেন তা কি বার্তায় বর্ণনা করতে পারবেন?\n\n_জরুরি অবস্থায় 112 নম্বরে কল করুন।_'
+          : locale === 'ar'
+          ? 'عذرًا، لا يمكنني عرض الصور بعد.\n\nهل يمكنك وصف ما تراه في رسالة نصية؟\n\n_في حالات الطوارئ اتصل بالرقم 112._'
+          : locale === 'fr'
+          ? 'Désolé, je ne peux pas encore analyser d\'images.\n\nPourriez-vous décrire ce que vous constatez dans un message ?\n\n_En cas d\'urgence, appelez le 112._'
+          : locale === 'sw'
+          ? 'Samahani, bado siwezi kutazama picha.\n\nJe, unaweza kueleza unachoona kwenye ujumbe?\n\n_Ikiwa ni dharura, piga 112._'
+          : locale === 'ha'
+          ? 'Yi haƙuri, har yanzu ba zan iya duba hotuna ba.\n\nZa ku iya bayyana abin da kuke gani a cikin sako?\n\n_Idan na gaggawa ne, kira 112._'
+          : locale === 'yo'
+          ? 'Ma binu, n kò tíì lè wo àwòrán.\n\nṢe o le ṣe àpèjúwe ohun tí o ń rí nínú ìfiránṣẹ́?\n\n_Tí ó bá jẹ́ pàjáwìrì, pe 112._'
+          : locale === 'am'
+          ? 'ይቅርታ፣ ምስሎችን ገና ማየት አልችልም።\n\nየሚያዩትን በመልእክት ሊገልጹልኝ ይችላሉ?\n\n_አስቸኳይ ከሆነ ወደ 112 ይደውሉ።_'
+          : locale === 'zu'
+          ? 'Uxolo, angikwazi ukubuka izithombe okwamanje.\n\nUngachaza okubonayo emyalezweni?\n\n_Uma kudingeka usizo oluphuthumayo, shayela ku-112._'
+          : "I can't look at images yet, sorry.\n\nCould you describe what you're seeing in a message?\n\n_If it's urgent, please call 112._";
+
       await deliver(from, {
         kind: 'text',
-        body: "I can't look at images yet, sorry.\n\nCould you describe what you're seeing in a message?\n\n_If it's urgent, please call 112._",
+        body: imageRejectMsg,
       });
       return;
     }
@@ -1527,7 +1586,12 @@ async function handleMessageEvent(event) {
         event.location.latitude,
         event.location.longitude
       );
-      if (placeName && session.profile.location) session.profile.location.name = placeName;
+      if (placeName && session.profile.location) {
+        session.profile.location.name = placeName;
+        if (result.reply && result.complete) {
+          result.reply = onboarding.completionMessage(session);
+        }
+      }
       // They will very likely ask "where is the nearest hospital" later. Start
       // that lookup now so the answer comes back instantly instead of in 15s.
       prefetchFacilities(event.location.latitude, event.location.longitude);
@@ -1686,6 +1750,20 @@ async function handleMessageEvent(event) {
         ? 'दैनिक हवामान अंदाज थांबवण्यात आला आहे. पुन्हा सुरू करण्यासाठी "start daily forecast" पाठवा.'
         : locale === 'bn'
         ? 'দৈনিক আবহাওয়ার পূর্বাভাস বন্ধ করা হয়েছে। আবার চালু করতে "start daily forecast" লিখুন।'
+        : locale === 'ar'
+        ? 'تم إيقاف التوقعات الجوية اليومية مؤقتًا. يمكنك إعادة تفعيلها في أي وقت بإرسال "start daily forecast".'
+        : locale === 'fr'
+        ? 'Les prévisions météo quotidiennes ont été suspendues. Vous pouvez les réactiver à tout moment en envoyant « start daily forecast ».'
+        : locale === 'sw'
+        ? 'Taarifa za utabiri wa kila siku zimesitishwa. Unaweza kuanzisha tena wakati wowote kwa kutuma "start daily forecast".'
+        : locale === 'ha'
+        ? 'An dakatar da hasashen yanayi na yau da kullum. Kuna iya sake farawa a kowane lokaci ta hanyar aika "start daily forecast".'
+        : locale === 'yo'
+        ? 'A ti da ikilọ asọtẹlẹ oju-ọjọ ojoojumọ duro. O le bẹrẹ pada nigbakugba nipa fifiranṣẹ "start daily forecast".'
+        : locale === 'am'
+        ? 'የዕለታዊ የአየር ሁኔታ ትንበያ አገልግሎት ቆሟል። በማንኛውም ጊዜ "start daily forecast" ብለው በመላክ እንደገና ማስጀመር ይችላሉ።'
+        : locale === 'zu'
+        ? 'Izibikezelo zesimo sezulu zansuku zonke zinqunyanyiwe. Ungaqhubeka noma nini ngokuthumela "start daily forecast".'
         : 'Daily weather forecast briefings have been paused. You can resume anytime by messaging "start daily forecast".';
     await deliver(from, msg);
     return;
@@ -1715,6 +1793,20 @@ async function handleMessageEvent(event) {
         ? `✅ आपल्या परिसरासाठी (${cityName}) २४ तासांचा दैनंदिन हवामान अंदाज सक्रिय केला आहे! दररोज सकाळी ७:०० वाजता अपडेट मिळेल.\n\n${briefText}`
         : locale === 'bn'
         ? `✅ আপনার এলাকার (${cityName}) জন্য ২৪ ঘণ্টার দৈনিক আবহাওয়ার পূর্বাভাস সক্রিয় করা হয়েছে! প্রতিদিন সকাল ৭:০০ টায় আপডেট পাবেন।\n\n${briefText}`
+        : locale === 'ar'
+        ? `✅ تم تفعيل التوقعات الجوية اليومية لمنطقتك (${cityName})! ستصلك التحديثات كل صباح.\n\n${briefText}`
+        : locale === 'fr'
+        ? `✅ Les prévisions météo quotidiennes sur 24h sont activées pour votre région (${cityName}) ! Vous recevrez un point chaque matin.\n\n${briefText}`
+        : locale === 'sw'
+        ? `✅ Utabiri wa hali ya hewa wa saa 24 kila siku umewezeshwa kwa eneo lako (${cityName})! Utapokea taarifa kila asubuhi.\n\n${briefText}`
+        : locale === 'ha'
+        ? `✅ An kunna hasashen yanayi na sa'o'i 24 na yau da kullum don yankinku (${cityName})! Za ku riƙa samun labari kowace safiya.\n\n${briefText}`
+        : locale === 'yo'
+        ? `✅ A ti mu asọtẹlẹ oju-ọjọ wakati 24 ojoojumọ ṣiṣẹ fun agbegbe rẹ (${cityName})! Iwọ yoo gba imudojuiwọn rẹ ni gbogbo owurọ.\n\n${briefText}`
+        : locale === 'am'
+        ? `✅ የ24 ሰዓት የዕለታዊ የአየር ሁኔታ ትንበያ ለአካባቢዎ (${cityName}) ነቅቷል! በየማለዳው መረጃ ይደርስዎታል።\n\n${briefText}`
+        : locale === 'zu'
+        ? `✅ Izibikezelo zesimo sezulu zamahora angama-24 zansuku zonke zivuliwe endaweni yakho (${cityName})! Uzothola isibuyekezo sakho njalo ekuseni.\n\n${briefText}`
         : `✅ Daily 24-hour weather predictions and health guidance are enabled for ${cityName}! You will receive your update every morning at 07:00 AM IST.\n\n${briefText}`;
 
     await deliver(from, confirmMsg);
@@ -1917,6 +2009,76 @@ async function handleMessageEvent(event) {
               { id: onboarding.ONBOARDING_IDS.feedbackYes, title: 'সহায়ক ছিল 👍' },
               { id: SURVEY_IDS.start, title: 'সার্ভে 📋' },
               { id: onboarding.ONBOARDING_IDS.optOut, title: 'অপ্ট আউট 🛑' },
+            ],
+          }
+        : locale === 'ar'
+        ? {
+            kind: 'buttons',
+            body: 'هل كانت هذه الإرشادات مفيدة لك؟',
+            buttons: [
+              { id: onboarding.ONBOARDING_IDS.feedbackYes, title: 'مفيدة 👍' },
+              { id: SURVEY_IDS.start, title: 'استطلاع 📋' },
+              { id: onboarding.ONBOARDING_IDS.optOut, title: 'إلغاء 🛑' },
+            ],
+          }
+        : locale === 'fr'
+        ? {
+            kind: 'buttons',
+            body: 'Ces conseils vous ont-ils été utiles ?',
+            buttons: [
+              { id: onboarding.ONBOARDING_IDS.feedbackYes, title: 'Utile 👍' },
+              { id: SURVEY_IDS.start, title: 'Enquête 📋' },
+              { id: onboarding.ONBOARDING_IDS.optOut, title: 'Quitter 🛑' },
+            ],
+          }
+        : locale === 'sw'
+        ? {
+            kind: 'buttons',
+            body: 'Je, ushauri huu umekusaidia?',
+            buttons: [
+              { id: onboarding.ONBOARDING_IDS.feedbackYes, title: 'Umesaidia 👍' },
+              { id: SURVEY_IDS.start, title: 'Utafiti 📋' },
+              { id: onboarding.ONBOARDING_IDS.optOut, title: 'Ondoka 🛑' },
+            ],
+          }
+        : locale === 'ha'
+        ? {
+            kind: 'buttons',
+            body: 'Shin wannan shawarar ta taimaka?',
+            buttons: [
+              { id: onboarding.ONBOARDING_IDS.feedbackYes, title: 'Taimaka 👍' },
+              { id: SURVEY_IDS.start, title: 'Bincike 📋' },
+              { id: onboarding.ONBOARDING_IDS.optOut, title: 'Fita 🛑' },
+            ],
+          }
+        : locale === 'yo'
+        ? {
+            kind: 'buttons',
+            body: 'Ṣe itọsọna yii ṣe iranlọwọ?',
+            buttons: [
+              { id: onboarding.ONBOARDING_IDS.feedbackYes, title: 'Iranlọwọ 👍' },
+              { id: SURVEY_IDS.start, title: 'Iwadii 📋' },
+              { id: onboarding.ONBOARDING_IDS.optOut, title: 'Jade 🛑' },
+            ],
+          }
+        : locale === 'am'
+        ? {
+            kind: 'buttons',
+            body: 'ይህ መመሪያ ጠቅሞዎታል?',
+            buttons: [
+              { id: onboarding.ONBOARDING_IDS.feedbackYes, title: 'ረድቷል 👍' },
+              { id: SURVEY_IDS.start, title: 'ጥናት 📋' },
+              { id: onboarding.ONBOARDING_IDS.optOut, title: 'ውጣ 🛑' },
+            ],
+          }
+        : locale === 'zu'
+        ? {
+            kind: 'buttons',
+            body: 'Ingabe lesi siqondiso sibe wusizo?',
+            buttons: [
+              { id: onboarding.ONBOARDING_IDS.feedbackYes, title: 'Kusizile 👍' },
+              { id: SURVEY_IDS.start, title: 'Inhlolovo 📋' },
+              { id: onboarding.ONBOARDING_IDS.optOut, title: 'Phuma 🛑' },
             ],
           }
         : {
