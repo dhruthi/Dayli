@@ -1238,8 +1238,16 @@ export function advance(session, event) {
   const replyId = event.replyId || '';
   const text = String(event.text || '').trim();
 
+  const isAwaitingLang =
+    Boolean(session.awaitingLanguageSelection) ||
+    !session.onboardingStep ||
+    session.onboardingStep === STEPS.LANGUAGE ||
+    !session.profile?.languageSelected;
+
   // Explicit language menu selection or text language choice
-  const langChoice = parseLanguageSelection(replyId, text);
+  const langChoice = parseLanguageSelection(replyId, text, {
+    allowNumeric: isAwaitingLang,
+  });
   if (langChoice === 'more') {
     return { session, reply: getLanguageMenu(session.profile?.locale || 'en', 'more'), complete: false };
   }
@@ -1249,6 +1257,7 @@ export function advance(session, event) {
   if (langChoice) {
     session.profile.locale = langChoice;
     session.profile.languageSelected = true;
+    delete session.awaitingLanguageSelection;
     const msg = getLanguageSwitchedMessage(langChoice);
     if (!session.onboardingStep || session.onboardingStep === STEPS.LANGUAGE) {
       session.onboardingStep = STEPS.CONSENT;
@@ -1259,11 +1268,24 @@ export function advance(session, event) {
         complete: false,
       };
     }
-    return { session, reply: { kind: 'text', body: msg }, complete: false };
+    let promptReply = null;
+    if (session.onboardingStep === STEPS.CONSENT) promptReply = consentPrompt(langChoice);
+    else if (session.onboardingStep === STEPS.SUBJECT) promptReply = subjectPrompt(langChoice);
+    else if (session.onboardingStep === STEPS.CHILD_AGE) promptReply = childAgePrompt(langChoice);
+    else if (session.onboardingStep === STEPS.PREGNANCY_STAGE) promptReply = pregnancyPrompt(langChoice);
+    else if (session.onboardingStep === STEPS.LOCATION) promptReply = locationPrompt(langChoice);
+
+    return {
+      session,
+      reply: promptReply || { kind: 'text', body: msg },
+      prefixMessage: promptReply ? msg : null,
+      complete: false,
+    };
   }
 
   // Language command ('LANGUAGE', 'భాష', etc.)
   if (isLanguageCommand(text)) {
+    session.awaitingLanguageSelection = true;
     return {
       session,
       reply: getLanguageMenu(session.profile?.locale || 'en'),
@@ -1345,6 +1367,22 @@ export function advance(session, event) {
       session.onboardingStep = STEPS.LOCATION;
       return { session, reply: locationPrompt(locale), complete: false };
     }
+    const tTrim = text.trim();
+    if (tTrim === '1' || /infant|baby|குழந்தை|శిశువు|शिशु/i.test(tTrim)) {
+      session.profile.subjectType = 'infant';
+      session.onboardingStep = STEPS.CHILD_AGE;
+      return { session, reply: childAgePrompt(locale), complete: false };
+    }
+    if (tTrim === '2' || /pregnant|pregnancy|கர்ப்பம்|கர்ப்பமாக|గర్భవతి|गर्भावस्था|गर्भवती/i.test(tTrim)) {
+      session.profile.subjectType = 'pregnant_person';
+      session.onboardingStep = STEPS.PREGNANCY_STAGE;
+      return { session, reply: pregnancyPrompt(locale), complete: false };
+    }
+    if (tTrim === '3' || /adult|myself|எனக்கு|నా కోసం|खुद/i.test(tTrim)) {
+      session.profile.subjectType = 'adult';
+      session.onboardingStep = STEPS.LOCATION;
+      return { session, reply: locationPrompt(locale), complete: false };
+    }
     return { session, reply: subjectPrompt(locale), complete: false };
   }
 
@@ -1359,6 +1397,25 @@ export function advance(session, event) {
       session.onboardingStep = STEPS.LOCATION;
       return { session, reply: locationPrompt(locale), complete: false };
     }
+    const tTrim = text.trim();
+    if (tTrim === '1') {
+      session.profile.childAgeMonths = 3;
+      session.profile.subjectType = 'infant';
+      session.onboardingStep = STEPS.LOCATION;
+      return { session, reply: locationPrompt(locale), complete: false };
+    }
+    if (tTrim === '2') {
+      session.profile.childAgeMonths = 9;
+      session.profile.subjectType = 'infant';
+      session.onboardingStep = STEPS.LOCATION;
+      return { session, reply: locationPrompt(locale), complete: false };
+    }
+    if (tTrim === '3') {
+      session.profile.childAgeMonths = 18;
+      session.profile.subjectType = 'child';
+      session.onboardingStep = STEPS.LOCATION;
+      return { session, reply: locationPrompt(locale), complete: false };
+    }
     return { session, reply: childAgePrompt(locale), complete: false };
   }
 
@@ -1367,6 +1424,22 @@ export function advance(session, event) {
     if (replyId.startsWith(ID.pregPrefix)) {
       const weeks = parseInt(replyId.slice(ID.pregPrefix.length), 10);
       session.profile.pregnancyWeeks = weeks >= 0 ? weeks : null;
+      session.onboardingStep = STEPS.LOCATION;
+      return { session, reply: locationPrompt(locale), complete: false };
+    }
+    const tTrim = text.trim();
+    if (tTrim === '1' || /first|1st|1வது|முதல்|पहला|మొదటి/i.test(tTrim)) {
+      session.profile.pregnancyWeeks = 8;
+      session.onboardingStep = STEPS.LOCATION;
+      return { session, reply: locationPrompt(locale), complete: false };
+    }
+    if (tTrim === '2' || /second|2nd|2வது|இரண்டாவது|दूसरा|రెండవ/i.test(tTrim)) {
+      session.profile.pregnancyWeeks = 20;
+      session.onboardingStep = STEPS.LOCATION;
+      return { session, reply: locationPrompt(locale), complete: false };
+    }
+    if (tTrim === '3' || /third|3rd|3வது|மூன்றாவது|तीसरा|మూడవ/i.test(tTrim)) {
+      session.profile.pregnancyWeeks = 32;
       session.onboardingStep = STEPS.LOCATION;
       return { session, reply: locationPrompt(locale), complete: false };
     }

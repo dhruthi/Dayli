@@ -299,19 +299,45 @@ export function isLanguageCommand(text = '') {
   );
 }
 
+const LANG_SPECS = [
+  { code: 'en', keywords: ['english'] },
+  { code: 'hi', keywords: ['hindi', 'हिन्दी', 'हिंदी', 'हिन्दी में', 'हिंदी में'] },
+  { code: 'te', keywords: ['telugu', 'తెలుగు', 'తెలుగులో'] },
+  { code: 'ta', keywords: ['tamil', 'தமிழ்', 'தமிழில்'] },
+  { code: 'kn', keywords: ['kannada', 'ಕನ್ನಡ', 'ಕನ್ನಡದಲ್ಲಿ'] },
+  { code: 'ml', keywords: ['malayalam', 'മലയാളം', 'മലയാളത്തിൽ'] },
+  { code: 'mr', keywords: ['marathi', 'मराठी', 'मराठीत'] },
+  { code: 'bn', keywords: ['bengali', 'bangla', 'বাংলা', 'বাংলায়'] },
+  { code: 'ar', keywords: ['arabic', 'العربية', 'عربي', 'بالعربية'] },
+  { code: 'fr', keywords: ['french', 'français', 'francais', 'en français'] },
+  { code: 'sw', keywords: ['swahili', 'kiswahili', 'kwa kiswahili'] },
+  { code: 'ha', keywords: ['hausa', 'harshen hausa', 'da hausa'] },
+  { code: 'yo', keywords: ['yoruba', 'yorùbá', 'èdè yorùbá'] },
+  { code: 'am', keywords: ['amharic', 'አማርኛ', 'በአማርኛ'] },
+  { code: 'zu', keywords: ['zulu', 'isizulu', 'ngesizulu'] },
+];
+
 /**
  * Identifies if a reply or button id selects a specific language.
  * @param {string} replyId
  * @param {string} text
+ * @param {object} [options={}]
+ * @param {boolean} [options.allowNumeric=true] Whether bare numeric answers ("1"-"15") are parsed
  * @returns {string|null} Locale code or null
  */
-export function parseLanguageSelection(replyId = '', text = '') {
+export function parseLanguageSelection(replyId = '', text = '', options = {}) {
   const rid = String(replyId || '').trim();
-  if (rid === 'lang_more') return 'more';
-  if (rid === 'lang_back') return 'back';
-  if (rid.startsWith('lang_')) {
-    const code = rid.replace('lang_', '');
-    if (isSupportedLocale(code)) return code;
+  if (rid) {
+    if (rid === 'lang_more') return 'more';
+    if (rid === 'lang_back') return 'back';
+    if (rid.startsWith('lang_')) {
+      const code = rid.replace('lang_', '');
+      if (isSupportedLocale(code)) return code;
+    }
+    // Any interactive reply with a non-language replyId (such as ob_*, survey_*, feedback_*, etc.)
+    // was triggered by an interactive button/list row that is NOT part of language selection.
+    // It must NEVER be parsed as a language selection!
+    return null;
   }
 
   const t = String(text || '').trim().toLowerCase();
@@ -324,188 +350,60 @@ export function parseLanguageSelection(replyId = '', text = '') {
     return 'back';
   }
 
-  // Numeric selection: 1 to 15 (supports "1", "15", "option 1", Indic numerals, Arabic numerals, Ethiopic numerals)
-  const numMatch = t.match(/^(?:option\s+|choice\s+)?([1-9]|1[0-5]|[१-९]|१[०-५]|[౧-౯]|౧[०-౫]|[\u0661-\u0669]|\u0661[\u0660-\u0665]|[፩-፱]|፲[፩-፭]?)(?:\.|\b|\s|$)/i);
-  if (numMatch) {
-    const rawDigit = numMatch[1];
-    const digitMap = {
-      '1': 'en', '१': 'en', '౧': 'en', '௧': 'en', '೧': 'en', '൧': 'en', '১': 'en', '١': 'en', '፩': 'en',
-      '2': 'hi', '२': 'hi', '౨': 'hi', '௨': 'hi', '೨': 'hi', '൨': 'hi', '২': 'hi', '٢': 'hi', '፪': 'hi',
-      '3': 'te', '३': 'te', '౩': 'te', '௩': 'te', '೩': 'te', '൩': 'te', '৩': 'te', '٣': 'te', '፫': 'te',
-      '4': 'ta', '४': 'ta', '౪': 'ta', '௪': 'ta', '೪': 'ta', '൪': 'ta', '৪': 'ta', '٤': 'ta', '፬': 'ta',
-      '5': 'kn', '५': 'kn', '౫': 'kn', '௫': 'kn', '೫': 'kn', '൫': 'kn', '৫': 'kn', '٥': 'kn', '፭': 'kn',
-      '6': 'ml', '६': 'ml', '౬': 'ml', '௬': 'ml', '೬': 'ml', '൬': 'ml', '৬': 'ml', '٦': 'ml', '፮': 'ml',
-      '7': 'mr', '७': 'mr', '౭': 'mr', '௭': 'mr', '೭': 'mr', '൭': 'mr', '৭': 'mr', '٧': 'mr', '፯': 'mr',
-      '8': 'bn', '८': 'bn', '౮': 'bn', '௮': 'bn', '೮': 'bn', '൮': 'bn', '৮': 'bn', '٨': 'bn', '፰': 'bn',
-      '9': 'ar', '९': 'ar', '౯': 'ar', '௯': 'ar', '೯': 'ar', '൯': 'ar', '৯': 'ar', '٩': 'ar', '፱': 'ar',
-      '10': 'fr', '१०': 'fr', '౧౦': 'fr', '١٠': 'fr', '፲': 'fr',
-      '11': 'sw', '११': 'sw', '౧౧': 'sw', '١١': 'sw', '፲፩': 'sw',
-      '12': 'ha', '१२': 'ha', '౧౨': 'ha', '١٢': 'ha', '፲፪': 'ha',
-      '13': 'yo', '१३': 'yo', '౧౩': 'yo', '١٣': 'yo', '፲፫': 'yo',
-      '14': 'am', '१४': 'am', '౧౪': 'am', '١٤': 'am', '፲፬': 'am',
-      '15': 'zu', '१५': 'zu', '౧౫': 'zu', '١٥': 'zu', '፲፭': 'zu',
-    };
-    if (digitMap[rawDigit]) return digitMap[rawDigit];
-  }
-
   // Never treat common English greetings/words like "hi", "hey", "hello" as a language code
   if (/^(?:hi|hey|hello|hola|namaste|vanakkam)\b/i.test(t)) {
-    if (!/\b(?:language|change|switch|talk|speak|convert)\b/i.test(t)) {
+    if (!/\b(?:language|change|switch|talk|speak|convert|tamil|hindi|english|telugu)\b/i.test(t)) {
       return null;
     }
   }
 
-  // English
-  if (
-    t === 'english' ||
-    /\b(?:change|switch|set|talk|speak|convert|choose|select)?(?:\s+(?:the|my)?\s*language)?\s+(?:to|in)?\s*english\b/i.test(t) ||
-    t === 'lang:en'
-  ) {
-    return 'en';
+  // Numeric selection: 1 to 15 (e.g. "1", "15", "option 1", "choice 2", Indic, Arabic, Ethiopic numerals)
+  // ONLY if allowNumeric is true (e.g. during pre-onboarding language selection or after language menu prompt)
+  // AND must be strictly anchored to the number itself!
+  if (options.allowNumeric !== false) {
+    const numMatch = t.match(/^(?:option\s+|choice\s+|lang\s+|language\s+)?([1-9]|1[0-5]|[१-९]|१[०-५]|[౧-౯]|౧[०-౫]|[\u0661-\u0669]|\u0661[\u0660-\u0665]|[፩-፱]|፲[፩-፭]?)\.?$/i);
+    if (numMatch) {
+      const rawDigit = numMatch[1];
+      const digitMap = {
+        '1': 'en', '१': 'en', '౧': 'en', '௧': 'en', '೧': 'en', '൧': 'en', '১': 'en', '١': 'en', '፩': 'en',
+        '2': 'hi', '२': 'hi', '౨': 'hi', '௨': 'hi', '೨': 'hi', '൨': 'hi', '২': 'hi', '٢': 'hi', '፪': 'hi',
+        '3': 'te', '३': 'te', '౩': 'te', '௩': 'te', '೩': 'te', '൩': 'te', '৩': 'te', '٣': 'te', '፫': 'te',
+        '4': 'ta', '४': 'ta', '౪': 'ta', '௪': 'ta', '೪': 'ta', '൪': 'ta', '৪': 'ta', '٤': 'ta', '፬': 'ta',
+        '5': 'kn', '५': 'kn', '౫': 'kn', '௫': 'kn', '೫': 'kn', '൫': 'kn', '৫': 'kn', '٥': 'kn', '፭': 'kn',
+        '6': 'ml', '६': 'ml', '౬': 'ml', '௬': 'ml', '೬': 'ml', '൬': 'ml', '۶': 'ml', '٦': 'ml', '፮': 'ml',
+        '7': 'mr', '७': 'mr', '౭': 'mr', '௭': 'mr', '೭': 'mr', '൭': 'mr', '৭': 'mr', '٧': 'mr', '፯': 'mr',
+        '8': 'bn', '८': 'bn', '౮': 'bn', '௮': 'bn', '೮': 'bn', '൮': 'bn', '৮': 'bn', '٨': 'bn', '፰': 'bn',
+        '9': 'ar', '९': 'ar', '౯': 'ar', '௯': 'ar', '೯': 'ar', '൯': 'ar', '৯': 'ar', '٩': 'ar', '፱': 'ar',
+        '10': 'fr', '१०': 'fr', '౧౦': 'fr', '١٠': 'fr', '፲': 'fr',
+        '11': 'sw', '११': 'sw', '౧౧': 'sw', '١١': 'sw', '፲፩': 'sw',
+        '12': 'ha', '१२': 'ha', '౧౨': 'ha', '١٢': 'ha', '፲፪': 'ha',
+        '13': 'yo', '१३': 'yo', '౧౩': 'yo', '١٣': 'yo', '፲፫': 'yo',
+        '14': 'am', '१४': 'am', '౧౪': 'am', '١٤': 'am', '፲፬': 'am',
+        '15': 'zu', '१५': 'zu', '౧౫': 'zu', '١٥': 'zu', '፲፭': 'zu',
+      };
+      if (digitMap[rawDigit]) return digitMap[rawDigit];
+    }
   }
 
-  // Hindi (NEVER match bare "hi")
-  if (
-    t === 'hindi' ||
-    t === 'हिन्दी' ||
-    t === 'हिंदी' ||
-    /\b(?:change|switch|set|talk|speak|convert|choose|select)?(?:\s+(?:the|my)?\s*language)?\s+(?:to|in)?\s*(?:hindi|हिन्दी|हिंदी)\b/i.test(t) ||
-    t === 'lang:hi'
-  ) {
-    return 'hi';
-  }
+  // Explicit language name matching across all 15 supported languages
+  for (const spec of LANG_SPECS) {
+    if (t === `lang:${spec.code}`) return spec.code;
 
-  // Telugu
-  if (
-    t === 'telugu' ||
-    t === 'తెలుగు' ||
-    /\b(?:change|switch|set|talk|speak|convert|choose|select)?(?:\s+(?:the|my)?\s*language)?\s+(?:to|in)?\s*(?:telugu|తెలుగు)\b/i.test(t) ||
-    t === 'lang:te'
-  ) {
-    return 'te';
-  }
+    const escaped = spec.keywords.map((k) => k.replace(/[.*+?^()|[]\\]/g, '\\$&')).join('|');
 
-  // Tamil
-  if (
-    t === 'tamil' ||
-    t === 'தமிழ்' ||
-    /\b(?:change|switch|set|talk|speak|convert|choose|select)?(?:\s+(?:the|my)?\s*language)?\s+(?:to|in)?\s*(?:tamil|தமிழ்)\b/i.test(t) ||
-    t === 'lang:ta'
-  ) {
-    return 'ta';
-  }
+    // 1. Direct command e.g. "tamil", "தமிழ்", "Tamil only", "only tamil", "in tamil", "tamil please", "change language to tamil", "I want tamil"
+    const directRegex = new RegExp(
+      `^(?:(?:change|switch|set|talk|speak|convert|choose|select|only|just|use|want|prefer|need|i\\s+want|i\\s+need|i\\s+prefer)?(?:\\s+(?:the|my)?\\s*language)?\\s*(?:to|in|into)?\\s*)?(?:${escaped})(?:\\s+(?:only|please|language|mode|lang|மட்டும்))?\\.?$`,
+      'i'
+    );
+    if (directRegex.test(t)) return spec.code;
 
-  // Kannada
-  if (
-    t === 'kannada' ||
-    t === 'ಕನ್ನಡ' ||
-    /\b(?:change|switch|set|talk|speak|convert|choose|select)?(?:\s+(?:the|my)?\s*language)?\s+(?:to|in)?\s*(?:kannada|ಕನ್ನಡ)\b/i.test(t) ||
-    t === 'lang:kn'
-  ) {
-    return 'kn';
-  }
-
-  // Malayalam
-  if (
-    t === 'malayalam' ||
-    t === 'മലയാളം' ||
-    /\b(?:change|switch|set|talk|speak|convert|choose|select)?(?:\s+(?:the|my)?\s*language)?\s+(?:to|in)?\s*(?:malayalam|മലയാളം)\b/i.test(t) ||
-    t === 'lang:ml'
-  ) {
-    return 'ml';
-  }
-
-  // Marathi
-  if (
-    t === 'marathi' ||
-    t === 'मराठी' ||
-    /\b(?:change|switch|set|talk|speak|convert|choose|select)?(?:\s+(?:the|my)?\s*language)?\s+(?:to|in)?\s*(?:marathi|मराठी)\b/i.test(t) ||
-    t === 'lang:mr'
-  ) {
-    return 'mr';
-  }
-
-  // Bengali
-  if (
-    t === 'bengali' ||
-    t === 'bangla' ||
-    t === 'বাংলা' ||
-    /\b(?:change|switch|set|talk|speak|convert|choose|select)?(?:\s+(?:the|my)?\s*language)?\s+(?:to|in)?\s*(?:bengali|bangla|বাংলা)\b/i.test(t) ||
-    t === 'lang:bn'
-  ) {
-    return 'bn';
-  }
-
-  // Arabic
-  if (
-    t === 'arabic' ||
-    t === 'العربية' ||
-    t === 'عربي' ||
-    /\b(?:change|switch|set|talk|speak|convert|choose|select)?(?:\s+(?:the|my)?\s*language)?\s+(?:to|in)?\s*(?:arabic|العربية|عربي)\b/i.test(t) ||
-    t === 'lang:ar'
-  ) {
-    return 'ar';
-  }
-
-  // French
-  if (
-    t === 'french' ||
-    t === 'français' ||
-    t === 'francais' ||
-    /\b(?:change|switch|set|talk|speak|convert|choose|select)?(?:\s+(?:the|my)?\s*language)?\s+(?:to|in)?\s*(?:french|français|francais)\b/i.test(t) ||
-    t === 'lang:fr'
-  ) {
-    return 'fr';
-  }
-
-  // Swahili
-  if (
-    t === 'swahili' ||
-    t === 'kiswahili' ||
-    /\b(?:change|switch|set|talk|speak|convert|choose|select)?(?:\s+(?:the|my)?\s*language)?\s+(?:to|in)?\s*(?:swahili|kiswahili)\b/i.test(t) ||
-    t === 'lang:sw'
-  ) {
-    return 'sw';
-  }
-
-  // Hausa
-  if (
-    t === 'hausa' ||
-    t === 'harshen hausa' ||
-    /\b(?:change|switch|set|talk|speak|convert|choose|select)?(?:\s+(?:the|my)?\s*language)?\s+(?:to|in)?\s*(?:hausa|harshen hausa)\b/i.test(t) ||
-    t === 'lang:ha'
-  ) {
-    return 'ha';
-  }
-
-  // Yoruba
-  if (
-    t === 'yoruba' ||
-    t === 'yorùbá' ||
-    /\b(?:change|switch|set|talk|speak|convert|choose|select)?(?:\s+(?:the|my)?\s*language)?\s+(?:to|in)?\s*(?:yoruba|yorùbá)\b/i.test(t) ||
-    t === 'lang:yo'
-  ) {
-    return 'yo';
-  }
-
-  // Amharic
-  if (
-    t === 'amharic' ||
-    t === 'አማርኛ' ||
-    /\b(?:change|switch|set|talk|speak|convert|choose|select)?(?:\s+(?:the|my)?\s*language)?\s+(?:to|in)?\s*(?:amharic|አማርኛ)\b/i.test(t) ||
-    t === 'lang:am'
-  ) {
-    return 'am';
-  }
-
-  // Zulu
-  if (
-    t === 'zulu' ||
-    t === 'isizulu' ||
-    /\b(?:change|switch|set|talk|speak|convert|choose|select)?(?:\s+(?:the|my)?\s*language)?\s+(?:to|in)?\s*(?:zulu|isizulu)\b/i.test(t) ||
-    t === 'lang:zu'
-  ) {
-    return 'zu';
+    // 2. Conversational switch request in sentence e.g. "can you please talk to me in tamil", "reply in tamil"
+    const sentenceRegex = new RegExp(
+      `\\b(?:change|switch|talk|speak|convert|set|tell|explain|guide|reply|answer|respond|message)\\b.*\\b(?:to|in|into)\\s+(?:${escaped})\\b`,
+      'i'
+    );
+    if (sentenceRegex.test(t)) return spec.code;
   }
 
   return null;

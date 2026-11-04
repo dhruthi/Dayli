@@ -217,6 +217,26 @@ describe('Multilingual Script & Language Detection', () => {
       expect(parseLanguageSelection('', 'hi')).toBeNull();
       expect(parseLanguageSelection('', 'hello')).toBeNull();
       expect(parseLanguageSelection('', 'something else')).toBeNull();
+      // Phrased requests
+      expect(parseLanguageSelection('', 'Tamil only')).toBe('ta');
+      expect(parseLanguageSelection('', 'tamil only')).toBe('ta');
+      expect(parseLanguageSelection('', 'TAMIL ONLY')).toBe('ta');
+      expect(parseLanguageSelection('', 'only tamil')).toBe('ta');
+      expect(parseLanguageSelection('', 'in tamil')).toBe('ta');
+      expect(parseLanguageSelection('', 'tamil please')).toBe('ta');
+      expect(parseLanguageSelection('', 'French only')).toBe('fr');
+      expect(parseLanguageSelection('', 'English please')).toBe('en');
+      // Interactive non-language button reply IDs must NEVER switch language
+      expect(parseLanguageSelection('ob_preg_20', '2வது காலாண்டு (13–27 வார')).toBeNull();
+      expect(parseLanguageSelection('ob_subj_pregnant', 'நான் கர்ப்பமாக உள்ளேன்')).toBeNull();
+      expect(parseLanguageSelection('ob_consent_yes', 'Yes')).toBeNull();
+      // Partial numerical text must NEVER match numeric language selection
+      expect(parseLanguageSelection('', '2வது காலாண்டு (13–27 வார')).toBeNull();
+      expect(parseLanguageSelection('', '2 days fever')).toBeNull();
+      expect(parseLanguageSelection('', '3 months baby')).toBeNull();
+      // Bare numbers only match when allowNumeric is true
+      expect(parseLanguageSelection('', '2', { allowNumeric: false })).toBeNull();
+      expect(parseLanguageSelection('', '2', { allowNumeric: true })).toBe('hi');
     });
   });
 });

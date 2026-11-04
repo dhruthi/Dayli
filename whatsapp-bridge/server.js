@@ -1233,7 +1233,15 @@ async function handleMessageEvent(event) {
   let locale = session.profile.locale || 'en';
 
   // ── LANGUAGE SELECTION / MENU COMMANDS ─────────────────────────────────
-  const selectedLocale = parseLanguageSelection(event.replyId, event.text);
+  const isAwaitingLang =
+    Boolean(session.awaitingLanguageSelection) ||
+    !session.onboardingStep ||
+    session.onboardingStep === onboarding.STEPS.LANGUAGE ||
+    !session.profile?.languageSelected;
+
+  const selectedLocale = parseLanguageSelection(event.replyId, event.text, {
+    allowNumeric: isAwaitingLang,
+  });
   if (selectedLocale === 'more') {
     await deliver(from, getLanguageMenu(session.profile?.locale || 'en', 'more'));
     return;
@@ -1245,6 +1253,7 @@ async function handleMessageEvent(event) {
   if (selectedLocale) {
     session.profile.locale = selectedLocale;
     session.profile.languageSelected = true;
+    delete session.awaitingLanguageSelection;
     locale = selectedLocale;
     const confirmMsg = getLanguageSwitchedMessage(selectedLocale);
 
@@ -1263,6 +1272,10 @@ async function handleMessageEvent(event) {
       await deliver(from, onboarding.consentPrompt(selectedLocale));
     } else if (session.onboardingStep === onboarding.STEPS.SUBJECT) {
       await deliver(from, onboarding.subjectPrompt(selectedLocale));
+    } else if (session.onboardingStep === onboarding.STEPS.CHILD_AGE) {
+      await deliver(from, onboarding.childAgePrompt(selectedLocale));
+    } else if (session.onboardingStep === onboarding.STEPS.PREGNANCY_STAGE) {
+      await deliver(from, onboarding.pregnancyPrompt(selectedLocale));
     } else if (session.onboardingStep === onboarding.STEPS.LOCATION) {
       await deliver(from, onboarding.locationPrompt(selectedLocale));
     }
@@ -1270,6 +1283,8 @@ async function handleMessageEvent(event) {
   }
 
   if (isLanguageCommand(event.text)) {
+    session.awaitingLanguageSelection = true;
+    await store.saveSession(from, session);
     const menu = getLanguageMenu(session.profile?.locale || 'en');
     await deliver(from, menu);
     return;

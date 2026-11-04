@@ -390,4 +390,35 @@ describe('onboarding', () => {
     expect(r.reply.body).toContain('Almasguda');
     expect(r.reply.body).not.toContain("All set");
   });
+
+  it('preserves Tamil language when selecting 2nd trimester and does NOT switch to Hindi', () => {
+    const s = {
+      profile: { locale: 'ta', languageSelected: true, subjectType: 'pregnant_person' },
+      consent: { granted: true },
+      onboardingStep: onboarding.STEPS.PREGNANCY_STAGE,
+    };
+    const r = onboarding.advance(s, {
+      replyId: 'ob_preg_20',
+      text: '2வது காலாண்டு (13–27 வார',
+    });
+    expect(r.session.profile.locale).toBe('ta');
+    expect(r.session.profile.pregnancyWeeks).toBe(20);
+    expect(r.session.onboardingStep).toBe(onboarding.STEPS.LOCATION);
+    expect(r.reply.body).toContain('இருப்பிடம்');
+    expect(r.reply.body).not.toContain('भाषा बदलकर');
+  });
+
+  it('switches to Tamil when user messages "Tamil only" during onboarding and re-prompts step in Tamil', () => {
+    const s = {
+      profile: { locale: 'hi', languageSelected: true, subjectType: 'pregnant_person' },
+      consent: { granted: true },
+      onboardingStep: onboarding.STEPS.PREGNANCY_STAGE,
+    };
+    const r = onboarding.advance(s, {
+      text: 'Tamil only',
+    });
+    expect(r.session.profile.locale).toBe('ta');
+    expect(r.prefixMessage).toContain('தமிழ்');
+    expect(r.reply.header).toContain('கர்ப்பகால');
+  });
 });
