@@ -117,8 +117,15 @@ describe('Multilingual Script & Language Detection', () => {
       expect(resolveLocale('no', 'bn')).toBe('bn');
     });
 
-    it('switches to English when substantial English sentences are typed', () => {
-      expect(resolveLocale('Can you please tell me the weather forecast for today?', 'te')).toBe('en');
+    it('switches to English when substantial English sentences are typed and not explicitly locked', () => {
+      expect(resolveLocale('Can you please tell me the weather forecast for today?', 'te', false)).toBe('en');
+    });
+
+    it('locks language strictly when isExplicitlySelected is true, ignoring English medical terms', () => {
+      expect(resolveLocale('paracetamol 500mg syrup fever', 'te', true)).toBe('te');
+      expect(resolveLocale('Can you please tell me the weather forecast for today?', 'te', true)).toBe('te');
+      expect(resolveLocale('ORSL hydration for my baby', 'hi', true)).toBe('hi');
+      expect(resolveLocale('fever and cough since yesterday', 'kn', true)).toBe('kn');
     });
   });
 
@@ -126,6 +133,12 @@ describe('Multilingual Script & Language Detection', () => {
     it('identifies language commands in multiple languages', () => {
       expect(isLanguageCommand('language')).toBe(true);
       expect(isLanguageCommand('LANGUAGE')).toBe(true);
+      expect(isLanguageCommand('change language')).toBe(true);
+      expect(isLanguageCommand('switch language')).toBe(true);
+      expect(isLanguageCommand('language change')).toBe(true);
+      expect(isLanguageCommand('bhasha badlo')).toBe(true);
+      expect(isLanguageCommand('భాష మార్చండి')).toBe(true);
+      expect(isLanguageCommand('भाषा बदलो')).toBe(true);
       expect(isLanguageCommand('lang')).toBe(true);
       expect(isLanguageCommand('bhasha')).toBe(true);
       expect(isLanguageCommand('భాష')).toBe(true);
@@ -133,6 +146,21 @@ describe('Multilingual Script & Language Detection', () => {
       expect(isLanguageCommand('மொழி')).toBe(true);
       expect(isLanguageCommand('ಭಾಷೆ')).toBe(true);
       expect(isLanguageCommand('weather in hyderabad')).toBe(false);
+    });
+
+    it('parses numeric selections 1 to 8 and Indic digits', () => {
+      expect(parseLanguageSelection('', '1')).toBe('en');
+      expect(parseLanguageSelection('', '2')).toBe('hi');
+      expect(parseLanguageSelection('', '3')).toBe('te');
+      expect(parseLanguageSelection('', '4')).toBe('ta');
+      expect(parseLanguageSelection('', '5')).toBe('kn');
+      expect(parseLanguageSelection('', '6')).toBe('ml');
+      expect(parseLanguageSelection('', '7')).toBe('mr');
+      expect(parseLanguageSelection('', '8')).toBe('bn');
+      expect(parseLanguageSelection('', '3.')).toBe('te');
+      expect(parseLanguageSelection('', 'option 2')).toBe('hi');
+      expect(parseLanguageSelection('', '౩')).toBe('te');
+      expect(parseLanguageSelection('', '२')).toBe('hi');
     });
 
     it('parses interactive menu button/list selections', () => {

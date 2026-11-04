@@ -188,7 +188,13 @@ export function detectLocale(text) {
  * @param {string|null} currentLocale Stored session locale
  * @returns {string} Target locale code
  */
-export function resolveLocale(text, currentLocale) {
+export function resolveLocale(text, currentLocale, isExplicitlySelected = false) {
+  // If the user has explicitly chosen their language, lock it.
+  // Never let Latin letters or medical terminology (e.g. paracetamol, ORSL) flip it to English.
+  if (isExplicitlySelected && currentLocale) {
+    return currentLocale;
+  }
+
   const detected = detectLanguage(text, currentLocale || 'en');
 
   // If a strong non-English language was detected (native script or romanized indic), adopt it
@@ -224,12 +230,30 @@ export function isLanguageCommand(text = '') {
     t === 'change language' ||
     t === 'select language' ||
     t === 'choose language' ||
+    t === 'switch language' ||
+    t === 'language change' ||
+    t === 'bhasha badlo' ||
+    t === 'bhasha change' ||
+    /\b(?:change|switch|select|choose|set)\s+(?:the\s+)?language\b/i.test(t) ||
+    /\blanguage\s+(?:change|switch|selection|menu)\b/i.test(t) ||
     t === 'భాష' ||
+    t === 'భాష మార్చండి' ||
+    t === 'భాష మార్చు' ||
+    t === 'భాష ఎంచుకోండి' ||
     t === 'भाषा' ||
+    t === 'भाषा बदलो' ||
+    t === 'भाषा बदलें' ||
+    t === 'भाषा चुनें' ||
     t === 'மொழி' ||
+    t === 'மொழி மாற்று' ||
+    t === 'மொழியை மாற்று' ||
     t === 'ಭಾಷೆ' ||
+    t === 'ಭಾಷೆ ಬದಲಿಸಿ' ||
+    t === 'ಭಾಷೆ ಬದಲಾಯಿಸಿ' ||
     t === 'ഭാഷ' ||
+    t === 'ഭാഷ മാറ്റുക' ||
     t === 'ভাষা' ||
+    t === 'ভাষা পরিবর্তন' ||
     t === 'मराठी' ||
     t === 'తెలుగు' ||
     t === 'தமிழ்' ||
@@ -256,6 +280,23 @@ export function parseLanguageSelection(replyId = '', text = '') {
 
   const t = String(text || '').trim().toLowerCase();
   if (!t) return null;
+
+  // Numeric selection: 1 to 8 (supports "1", "1.", "option 1", and Indic numerals)
+  const numMatch = t.match(/^(?:option\s+|choice\s+)?([1-8१-८౧-౮௧-௮೧-೮൧-൮১-৮])(?:\.|\b|\s|$)/i);
+  if (numMatch) {
+    const rawDigit = numMatch[1];
+    const digitMap = {
+      '1': 'en', '१': 'en', '౧': 'en', '௧': 'en', '೧': 'en', '൧': 'en', '১': 'en',
+      '2': 'hi', '२': 'hi', '౨': 'hi', '௨': 'hi', '೨': 'hi', '൨': 'hi', '২': 'hi',
+      '3': 'te', '३': 'te', '౩': 'te', '௩': 'te', '೩': 'te', '൩': 'te', '৩': 'te',
+      '4': 'ta', '४': 'ta', '౪': 'ta', '௪': 'ta', '೪': 'ta', '൪': 'ta', '৪': 'ta',
+      '5': 'kn', '५': 'kn', '౫': 'kn', '௫': 'kn', '೫': 'kn', '൫': 'kn', '৫': 'kn',
+      '6': 'ml', '६': 'ml', '౬': 'ml', '௬': 'ml', '೬': 'ml', '൬': 'ml', '৬': 'ml',
+      '7': 'mr', '७': 'mr', '౭': 'mr', '௭': 'mr', '೭': 'mr', '൭': 'mr', '৭': 'mr',
+      '8': 'bn', '८': 'bn', '౮': 'bn', '௮': 'bn', '೮': 'bn', '൮': 'bn', '৮': 'bn',
+    };
+    if (digitMap[rawDigit]) return digitMap[rawDigit];
+  }
 
   // Never treat common English greetings/words like "hi", "hey", "hello" as a language code
   if (/^(?:hi|hey|hello|hola|namaste|vanakkam)\b/i.test(t)) {

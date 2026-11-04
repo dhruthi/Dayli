@@ -227,6 +227,46 @@ describe('onboarding', () => {
     onboardingStep: onboarding.STEPS.CONSENT,
   });
 
+  it('presents language prompt first when language has not been selected', () => {
+    const unselected = {
+      profile: { name: '', subjectType: 'unknown', locale: 'en' },
+      consent: { granted: false },
+      onboardingStep: onboarding.STEPS.LANGUAGE,
+    };
+    const r = onboarding.advance(unselected, { text: 'Hello' });
+    expect(r.reply.kind).toBe('list');
+    expect(r.reply.header).toContain('Language');
+    expect(r.session.onboardingStep).toBe(onboarding.STEPS.LANGUAGE);
+  });
+
+  it('selects Telugu via numeric choice "3" and advances directly to consent in Telugu', () => {
+    const unselected = {
+      profile: { name: '', subjectType: 'unknown', locale: 'en' },
+      consent: { granted: false },
+      onboardingStep: onboarding.STEPS.LANGUAGE,
+    };
+    const r = onboarding.advance(unselected, { text: '3' });
+    expect(r.session.profile.locale).toBe('te');
+    expect(r.session.profile.languageSelected).toBe(true);
+    expect(r.session.onboardingStep).toBe(onboarding.STEPS.CONSENT);
+    expect(r.reply.kind).toBe('buttons');
+    expect(r.reply.header).toContain('సమ్మతి');
+    expect(r.prefixMessage).toContain('తెలుగు');
+  });
+
+  it('selects Hindi via interactive menu selection "lang_hi" and advances to consent in Hindi', () => {
+    const unselected = {
+      profile: { name: '', subjectType: 'unknown', locale: 'en' },
+      consent: { granted: false },
+      onboardingStep: onboarding.STEPS.LANGUAGE,
+    };
+    const r = onboarding.advance(unselected, { replyId: 'lang_hi' });
+    expect(r.session.profile.locale).toBe('hi');
+    expect(r.session.profile.languageSelected).toBe(true);
+    expect(r.session.onboardingStep).toBe(onboarding.STEPS.CONSENT);
+    expect(r.reply.header).toContain('सहमति');
+  });
+
   it('records consent with a version and timestamp', () => {
     const r = onboarding.advance(fresh(), { replyId: onboarding.ONBOARDING_IDS.consentYes });
     expect(r.session.consent.granted).toBe(true);

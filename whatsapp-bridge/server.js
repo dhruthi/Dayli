@@ -540,15 +540,31 @@ const geminiConversationHistory = new Map();
 const userLocationCache = new Map();
 const MAX_HISTORY = 5;
 
+const LANGUAGE_NAMES = {
+  en: 'English',
+  hi: 'Hindi (हिन्दी)',
+  te: 'Telugu (తెలుగు)',
+  ta: 'Tamil (தமிழ்)',
+  kn: 'Kannada (ಕನ್ನಡ)',
+  ml: 'Malayalam (മലയാളം)',
+  mr: 'Marathi (मराठी)',
+  bn: 'Bengali (বাংলা)',
+};
+
 // Primary Engine: Call Grok / Groq API with automatic model fallback
-async function generateGrokResponse(userMessage, userName = 'there', additionalContext = '', userId = 'anon') {
+async function generateGrokResponse(userMessage, userName = 'there', additionalContext = '', userId = 'anon', locale = 'en') {
   if (!allowFrontier() || !AI_API_KEY) return null;
   if (!grokConversationHistory.has(userId)) grokConversationHistory.set(userId, []);
   const history = grokConversationHistory.get(userId);
   const currentMsg = { role: 'user', content: userMessage + (additionalContext ? `\n\n[REAL-TIME DATA CONTEXT]:\n${additionalContext}` : '') };
 
+  const targetLang = LANGUAGE_NAMES[locale] || 'English';
+  const languageDirective = locale && locale !== 'en'
+    ? `\n\nCRITICAL LANGUAGE INSTRUCTION: The user has chosen to speak in ${targetLang}. You MUST write your ENTIRE response strictly in ${targetLang}. Use warm, empathetic, natural everyday phrasing in ${targetLang}. Do NOT respond in English or mix in English sentences unless quoting a formal medication brand name or helpline number.`
+    : '';
+
   const messages = [
-    { role: 'system', content: SYSTEM_PROMPT + '\n\nThe user\'s name is ' + userName + '.' },
+    { role: 'system', content: SYSTEM_PROMPT + '\n\nThe user\'s name is ' + userName + '.' + languageDirective },
     ...history,
     currentMsg,
   ];
@@ -610,19 +626,24 @@ async function generateGrokResponse(userMessage, userName = 'there', additionalC
 }
 
 // Fallback Engine: Call Google Gemini API
-async function generateGeminiFallback(promptWithContext, userName = 'there', userId = 'anon') {
+async function generateGeminiFallback(promptWithContext, userName = 'there', userId = 'anon', locale = 'en') {
   if (!allowFrontier() || !GEMINI_API_KEY) return null;
   if (!geminiConversationHistory.has(userId)) geminiConversationHistory.set(userId, []);
   const history = geminiConversationHistory.get(userId);
   history.push({ role: 'user', parts: [{ text: promptWithContext }] });
   if (history.length > MAX_HISTORY * 2) history.splice(0, history.length - MAX_HISTORY * 2);
 
+  const targetLang = LANGUAGE_NAMES[locale] || 'English';
+  const languageDirective = locale && locale !== 'en'
+    ? `\n\nCRITICAL LANGUAGE INSTRUCTION: The user has chosen to speak in ${targetLang}. You MUST write your ENTIRE response strictly in ${targetLang}. Use warm, empathetic, natural everyday phrasing in ${targetLang}. Do NOT respond in English or mix in English sentences unless quoting a formal medication brand name or helpline number.`
+    : '';
+
   try {
     const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        systemInstruction: { parts: [{ text: SYSTEM_PROMPT + `\n\nThe user's name is ${userName}.` }] },
+        systemInstruction: { parts: [{ text: SYSTEM_PROMPT + `\n\nThe user's name is ${userName}.` + languageDirective }] },
         contents: history,
         generationConfig: { temperature: 0.7, maxOutputTokens: 1024 },
       }),
@@ -964,6 +985,9 @@ async function generateAIResponse(userMessage, userName = 'there', locationPaylo
     routed,
   });
 
+  // Active user locale (profile locale strictly takes precedence over speculative router detection)
+  const activeLocale = session?.profile?.locale || routed.language || 'en';
+
   // ── STEP 1: LOCAL OPEN-WEIGHT LLM (MedGemma / BioMistral / Baichuan) ──
   // If local LLM testing is enabled (via SSH tunnel or local daemon), try it first.
   if (allowLocalLlm()) {
@@ -972,7 +996,7 @@ async function generateAIResponse(userMessage, userName = 'there', locationPaylo
       const rewritten = await generateWithLocalLlm({
         userMessage,
         userName,
-        locale: routed.language || session?.profile?.locale || 'en',
+        locale: activeLocale,
         profile: session?.profile || {},
         liveContext: dynamicContext,
         clinicsData,
@@ -1002,7 +1026,7 @@ async function generateAIResponse(userMessage, userName = 'there', locationPaylo
   if (AI_API_KEY && allowFrontier()) {
     metric('ai.call');
     try {
-      const grokReply = await generateGrokResponse(userMessage, userName, fullContext, userId);
+      const grokReply = await generateGrokResponse(userMessage, userName, fullContext, userId, activeLocale);
       if (grokReply) return finalize(grokReply);
     } catch (err) {
       console.warn('[AI] Frontier provider error:', err.message);
@@ -1016,7 +1040,7 @@ async function generateAIResponse(userMessage, userName = 'there', locationPaylo
     metric('ai.fallback_gemini');
     try {
       const promptWithContext = userMessage + (fullContext ? `\n\n[Live System Context]:\n${fullContext}` : '');
-      const geminiReply = await generateGeminiFallback(promptWithContext, userName, userId);
+      const geminiReply = await generateGeminiFallback(promptWithContext, userName, userId, activeLocale);
       if (geminiReply) return finalize(geminiReply);
     } catch (err) {
       console.warn('[AI] Gemini fallback error:', err.message);
@@ -1194,16 +1218,32 @@ async function handleMessageEvent(event) {
   }
 
   // Handle language switch if user wrote in non-English script
-  session.profile.locale = onboarding.resolveLocale(event.text, session.profile.locale);
+  session.profile.locale = onboarding.resolveLocale(
+    event.text,
+    session.profile.locale,
+    Boolean(session.profile?.languageSelected)
+  );
   let locale = session.profile.locale || 'en';
 
   // ── LANGUAGE SELECTION / MENU COMMANDS ─────────────────────────────────
   const selectedLocale = parseLanguageSelection(event.replyId, event.text);
   if (selectedLocale) {
     session.profile.locale = selectedLocale;
+    session.profile.languageSelected = true;
     locale = selectedLocale;
+    const confirmMsg = getLanguageSwitchedMessage(selectedLocale);
+
+    // If pre-onboarding / waiting for language, advance to CONSENT step immediately
+    if (!session.onboardingStep || session.onboardingStep === onboarding.STEPS.LANGUAGE) {
+      session.onboardingStep = onboarding.STEPS.CONSENT;
+      await store.saveSession(from, session);
+      await deliver(from, { kind: 'text', body: confirmMsg });
+      await deliver(from, onboarding.consentPrompt(selectedLocale));
+      return;
+    }
+
     await store.saveSession(from, session);
-    await deliver(from, { kind: 'text', body: getLanguageSwitchedMessage(selectedLocale) });
+    await deliver(from, { kind: 'text', body: confirmMsg });
     if (session.onboardingStep === onboarding.STEPS.CONSENT) {
       await deliver(from, onboarding.consentPrompt(selectedLocale));
     } else if (session.onboardingStep === onboarding.STEPS.SUBJECT) {
@@ -1453,7 +1493,13 @@ async function handleMessageEvent(event) {
     !session.onboardingStep && !session.consent?.granted && !session.consent?.declinedAt;
 
   if (midOnboarding || neverAsked) {
-    if (!session.onboardingStep) session.onboardingStep = onboarding.STEPS.CONSENT;
+    if (!session.onboardingStep) {
+      if (!session.profile?.languageSelected) {
+        session.onboardingStep = onboarding.STEPS.LANGUAGE;
+      } else {
+        session.onboardingStep = onboarding.STEPS.CONSENT;
+      }
+    }
     const atLocationStep = session.onboardingStep === onboarding.STEPS.LOCATION;
     const result = onboarding.advance(session, event);
     session = result.session;
@@ -1507,6 +1553,9 @@ async function handleMessageEvent(event) {
     }
 
     await store.saveSession(from, session);
+    if (result.prefixMessage) {
+      await deliver(from, { kind: 'text', body: result.prefixMessage });
+    }
     if (result.reply) {
       await deliver(from, result.reply);
       // Finishing setup should pay off immediately: follow the celebration

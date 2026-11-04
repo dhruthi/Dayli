@@ -37,6 +37,7 @@ export { detectLocale, resolveLocale };
 export const CONSENT_VERSION = '2026-08-1';
 
 export const STEPS = {
+  LANGUAGE: 'language',
   CONSENT: 'consent',
   SUBJECT: 'subject',
   CHILD_AGE: 'child_age',
@@ -410,6 +411,45 @@ export function subjectNoun(subjectType, locale = 'en') {
   };
   const row = table[norm] || table.en;
   return row[subjectType] || row.unknown;
+}
+
+// ── Step 0: language selection ───────────────────────────────────────────
+
+export function languagePrompt(locale = 'en') {
+  const rows = [
+    { id: 'lang_en', title: '1. English', description: 'English' },
+    { id: 'lang_hi', title: '2. हिन्दी (Hindi)', description: 'Hindi' },
+    { id: 'lang_te', title: '3. తెలుగు (Telugu)', description: 'Telugu' },
+    { id: 'lang_ta', title: '4. தமிழ் (Tamil)', description: 'Tamil' },
+    { id: 'lang_kn', title: '5. ಕನ್ನಡ (Kannada)', description: 'Kannada' },
+    { id: 'lang_ml', title: '6. മലയാളം (Malayalam)', description: 'Malayalam' },
+    { id: 'lang_mr', title: '7. मराठी (Marathi)', description: 'Marathi' },
+    { id: 'lang_bn', title: '8. বাংলা (Bengali)', description: 'Bengali' },
+  ];
+
+  return {
+    kind: 'list',
+    header: '🌐 Choose Your Language',
+    body:
+      '🌸 Welcome to Dayli AI | డేలీ AI కి స్వాగతం | डेयली AI में स्वागत है\n\n' +
+      'Please select your language / దయచేసి మీ భాషను ఎంచుకోండి / अपनी भाषा चुनें:\n\n' +
+      '1. English\n' +
+      '2. हिन्दी (Hindi)\n' +
+      '3. తెలుగు (Telugu)\n' +
+      '4. தமிழ் (Tamil)\n' +
+      '5. ಕನ್ನಡ (Kannada)\n' +
+      '6. മലയാളം (Malayalam)\n' +
+      '7. मराठी (Marathi)\n' +
+      '8. বাংলা (Bengali)\n\n' +
+      'Reply with 1-8 or choose from the menu below.',
+    buttonText: 'Select Language',
+    sections: [
+      {
+        title: 'Languages / భాషలు / भाषाएँ',
+        rows,
+      },
+    ],
+  };
 }
 
 // ── Step 1: consent ───────────────────────────────────────────────────────
@@ -1151,7 +1191,17 @@ export function advance(session, event) {
   const langChoice = parseLanguageSelection(replyId, text);
   if (langChoice) {
     session.profile.locale = langChoice;
+    session.profile.languageSelected = true;
     const msg = getLanguageSwitchedMessage(langChoice);
+    if (!session.onboardingStep || session.onboardingStep === STEPS.LANGUAGE) {
+      session.onboardingStep = STEPS.CONSENT;
+      return {
+        session,
+        reply: consentPrompt(langChoice),
+        prefixMessage: msg,
+        complete: false,
+      };
+    }
     return { session, reply: { kind: 'text', body: msg }, complete: false };
   }
 
@@ -1164,12 +1214,24 @@ export function advance(session, event) {
     };
   }
 
+  const step = session.onboardingStep;
+
+  // ── Language (Pre-Onboarding Step) ──────────────────────────────────────
+  // If the user has not explicitly selected a language yet, or is at the LANGUAGE step
+  if (step === STEPS.LANGUAGE || (!step && !session.profile?.languageSelected)) {
+    session.onboardingStep = STEPS.LANGUAGE;
+    return {
+      session,
+      reply: languagePrompt(session.profile?.locale || 'en'),
+      complete: false,
+    };
+  }
+
   const detected = detectLocale(text);
-  if (detected !== 'en' || !session.profile.locale) {
+  if (!session.profile?.languageSelected && (detected !== 'en' || !session.profile?.locale)) {
     session.profile.locale = detected;
   }
-  const locale = session.profile.locale || 'en';
-  const step = session.onboardingStep;
+  const locale = session.profile?.locale || 'en';
 
   // ── Consent ─────────────────────────────────────────────────────────────
   if (step === STEPS.CONSENT || !step) {

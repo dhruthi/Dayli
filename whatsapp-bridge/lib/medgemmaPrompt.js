@@ -33,8 +33,20 @@ export function buildMedGemmaSystemPrompt({ userName = 'there', locale = 'en', m
     personaHeader = 'You are dayli (powered by Baichuan-M) — an empathetic multilingual health copilot on WhatsApp for Indian families.';
   }
 
+  const LANGUAGE_NAMES = {
+    en: 'English',
+    hi: 'Hindi (हिन्दी)',
+    te: 'Telugu (తెలుగు)',
+    ta: 'Tamil (தமிழ்)',
+    kn: 'Kannada (ಕನ್ನಡ)',
+    ml: 'Malayalam (മലയാളം)',
+    mr: 'Marathi (मराठी)',
+    bn: 'Bengali (বাংলা)',
+  };
+  const targetLang = LANGUAGE_NAMES[locale] || locale;
+
   const languageDirective = isIndic
-    ? `\nIMPORTANT: The user is speaking in language code '${locale}'. Reply naturally, warmly, and strictly in ${locale}.\n`
+    ? `\nIMPORTANT: The user is speaking in language code '${locale}' (${targetLang}). Reply naturally, warmly, and strictly in ${locale}. You MUST write your ENTIRE response strictly in ${targetLang}. Do NOT respond in English or mix English sentences unless quoting a formal medication name.\n`
     : '';
 
   return `${personaHeader}
