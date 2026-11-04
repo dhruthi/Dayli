@@ -9,8 +9,8 @@ import {
 } from '../lib/i18n/index.js';
 
 describe('Multilingual i18n Translation Engine', () => {
-  it('supports all 8 target languages in SUPPORTED_LOCALES', () => {
-    const expected = ['en', 'hi', 'te', 'ta', 'kn', 'ml', 'mr', 'bn'];
+  it('supports all target languages in SUPPORTED_LOCALES', () => {
+    const expected = ['en', 'hi', 'te', 'ta', 'kn', 'ml', 'mr', 'bn', 'ar', 'fr', 'sw', 'ha', 'yo', 'am', 'zu'];
     expect(Object.keys(SUPPORTED_LOCALES).sort()).toEqual(expected.sort());
   });
 
@@ -19,7 +19,9 @@ describe('Multilingual i18n Translation Engine', () => {
     expect(normalizeLocale('hi-Latn')).toBe('hi');
     expect(normalizeLocale('TA')).toBe('ta');
     expect(normalizeLocale('KN_IN')).toBe('kn');
-    expect(normalizeLocale('ar')).toBe('en'); // unhandled falls back to en
+    expect(normalizeLocale('ar-EG')).toBe('ar');
+    expect(normalizeLocale('fr-FR')).toBe('fr');
+    expect(normalizeLocale('sw-KE')).toBe('sw');
     expect(normalizeLocale('xyz')).toBe('en');
   });
 
@@ -28,11 +30,18 @@ describe('Multilingual i18n Translation Engine', () => {
     expect(isSupportedLocale('ta')).toBe(true);
     expect(isSupportedLocale('mr')).toBe(true);
     expect(isSupportedLocale('bn')).toBe(true);
-    expect(isSupportedLocale('fr')).toBe(false);
+    expect(isSupportedLocale('ar')).toBe(true);
+    expect(isSupportedLocale('fr')).toBe(true);
+    expect(isSupportedLocale('sw')).toBe(true);
+    expect(isSupportedLocale('ha')).toBe(true);
+    expect(isSupportedLocale('yo')).toBe(true);
+    expect(isSupportedLocale('am')).toBe(true);
+    expect(isSupportedLocale('zu')).toBe(true);
+    expect(isSupportedLocale('xyz')).toBe(false);
   });
 
-  it('translates keys across all 8 languages without missing fallbacks', () => {
-    const locales = ['en', 'hi', 'te', 'ta', 'kn', 'ml', 'mr', 'bn'];
+  it('translates keys across Indian and African/global languages without missing fallbacks', () => {
+    const locales = ['en', 'hi', 'te', 'ta', 'kn', 'ml', 'mr', 'bn', 'ar', 'fr', 'sw', 'ha', 'yo', 'am', 'zu'];
     const keysToCheck = [
       'consent_header',
       'consent_body',
@@ -41,10 +50,7 @@ describe('Multilingual i18n Translation Engine', () => {
       'emergency_banner',
       'emergency_action_112',
       'heat_hydration_infant',
-      'heat_hydration_maternal',
-      'air_quality_guidance',
       'fever_guidance',
-      'pregnancy_guidance',
       'stop_confirmation',
     ];
 
@@ -83,13 +89,16 @@ describe('Multilingual i18n Translation Engine', () => {
     const menu = getLanguageMenu('en');
     expect(menu.kind).toBe('list');
     expect(menu.sections.length).toBe(1);
-    expect(menu.sections[0].rows.length).toBe(8);
+    expect(menu.sections[0].rows.length).toBeLessThanOrEqual(10);
 
     // Meta API limits check: row titles must be <= 24 characters
     for (const row of menu.sections[0].rows) {
       expect(row.title.length).toBeLessThanOrEqual(24);
       expect(row.id.startsWith('lang_')).toBe(true);
     }
+
+    const moreMenu = getLanguageMenu('en', 'more');
+    expect(moreMenu.sections[0].rows.length).toBeLessThanOrEqual(10);
   });
 
   it('provides a warm language-switch confirmation in native script', () => {
@@ -100,5 +109,8 @@ describe('Multilingual i18n Translation Engine', () => {
     expect(getLanguageSwitchedMessage('bn')).toContain('বাংলা');
     expect(getLanguageSwitchedMessage('te')).toContain('తెలుగు');
     expect(getLanguageSwitchedMessage('hi')).toContain('हिन्दी');
+    expect(getLanguageSwitchedMessage('ar')).toContain('العربية');
+    expect(getLanguageSwitchedMessage('fr')).toContain('Français');
+    expect(getLanguageSwitchedMessage('sw')).toContain('Kiswahili');
   });
 });

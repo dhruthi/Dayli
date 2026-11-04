@@ -42,6 +42,13 @@ export function buildMedGemmaSystemPrompt({ userName = 'there', locale = 'en', m
     ml: 'Malayalam (മലയാളം)',
     mr: 'Marathi (मराठी)',
     bn: 'Bengali (বাংলা)',
+    ar: 'Arabic (العربية)',
+    fr: 'French (Français)',
+    sw: 'Swahili (Kiswahili)',
+    ha: 'Hausa (Harshen Hausa)',
+    yo: 'Yoruba (Èdè Yorùbá)',
+    am: 'Amharic (አማርኛ)',
+    zu: 'Zulu (isiZulu)',
   };
   const targetLang = LANGUAGE_NAMES[locale] || locale;
 

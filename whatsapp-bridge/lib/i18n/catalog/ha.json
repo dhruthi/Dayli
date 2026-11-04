@@ -1,0 +1,73 @@
+{
+  "_meta": {
+    "locale": "ha",
+    "reviewed": true,
+    "lastUpdated": "2026-11-04"
+  },
+  "lang_menu_header": "🌐 Zaɓi Harshenka",
+  "lang_menu_body": "Da fatan za a zaɓi harshen da kuka fi so. Dayli AI za ta tattauna da ku a cikin wannan harshe:",
+  "lang_menu_btn": "Zaɓi Harshe",
+  "lang_menu_section": "Harsunan da ake da su",
+  "lang_switched_confirm": "An saita harshe zuwa Harshen Hausa 🌸\n\nTa yaya zan iya taimaka muku da iyalinku a yau?",
+
+  "consent_header": "Mataki na 1 cikin 3: Yarda",
+  "consent_body": "Sannu! Ni ce Dayli — mai taimaka muku wajen kiwon lafiya da kula da yanayi da zafin rana a duk inda kuke.\n\nKafin mu fara: domin in ba ku shawarwari masu dacewa, ina buƙatar sanin wanda nake taimaka wa da kuma kusan inda kuke.\n\n• Bayananku sirri ne kuma ba za a taɓa sayar da su ba\n• Kuna iya aiko da *stop* ko *opt out* a kowane lokaci don goge komai nan take\n• Ni ba likita ba ce, kuma ba na bayar da binciken asibiti na ƙarshe\n\nShin mun shirya don farawa?",
+  "consent_yes": "Ee, mu fara",
+  "consent_no": "A'a 🛑",
+  "consent_terms": "Ka'idoji & Sirri",
+  "consent_footer": "Don gaggawa, nemi asibiti mafi kusa",
+  "consent_terms_body": "Ga yadda Dayli ke kiyaye bayananku:\n\n• *Ajiya:* Boyayye kuma ba a haɗa shi da sunanku na ainihi ba\n• *Raba bayani:* Babu raba bayani da wasu ko 'yan talla\n• *Gogewa:* Aika *STOP* a kowane lokaci don goge bayananku gaba ɗaya\n• *Manufa:* Jagorar lafiya, yanayi, da asibitoci mafi kusa\n\nKun shirya ci gaba?",
+  "consent_declined_body": "Na fahimta sosai. An girmama zaɓinku kuma ba a ajiye wani bayanin sirri ba.\n\nKuna iya yin tambayoyi na gaba ɗaya a kowane lokaci. Don sake farawa, aiko da *START*.\n\n_Don gaggawar lafiya, tuntuɓi asibiti mafi kusa nan take._",
+  "stop_confirmation": "🛑 *An Goge Bayanai & An Fita*\n\nAn cire ku kuma an share dukkan bayanan ku na sirri da tarihin tattaunawa gaba ɗaya.\n\nDon sake farawa kowane lokaci, aiko da kalmar *START* ko *Sannu*.",
+
+  "subject_header": "Mataki na 2 cikin 3: Bayani",
+  "subject_body": "Ga wa kuke neman wannan jagorar? Dokokin kiyaye lafiya sun bambanta ga kowane ɗaya:",
+  "subject_btn": "Zaɓa",
+  "subject_section": "Wanda ake nema wa",
+  "subj_infant_title": "Jaririna (ƙasa da shekara 1)",
+  "subj_infant_desc": "Kula da jarirai",
+  "subj_child_title": "Babbar ɗana/yata (shekara 1 zuwa 12)",
+  "subj_child_desc": "Lafiyar yara",
+  "subj_pregnant_title": "Ina da juna biyu (ciki)",
+  "subj_pregnant_desc": "Kula da ciki da zafin rana",
+  "subj_postpartum_title": "Na haihu kwanan nan",
+  "subj_postpartum_desc": "Kula bayan haihuwa (watan 0–6)",
+  "subj_adult_title": "Don kaina",
+  "subj_adult_desc": "Lafiyar manya gaba ɗaya",
+  "subj_unknown_title": "Ba na son faɗa",
+  "subj_unknown_desc": "Zan faɗa lokacin da nake tambaya",
+
+  "age_header": "Shekarun Jariri",
+  "age_body": "Wane shekaru jaririnku yake da su? Shawarwarin lafiya sun bambanta sosai ga waɗanda ba su kai watanni 6 ba:",
+  "age_btn": "Zaɓi Shekaru",
+  "age_under3m": "Ƙasa da watanni 3",
+  "age_3to6m": "Watanni 3 zuwa 6",
+  "age_6to12m": "Watanni 6 zuwa 12",
+
+  "preg_header": "Makin Ciki",
+  "preg_body": "A wane mataki kuke a cikin juna biyu a halin yanzu?",
+  "preg_btn": "Zaɓi Mataki",
+  "preg_tri1": "Mataki na 1 (Makonni 1–12)",
+  "preg_tri2": "Mataki na 2 (Makonni 13–27)",
+  "preg_tri3": "Mataki na 3 (Makonni 28+)",
+
+  "loc_header": "Mataki na 3 cikin 3: Wuri",
+  "loc_body": "Don samar muku da ingantattun faɗakarwar yanayi, zafin rana da kuma asibitoci mafi kusa, da fatan za a rubuta sunan birninku ko turo alamar wuri ta WhatsApp (Location Pin).\n\nKuna iya tsallake wannan matakin a yanzu.",
+  "loc_skip": "Tsallake a yanzu",
+
+  "welcome_header": "Komai ya shirya! 🌸",
+  "welcome_body": "Sannu {userName}! Ni ce Dayli AI — mataimakiyar ku kan lafiyar uwa, yara da yanayi.\n\nKuna iya tambayata game da:\n1. ☀️ Hasashen yanayi da faɗakarwar zafin rana a yankinku\n2. 💧 Shan ruwa mai aminci da kula da jarirai\n3. 🏥 Dakunan haihuwa, asibitoci da kantin magani mafi kusa\n4. 🌡️ Kula da zazzaɓi da alamomin juna biyu\n\nTa yaya zan iya taimaka muku a yau?",
+
+  "emergency_banner": "🚨 *Wannan yana buƙatar kulawar gaggawa a asibiti nan take*",
+  "emergency_lead": "Alamomin da kuka bayyana na iya zama barazana ga rayuwa cikin sauri.",
+  "emergency_action_112": "Nemi asibiti ko motar asibiti mafi kusa nan take ba tare da ɓata lokaci ba.",
+  "emergency_action_upright": "Rike jaririn a tsaye tare da tallafa masa domin hanyar numfashi ta kasance a buɗe. Sake kowane matsattsen tufafi.",
+  "emergency_action_no_fluids": "Kada ku ba da abinci, madara, ruwa ko ORS yayin da numfashi ke da wuya don guje wa shiga huhu.",
+  "emergency_maternal_102": "Don gaggawar haihuwa, nemi motar asibiti cikin gaggawa.",
+
+  "fever_guidance": "🌡️ *Kula da Zazzaɓi*\n\n• *Jarirai 'yan ƙasa da watanni 3:* DUKKAN zazzaɓi buƙatar gaggawa ce — duba likita a ranar.\n• Shafa jiki da ruwan dumi kaɗai. Kada a taɓa amfani da ruwan ƙanƙara ko ruwan sanyi.\n• Sha ruwa akai-akai a hankali.\n⚠️ *Ba zan iya ba da magani ko auna magani ba.* Tuntuɓi likita ko ma'aikacin magani.\n_Don gaggawa ko farfaɗiya, nemi asibiti nan take._",
+
+  "heat_hydration_infant": "💧 *Ruwa ga Jarirai da Tsaron Zafin Rana (Dokar Hukumar WHO)*\n\n• *Jarirai ƙasa da watanni 6:* Nono ko madarar jarirai kawai. *KADA A TAƁA BA SU RUWA TSAFFA* — ruwa ga jariri ƙasa da wata 6 na iya haifar da cutar ruwa (water intoxication) da matsalar sinadaran jiki.\n• Shayar da nono akai-akai yayin zafin rana na rana.\n• Sanya wa jariri tufafi marasa nauyi na auduga.\n• Kula da alamomin rashin ruwa: kwanyar da ta faɗa, busassun kyallen ƙafa (>sa'o'i 6), ko rashin hawaye yayin kuka.",
+
+  "disclaimer": "_Dayli na bayar da jagora ta gaba ɗaya ne, ba binciken likita ba. Don gaggawa, tuntuɓi asibiti mafi kusa._"
+}

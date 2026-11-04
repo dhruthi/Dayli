@@ -415,41 +415,8 @@ export function subjectNoun(subjectType, locale = 'en') {
 
 // ── Step 0: language selection ───────────────────────────────────────────
 
-export function languagePrompt(locale = 'en') {
-  const rows = [
-    { id: 'lang_en', title: '1. English', description: 'English' },
-    { id: 'lang_hi', title: '2. हिन्दी (Hindi)', description: 'Hindi' },
-    { id: 'lang_te', title: '3. తెలుగు (Telugu)', description: 'Telugu' },
-    { id: 'lang_ta', title: '4. தமிழ் (Tamil)', description: 'Tamil' },
-    { id: 'lang_kn', title: '5. ಕನ್ನಡ (Kannada)', description: 'Kannada' },
-    { id: 'lang_ml', title: '6. മലയാളം (Malayalam)', description: 'Malayalam' },
-    { id: 'lang_mr', title: '7. मराठी (Marathi)', description: 'Marathi' },
-    { id: 'lang_bn', title: '8. বাংলা (Bengali)', description: 'Bengali' },
-  ];
-
-  return {
-    kind: 'list',
-    header: '🌐 Choose Your Language',
-    body:
-      '🌸 Welcome to Dayli AI | డేలీ AI కి స్వాగతం | डेयली AI में स्वागत है\n\n' +
-      'Please select your language / దయచేసి మీ భాషను ఎంచుకోండి / अपनी भाषा चुनें:\n\n' +
-      '1. English\n' +
-      '2. हिन्दी (Hindi)\n' +
-      '3. తెలుగు (Telugu)\n' +
-      '4. தமிழ் (Tamil)\n' +
-      '5. ಕನ್ನಡ (Kannada)\n' +
-      '6. മലയാളം (Malayalam)\n' +
-      '7. मराठी (Marathi)\n' +
-      '8. বাংলা (Bengali)\n\n' +
-      'Reply with 1-8 or choose from the menu below.',
-    buttonText: 'Select Language',
-    sections: [
-      {
-        title: 'Languages / భాషలు / भाषाएँ',
-        rows,
-      },
-    ],
-  };
+export function languagePrompt(locale = 'en', page = 'main') {
+  return getLanguageMenu(locale, page);
 }
 
 // ── Step 1: consent ───────────────────────────────────────────────────────
@@ -496,7 +463,7 @@ export function consentPrompt(locale = 'en') {
     };
   }
 
-  if (['ta', 'kn', 'ml', 'mr', 'bn'].includes(loc)) {
+  if (['ta', 'kn', 'ml', 'mr', 'bn', 'ar', 'fr', 'sw', 'ha', 'yo', 'am', 'zu'].includes(loc)) {
     return {
       kind: 'buttons',
       header: t('consent_header', loc),
@@ -556,7 +523,7 @@ export function consentDetails(locale = 'en') {
     };
   }
 
-  if (['ta', 'kn', 'ml', 'mr', 'bn'].includes(loc)) {
+  if (['ta', 'kn', 'ml', 'mr', 'bn', 'ar', 'fr', 'sw', 'ha', 'yo', 'am', 'zu'].includes(loc)) {
     return {
       kind: 'text',
       body: t('consent_terms_body', loc),
@@ -600,7 +567,7 @@ export function consentDeclined(locale = 'en') {
     };
   }
 
-  if (['ta', 'kn', 'ml', 'mr', 'bn'].includes(loc)) {
+  if (['ta', 'kn', 'ml', 'mr', 'bn', 'ar', 'fr', 'sw', 'ha', 'yo', 'am', 'zu'].includes(loc)) {
     return {
       kind: 'text',
       body: t('consent_declined_body', loc),
@@ -665,7 +632,7 @@ export function subjectPrompt(locale = 'en') {
     };
   }
 
-  if (['ta', 'kn', 'ml', 'mr', 'bn'].includes(loc)) {
+  if (['ta', 'kn', 'ml', 'mr', 'bn', 'ar', 'fr', 'sw', 'ha', 'yo', 'am', 'zu'].includes(loc)) {
     return {
       kind: 'list',
       header: t('subject_header', loc),
@@ -758,7 +725,7 @@ export function childAgePrompt(locale = 'en') {
     };
   }
 
-  if (['ta', 'kn', 'ml', 'mr', 'bn'].includes(loc)) {
+  if (['ta', 'kn', 'ml', 'mr', 'bn', 'ar', 'fr', 'sw', 'ha', 'yo', 'am', 'zu'].includes(loc)) {
     return {
       kind: 'list',
       header: t('age_header', loc),
@@ -847,7 +814,7 @@ export function pregnancyPrompt(locale = 'en') {
     };
   }
 
-  if (['ta', 'kn', 'ml', 'mr', 'bn'].includes(loc)) {
+  if (['ta', 'kn', 'ml', 'mr', 'bn', 'ar', 'fr', 'sw', 'ha', 'yo', 'am', 'zu'].includes(loc)) {
     return {
       kind: 'list',
       header: t('preg_header', loc),
@@ -912,7 +879,7 @@ export function locationPrompt(locale = 'en') {
     };
   }
 
-  if (['ta', 'kn', 'ml', 'mr', 'bn'].includes(loc)) {
+  if (['ta', 'kn', 'ml', 'mr', 'bn', 'ar', 'fr', 'sw', 'ha', 'yo', 'am', 'zu'].includes(loc)) {
     return {
       kind: 'location_request',
       body: `${t('loc_header', loc)}\n\n${t('loc_body', loc)}`,
@@ -1189,6 +1156,12 @@ export function advance(session, event) {
 
   // Explicit language menu selection or text language choice
   const langChoice = parseLanguageSelection(replyId, text);
+  if (langChoice === 'more') {
+    return { session, reply: getLanguageMenu(session.profile?.locale || 'en', 'more'), complete: false };
+  }
+  if (langChoice === 'back') {
+    return { session, reply: getLanguageMenu(session.profile?.locale || 'en', 'main'), complete: false };
+  }
   if (langChoice) {
     session.profile.locale = langChoice;
     session.profile.languageSelected = true;

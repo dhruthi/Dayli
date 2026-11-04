@@ -1,0 +1,73 @@
+{
+  "_meta": {
+    "locale": "zu",
+    "reviewed": true,
+    "lastUpdated": "2026-11-04"
+  },
+  "lang_menu_header": "🌐 Khetha Ulimi Lwakho",
+  "lang_menu_body": "Sicela ukhethe ulimi oluthandayo. I-Dayli AI izokhuluma nawe ngalolo limi:",
+  "lang_menu_btn": "Khetha Ulimi",
+  "lang_menu_section": "Izilimi Ezikhona",
+  "lang_switched_confirm": "Ulimi luhlelwe lwaba isiZulu 🌸\n\nNgingakusiza kanjani wena nomndeni wakho namuhla?",
+
+  "consent_header": "Isinyathelo 1 kwesi-3: Imvume",
+  "consent_body": "Sawubona! Ngingu-Dayli — umsizi wakho wezempilo wakho nomndeni wakho, obheka nesimo sezulu nokushisa lapho ukhona.\n\nNgaphambi kokuba siqale: ukuze ngikunikeze iseluleko esifanele, ngidinga ukukhumbula kancane ngawe — engimsizayo nalapho ukhona.\n\n• Imininingwane yakho iyimfihlo futhi ayithengiswa neze\n• Ungathumela igama elithi *stop* noma *opt out* nganoma yisiphi isikhathi ukususa yonke into masinyane\n• Angisiye udokotela, futhi angihloli izifo zokugcina\n\nIngabe ukulungele ukuqala?",
+  "consent_yes": "Yebo, masiqale",
+  "consent_no": "Cha 🛑",
+  "consent_terms": "Imigomo & Ubumfihlo",
+  "consent_footer": "Esimeni esiphuthumayo shayela usizo lwezimo eziphuthumayo",
+  "consent_terms_body": "Nansi indlela i-Dayli evikela ngayo idatha yakho:\n\n• *Ukugcinwa:* Kuvikelekile futhi akuxhunyanisiwe negama lakho langempela\n• *Ukwabelana:* Akwabelwa abanye noma abakhangisi\n• *Ukususa:* Thumela *STOP* noma nini ukususa unomphela idatha yakho\n• *Inhloso:* Isiqondiso sezempilo, isimo sezulu nezibhedlela eziseduze\n\nIngabe ukulungele ukuqhubeka?",
+  "consent_declined_body": "Ngiyaqonda kahle. Isinqumo sakho sihloniphekile futhi ayikho idatha egciniwe.\n\nUngabuza imibuzo evamile noma nini. Ukuze uqale kabusha, thumela *START*.\n\n_Esimeni esiphuthumayo sezempilo, xhumana ngokushesha nosizo lwezimo eziphuthumayo._",
+  "stop_confirmation": "🛑 *Idatha Isusiwe & Ukhishiwe*\n\nUkhishiwe futhi yonke imininingwane yakho nomlando wengxoxo kucishiwe unomphela.\n\nUkuze uqale kabusha noma nini, thumela igama elithi *START* noma *Sawubona*.",
+
+  "subject_header": "Isinyathelo 2 kwesi-3: Iphrofayili",
+  "subject_body": "Ingabe ufunela bani lesi siqondiso sezempilo? Imithetho yezempilo iyahluka kulowo nalowo:",
+  "subject_btn": "Khetha",
+  "subject_section": "Ubani okukhulunywa ngaye",
+  "subj_infant_title": "Usana lwami (ngaphansi konyaka o-1)",
+  "subj_infant_desc": "Ukunakekelwa kwezinsana",
+  "subj_child_title": "Ingane yami endala (iminyaka 1 kuya ku-12)",
+  "subj_child_desc": "Impilo yezingane",
+  "subj_pregnant_title": "Ngikhulelwe",
+  "subj_pregnant_desc": "Ukunakekelwa kokukhulelwa nezexwayiso zokushisa",
+  "subj_postpartum_title": "Ngisanda kubeletha",
+  "subj_postpartum_desc": "Ukunakekelwa ngemuva kokubeletha (izinyanga 0–6)",
+  "subj_adult_title": "Okwami uqobo",
+  "subj_adult_desc": "Impilo evamile yabantu abadala",
+  "subj_unknown_title": "Ngikhetha ukungasho",
+  "subj_unknown_desc": "Ngizochaza uma ngibuza imibuzo",
+
+  "age_header": "Iminyaka Yosana",
+  "age_body": "Usana lwakho lunezinyanga ezingaki? Iziqondiso zezempilo ziyahluka kakhulu kwabangaphansi kwezinyanga eziyisi-6:",
+  "age_btn": "Khetha Iminyaka",
+  "age_under3m": "Ngaphansi kwezinyanga ezi-3",
+  "age_3to6m": "Izinyanga ezi-3 kuya kwezi-6",
+  "age_6to12m": "Izinyanga ezi-6 kuya kwezi-12",
+
+  "preg_header": "Isigaba Sokukhulelwa",
+  "preg_body": "Ukuyiphi ingxenye yokukhulelwa njengamanje?",
+  "preg_btn": "Khetha Isigaba",
+  "preg_tri1": "Isigaba soku-1 (Amaviki 1–12)",
+  "preg_tri2": "Isigaba sesi-2 (Amaviki 13–27)",
+  "preg_tri3": "Isigaba sesi-3 (Amaviki 28+)",
+
+  "loc_header": "Isinyathelo 3 kwesi-3: Indawo",
+  "loc_body": "Ukuze sikunikeze izexwayiso ezinembile zesimo sezulu, ukushisa nezibhedlela eziseduze, sicela ubhale igama ledolobha lakho noma uthumele indawo ku-WhatsApp (Location Pin).\n\nUngase futhi weqe lesi sinyathelo okwamanje.",
+  "loc_skip": "Yeqa okwamanje",
+
+  "welcome_header": "Konke sekumi ngomumo! 🌸",
+  "welcome_body": "Sawubona {userName}! Ngingu-Dayli AI — umsizi wakho wezempilo yomama, izingane nesimo sezulu.\n\nUngangibuza mayelana:\n1. ☀️ Isimo sezulu nezexwayiso zokushisa endaweni yangakini\n2. 💧 Ukuphuza amanzi ngokuphepha nokunakekela izinsana\n3. 🏥 Amagumbi okubelethela, izibhedlela namakhemisi aseduze\n4. 🌡️ Isiqondiso somkhuhlane nezimpawu zokukhulelwa\n\nNgingakusiza kanjani namuhla?",
+
+  "emergency_banner": "🚨 *Lokhu kudinga ukunakekelwa kwezimo eziphuthumayo esibhedlela ngokushesha*",
+  "emergency_lead": "Izimpawu ozichazile zingaba yingozi enkulu empilweni masinyane.",
+  "emergency_action_112": "Shayela i-ambulensi noma uye ngqo egumbini lezimo eziphuthumayo esibhedlela esiseduze.",
+  "emergency_action_upright": "Gcina usana luhlezi lulungile ukuze umgudu wokuphefumula uhlale uvulekile. Thukulula izingubo eziqinile.",
+  "emergency_action_no_fluids": "Unganikezi ukudla, ubisi, amanzi noma i-ORS lapho ukuphefumula kunzima ukuvimbela ukungena emaphashini.",
+  "emergency_maternal_102": "Ezimweni eziphuthumayo zokubeletha, thola i-ambulensi ngokushesha.",
+
+  "fever_guidance": "🌡️ *Ukuphathwa Komkhuhlane*\n\n• *Izinsana ezingaphansi kwezinyanga ezi-3:* Noma yimuphi umkhuhlane uyisimo esiphuthumayo — bonana nodokotela ngalolo suku.\n• Sula ngendwangu enamanzi asivivi kuphela. Ungalokothi usebenzise amanzi eziqandisiwe noma utshwala.\n• Nikeza uketshezi oluncane njalo.\n⚠️ *Angikwazi ukunquma imithamo yemithi.* Sicela uxhumane nodokotela noma usokhemisi.\n_Ezimweni eziphuthumayo, funa usizo lwesibhedlela ngokushesha._",
+
+  "heat_hydration_infant": "💧 *Ukuphuzisa Izinsana Nokuphepha Ekushiseni (Umhlahlandlela we-WHO)*\n\n• *Izinsana ezingaphansi kwezinyanga ezi-6:* Ubisi lwebele kuphela noma ifomula. *AKUVUNYELWE NEZE AMANZI AVAMILE* — amanzi ezinganeni ezingaphansi kwezinyanga ezi-6 angadala ubuthi bamanzi (water intoxication) nokuphazamiseka kasawoti emzimbeni.\n• Ncelisa kaningi ngesikhathi sokushisa kwasemini.\n• Gqokisa usana izingubo ezilula zikakotini.\n• Bheka izimpawu zokuphelelwa ngamanzi: ukhakhayi olugobele ngaphakathi, amanabukeni omile (>amahora 6), noma ukungabikho kwezinyembezi lapho lukhala.",
+
+  "disclaimer": "_I-Dayli inikeza isiqondiso esivamile, akusona ukuxilongwa kodokotela. Ezimweni eziphuthumayo, funa usizo lwezibhedlela._"
+}

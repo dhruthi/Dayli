@@ -66,26 +66,67 @@ export function t(key, locale = DEFAULT_LOCALE, vars = {}) {
  * Adheres strictly to Meta Graph API 24-character title and 10-row limits.
  *
  * @param {string} [currentLocale='en']
+ * @param {'main'|'more'} [page='main'] Menu page
  * @returns {object} WhatsApp interactive list payload
  */
-export function getLanguageMenu(currentLocale = DEFAULT_LOCALE) {
+export function getLanguageMenu(currentLocale = DEFAULT_LOCALE, page = 'main') {
   const loc = normalizeLocale(currentLocale);
 
+  if (page === 'more') {
+    const rows = [
+      { id: 'lang_kn', title: '5. ಕನ್ನಡ (Kannada)', description: 'Karnataka' },
+      { id: 'lang_ml', title: '6. മലയാളം (Malayalam)', description: 'Kerala' },
+      { id: 'lang_mr', title: '7. मराठी (Marathi)', description: 'Maharashtra' },
+      { id: 'lang_yo', title: '13. Èdè Yorùbá', description: 'Nigeria / West Africa' },
+      { id: 'lang_am', title: '14. አማርኛ (Amharic)', description: 'Ethiopia' },
+      { id: 'lang_zu', title: '15. isiZulu (Zulu)', description: 'South Africa' },
+      { id: 'lang_back', title: '⬅️ Back to Main', description: 'Show main languages' },
+    ];
+    return {
+      kind: 'list',
+      header: '🌐 More Languages',
+      body:
+        'Select your language / Choisir la langue / اختر لغتك / Chagua lugha:\n\n' +
+        '5. ಕನ್ನಡ (Kannada)\n' +
+        '6. മലയാളം (Malayalam)\n' +
+        '7. मराठी (Marathi)\n' +
+        '13. Èdè Yorùbá (Yoruba)\n' +
+        '14. አማርኛ (Amharic)\n' +
+        '15. isiZulu (Zulu)\n\n' +
+        'Reply with number (1-15) or tap your choice.',
+      buttonText: 'Select Language',
+      sections: [{ title: 'Languages', rows }],
+    };
+  }
+
   const rows = [
-    { id: 'lang_en', title: 'English', description: 'English' },
-    { id: 'lang_hi', title: 'हिन्दी (Hindi)', description: 'उत्तर व मध्य भारत' },
-    { id: 'lang_te', title: 'తెలుగు (Telugu)', description: 'తెలంగాణ & ఆంధ్రప్రదేశ్' },
-    { id: 'lang_ta', title: 'தமிழ் (Tamil)', description: 'தமிழ்நாடு' },
-    { id: 'lang_kn', title: 'ಕನ್ನಡ (Kannada)', description: 'ಕರ್ನಾಟಕ' },
-    { id: 'lang_ml', title: 'മലയാളം (Malayalam)', description: 'കേരളം' },
-    { id: 'lang_mr', title: 'मराठी (Marathi)', description: 'महाराष्ट्र' },
-    { id: 'lang_bn', title: 'বাংলা (Bengali)', description: 'পশ্চিমবঙ্গ' },
+    { id: 'lang_en', title: '1. English', description: 'Global English' },
+    { id: 'lang_hi', title: '2. हिन्दी (Hindi)', description: 'North & Central India' },
+    { id: 'lang_te', title: '3. తెలుగు (Telugu)', description: 'Telangana & Andhra' },
+    { id: 'lang_ta', title: '4. தமிழ் (Tamil)', description: 'Tamil Nadu' },
+    { id: 'lang_bn', title: '8. বাংলা (Bengali)', description: 'West Bengal & Bangladesh' },
+    { id: 'lang_ar', title: '9. العربية (Arabic)', description: 'North Africa & Middle East' },
+    { id: 'lang_fr', title: '10. Français (French)', description: 'West & Central Africa' },
+    { id: 'lang_sw', title: '11. Kiswahili (Swahili)', description: 'East & Central Africa' },
+    { id: 'lang_ha', title: '12. Harshen Hausa', description: 'Nigeria & West Africa' },
+    { id: 'lang_more', title: '🌐 More Languages...', description: 'Kannada, Marathi, Yoruba...' },
   ];
 
   return {
     kind: 'list',
     header: t('lang_menu_header', loc),
-    body: t('lang_menu_body', loc),
+    body:
+      '🌸 Welcome to Dayli AI | مرحباً بك | Bienvenue | Karibu\n\n' +
+      'Please select your language / اختر لغتك / Choisissez votre langue / Chagua lugha:\n\n' +
+      '1. English          8. বাংলা (Bengali)\n' +
+      '2. हिन्दी (Hindi)     9. العربية (Arabic)\n' +
+      '3. తెలుగు (Telugu)    10. Français (French)\n' +
+      '4. தமிழ் (Tamil)     11. Kiswahili (Swahili)\n' +
+      '5. ಕನ್ನಡ (Kannada)   12. Harshen Hausa (Hausa)\n' +
+      '6. മലയാളം (Malayalam) 13. Èdè Yorùbá (Yoruba)\n' +
+      '7. मराठी (Marathi)   14. አማርኛ (Amharic)\n' +
+      '                    15. isiZulu (Zulu)\n\n' +
+      'Reply with 1-15 or choose from the menu below.',
     buttonText: t('lang_menu_btn', loc),
     sections: [
       {

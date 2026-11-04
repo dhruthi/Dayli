@@ -1,0 +1,73 @@
+{
+  "_meta": {
+    "locale": "sw",
+    "reviewed": true,
+    "lastUpdated": "2026-11-04"
+  },
+  "lang_menu_header": "🌐 Chagua Lugha Yako",
+  "lang_menu_body": "Tafadhali chagua lugha unayopendelea. Dayli AI itazungumza nawe kwa lugha hiyo:",
+  "lang_menu_btn": "Chagua Lugha",
+  "lang_menu_section": "Lugha Zinazopatikana",
+  "lang_switched_confirm": "Lugha imewekwa kuwa Kiswahili 🌸\n\nNinawezaje kukusaidia wewe na familia yako leo?",
+
+  "consent_header": "Hatua 1 ya 3: Idhini",
+  "consent_body": "Habari! Mimi ni Dayli — msaidizi wa afya kwa ajili yako na familia yako, nikifuatilia hali ya hewa na joto popote ulipo.\n\nKabla ya kuanza: ili kutoa ushauri unaofaa, nahitaji kukumbuka kidogo kukuhusu — ninayemsaidia na mahali ulipo takriban.\n\n• Data yako ni ya siri na haitauzwa kamwe\n• Unaweza kutuma neno *stop* au *opt out* wakati wowote ili kuifuta yote mara moja\n• Mimi si daktari, na sitoi utambuzi wa ugonjwa\n\nJe, tuko tayari kuanza?",
+  "consent_yes": "Ndiyo, tuanze",
+  "consent_no": "Kataa 🛑",
+  "consent_terms": "Vigezo & Usiri",
+  "consent_footer": "Kwa dharura, piga simu nambari ya dharura",
+  "consent_terms_body": "Hivi ndivyo Dayli inavyolinda data yako:\n\n• *Hifadhi:* Imelindwa na bila jina lako halisi\n• *Kushiriki:* Hakuna kushiriki na watu wengine au matangazo\n• *Kufuta:* Tuma neno *STOP* wakati wowote kufuta data yako kabisa\n• *Lengo:* Mwongozo wa afya, hali ya hewa na vituo vya afya vilivyo karibu\n\nUko tayari kuendelea?",
+  "consent_declined_body": "Naelewa vizuri. Uamuzi wako umeheshimiwa na hakuna taarifa binafsi iliyohifadhiwa.\n\nUnaweza kuuliza maswali ya jumla wakati wowote. Kuanza upya, tuma neno *START*.\n\n_Kwa dharura kubwa ya matibabu, tafadhali wasiliana na huduma za dharura mara moja._",
+  "stop_confirmation": "🛑 *Data Imefutwa na Umejiondoa*\n\nUmejiondoa kikamilifu na taarifa zako zote za kibinafsi na kumbukumbu za mazungumzo zimefutwa kabisa.\n\nKuanza tena wakati wowote, tuma neno *START* au *Habari*.",
+
+  "subject_header": "Hatua 2 ya 3: Wasifu",
+  "subject_body": "Mwongozo huu ni kwa ajili ya nani? Kanuni za usalama wa afya hutofautiana kwa kila mmoja:",
+  "subject_btn": "Chagua",
+  "subject_section": "Huu mwongozo ni wa nani",
+  "subj_infant_title": "Mtoto wangu mchanga (chini ya mwaka 1)",
+  "subj_infant_desc": "Ushauri wa watoto wachanga",
+  "subj_child_title": "Mtoto wangu mkubwa (miaka 1 hadi 12)",
+  "subj_child_desc": "Afya ya watoto",
+  "subj_pregnant_title": "Mimi ni mjamzito",
+  "subj_pregnant_desc": "Utunzaji wa ujauzito na tahadhari za joto",
+  "subj_postpartum_title": "Nimejifungua hivi karibuni",
+  "subj_postpartum_desc": "Utunzaji baada ya kujifungua (miezi 0–6)",
+  "subj_adult_title": "Kwa ajili yangu mwenyewe",
+  "subj_adult_desc": "Afya ya jumla ya watu wazima",
+  "subj_unknown_title": "Napendelea kutotaja",
+  "subj_unknown_desc": "Nitaeleza ninapouliza maswali",
+
+  "age_header": "Umri wa Mtoto",
+  "age_body": "Mtoto wako ana umri gani? Mwongozo wa matibabu hubadilika sana kwa walio chini ya miezi 6:",
+  "age_btn": "Chagua Umri",
+  "age_under3m": "Chini ya miezi 3",
+  "age_3to6m": "Miezi 3 hadi 6",
+  "age_6to12m": "Miezi 6 hadi 12",
+
+  "preg_header": "Kipindi cha Ujauzito",
+  "preg_body": "Uko katika miezi mitatu ipi ya ujauzito kwa sasa?",
+  "preg_btn": "Chagua Kipindi",
+  "preg_tri1": "Awamu ya 1 (Wiki 1–12)",
+  "preg_tri2": "Awamu ya 2 (Wiki 13–27)",
+  "preg_tri3": "Awamu ya 3 (Wiki 28+)",
+
+  "loc_header": "Hatua 3 ya 3: Mahali Ulipo",
+  "loc_body": "Ili kukupa tahadhari sahihi za hali ya hewa, joto kali na vituo vya afya vilivyo karibu nawe, tafadhali andika jina la mji wako au tuma eneo lako la WhatsApp (Location Pin).\n\nUnaweza pia kuruka hatua hii.",
+  "loc_skip": "Ruka kwa sasa",
+
+  "welcome_header": "Kila kitu kiko tayari! 🌸",
+  "welcome_body": "Habari {userName}! Mimi ni Dayli AI — msaidizi wako wa afya ya uzazi, watoto na hali ya hewa.\n\nUnaweza kuniuliza kuhusu:\n1. ☀️ Utabiri wa hali ya hewa na tahadhari za joto kali katika eneo lako\n2. 💧 Unywaji salama wa maji na utunzaji wa watoto wachanga\n3. 🏥 Vituo vya kujifungulia, hospitali na maduka ya dawa yaliyo karibu\n4. 🌡️ Mwongozo wa homa na dalili za ujauzito\n\nNinawezaje kukusaidia leo?",
+
+  "emergency_banner": "🚨 *Hii inahitaji huduma ya dharura ya kimatibabu sasa*",
+  "emergency_lead": "Dalili ulizozieleza zinaweza kuwa hatari kwa maisha haraka sana.",
+  "emergency_action_112": "Wasiliana na huduma za dharura sasa au nenda moja kwa moja kwenye kitengo cha dharura cha hospitali iliyo karibu.",
+  "emergency_action_upright": "Mweke mtoto akiwa ameketi wima na anayeungwa mkono ili njia ya hewa ibaki wazi. Legeza nguo zozote zilizobana.",
+  "emergency_action_no_fluids": "Usimpe mtoto chakula, maziwa, maji au ORS anapopata shida ya kupumua ili kuzuia kumeza kwenye mapafu.",
+  "emergency_maternal_102": "Kwa dharura za uzazi, tafuta gari la wagonjwa mara moja kwa usafiri wa haraka.",
+
+  "fever_guidance": "🌡️ *Usimamizi wa Homa*\n\n• *Watoto chini ya miezi 3:* Homa YOYOTE ni dharura ya kimatibabu — mwone daktari siku hiyo hiyo.\n• Pangusa kwa kitambaa chenye maji vuguvugu pekee. Kamwe usitumie maji ya barafu au sponji ya pombe.\n• Hakikisha anapata vimiminika mara kwa mara.\n⚠️ *Siwezi kuandika vipimo vya dawa.* Tafadhali wasiliana na daktari au mfamasia.\n_Kwa dharura au degedege, tafuta matibabu mara moja._",
+
+  "heat_hydration_infant": "💧 *Unywaji Maji kwa Watoto na Usalama wa Joto (Mwongozo wa WHO)*\n\n• *Watoto chini ya miezi 6:* Maziwa ya mama au maziwa ya unga pekee. *KAMWE USIMPE MAJI YA KAWAIDA* — maji ya kawaida kwa watoto walio chini ya miezi 6 yanaweza kusababisha ulevi wa maji (water intoxication) na kuharibu madini mwilini.\n• Nyonyesha mara kwa mara wakati wa joto kali la mchana.\n• Mvishe mtoto nguo nyepesi za pamba safi.\n• Chunguza dalili za upungufu wa maji mwilini: utosi uliodidimia, nepi kavu (>saa 6), au machozi kutotoka anapolia.",
+
+  "disclaimer": "_Dayli inatoa mwongozo wa jumla na si utambuzi wa kidaktari. Kwa dharura tafuta msaada wa haraka._"
+}

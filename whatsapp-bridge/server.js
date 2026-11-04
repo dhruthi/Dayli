@@ -549,6 +549,13 @@ const LANGUAGE_NAMES = {
   ml: 'Malayalam (മലയാളം)',
   mr: 'Marathi (मराठी)',
   bn: 'Bengali (বাংলা)',
+  ar: 'Arabic (العربية)',
+  fr: 'French (Français)',
+  sw: 'Swahili (Kiswahili)',
+  ha: 'Hausa (Harshen Hausa)',
+  yo: 'Yoruba (Èdè Yorùbá)',
+  am: 'Amharic (አማርኛ)',
+  zu: 'Zulu (isiZulu)',
 };
 
 // Primary Engine: Call Grok / Groq API with automatic model fallback
@@ -1227,6 +1234,14 @@ async function handleMessageEvent(event) {
 
   // ── LANGUAGE SELECTION / MENU COMMANDS ─────────────────────────────────
   const selectedLocale = parseLanguageSelection(event.replyId, event.text);
+  if (selectedLocale === 'more') {
+    await deliver(from, getLanguageMenu(session.profile?.locale || 'en', 'more'));
+    return;
+  }
+  if (selectedLocale === 'back') {
+    await deliver(from, getLanguageMenu(session.profile?.locale || 'en', 'main'));
+    return;
+  }
   if (selectedLocale) {
     session.profile.locale = selectedLocale;
     session.profile.languageSelected = true;

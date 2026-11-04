@@ -139,16 +139,26 @@ describe('Multilingual Script & Language Detection', () => {
       expect(isLanguageCommand('bhasha badlo')).toBe(true);
       expect(isLanguageCommand('భాష మార్చండి')).toBe(true);
       expect(isLanguageCommand('भाषा बदलो')).toBe(true);
+      expect(isLanguageCommand('تغيير اللغة')).toBe(true);
+      expect(isLanguageCommand('changer de langue')).toBe(true);
+      expect(isLanguageCommand('badilisha lugha')).toBe(true);
+      expect(isLanguageCommand('canza harshe')).toBe(true);
+      expect(isLanguageCommand('yi ede pada')).toBe(true);
+      expect(isLanguageCommand('ቋንቋ ቀይር')).toBe(true);
+      expect(isLanguageCommand('shintsha ulimi')).toBe(true);
       expect(isLanguageCommand('lang')).toBe(true);
       expect(isLanguageCommand('bhasha')).toBe(true);
       expect(isLanguageCommand('భాష')).toBe(true);
       expect(isLanguageCommand('भाषा')).toBe(true);
       expect(isLanguageCommand('மொழி')).toBe(true);
       expect(isLanguageCommand('ಭಾಷೆ')).toBe(true);
+      expect(isLanguageCommand('العربية')).toBe(true);
+      expect(isLanguageCommand('français')).toBe(true);
+      expect(isLanguageCommand('kiswahili')).toBe(true);
       expect(isLanguageCommand('weather in hyderabad')).toBe(false);
     });
 
-    it('parses numeric selections 1 to 8 and Indic digits', () => {
+    it('parses numeric selections 1 to 15, Indic digits, and Arabic digits', () => {
       expect(parseLanguageSelection('', '1')).toBe('en');
       expect(parseLanguageSelection('', '2')).toBe('hi');
       expect(parseLanguageSelection('', '3')).toBe('te');
@@ -157,20 +167,50 @@ describe('Multilingual Script & Language Detection', () => {
       expect(parseLanguageSelection('', '6')).toBe('ml');
       expect(parseLanguageSelection('', '7')).toBe('mr');
       expect(parseLanguageSelection('', '8')).toBe('bn');
+      expect(parseLanguageSelection('', '9')).toBe('ar');
+      expect(parseLanguageSelection('', '10')).toBe('fr');
+      expect(parseLanguageSelection('', '11')).toBe('sw');
+      expect(parseLanguageSelection('', '12')).toBe('ha');
+      expect(parseLanguageSelection('', '13')).toBe('yo');
+      expect(parseLanguageSelection('', '14')).toBe('am');
+      expect(parseLanguageSelection('', '15')).toBe('zu');
       expect(parseLanguageSelection('', '3.')).toBe('te');
-      expect(parseLanguageSelection('', 'option 2')).toBe('hi');
+      expect(parseLanguageSelection('', 'option 9')).toBe('ar');
+      expect(parseLanguageSelection('', 'option 10')).toBe('fr');
       expect(parseLanguageSelection('', '౩')).toBe('te');
       expect(parseLanguageSelection('', '२')).toBe('hi');
+      expect(parseLanguageSelection('', '٩')).toBe('ar');
+      expect(parseLanguageSelection('', '١٠')).toBe('fr');
+      expect(parseLanguageSelection('', '١١')).toBe('sw');
     });
 
-    it('parses interactive menu button/list selections', () => {
+    it('parses interactive menu button/list selections for all global languages', () => {
       expect(parseLanguageSelection('lang_ta')).toBe('ta');
       expect(parseLanguageSelection('lang_kn')).toBe('kn');
       expect(parseLanguageSelection('lang_mr')).toBe('mr');
       expect(parseLanguageSelection('lang_bn')).toBe('bn');
+      expect(parseLanguageSelection('lang_ar')).toBe('ar');
+      expect(parseLanguageSelection('lang_fr')).toBe('fr');
+      expect(parseLanguageSelection('lang_sw')).toBe('sw');
+      expect(parseLanguageSelection('lang_ha')).toBe('ha');
+      expect(parseLanguageSelection('lang_yo')).toBe('yo');
+      expect(parseLanguageSelection('lang_am')).toBe('am');
+      expect(parseLanguageSelection('lang_zu')).toBe('zu');
+      expect(parseLanguageSelection('lang_more')).toBe('more');
+      expect(parseLanguageSelection('lang_back')).toBe('back');
       expect(parseLanguageSelection('', 'తెలుగు')).toBe('te');
       expect(parseLanguageSelection('', 'தமிழ்')).toBe('ta');
       expect(parseLanguageSelection('', 'English')).toBe('en');
+      expect(parseLanguageSelection('', 'العربية')).toBe('ar');
+      expect(parseLanguageSelection('', 'arabic')).toBe('ar');
+      expect(parseLanguageSelection('', 'français')).toBe('fr');
+      expect(parseLanguageSelection('', 'french')).toBe('fr');
+      expect(parseLanguageSelection('', 'kiswahili')).toBe('sw');
+      expect(parseLanguageSelection('', 'swahili')).toBe('sw');
+      expect(parseLanguageSelection('', 'hausa')).toBe('ha');
+      expect(parseLanguageSelection('', 'yoruba')).toBe('yo');
+      expect(parseLanguageSelection('', 'አማርኛ')).toBe('am');
+      expect(parseLanguageSelection('', 'zulu')).toBe('zu');
       expect(parseLanguageSelection('', 'change the language to english')).toBe('en');
       expect(parseLanguageSelection('', 'switch to hindi')).toBe('hi');
       expect(parseLanguageSelection('', 'Hi')).toBeNull();

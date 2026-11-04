@@ -1,0 +1,73 @@
+{
+  "_meta": {
+    "locale": "fr",
+    "reviewed": true,
+    "lastUpdated": "2026-11-04"
+  },
+  "lang_menu_header": "🌐 Choisissez votre langue",
+  "lang_menu_body": "Veuillez sélectionner votre langue préférée. Dayli AI communiquera avec vous dans cette langue :",
+  "lang_menu_btn": "Choisir la langue",
+  "lang_menu_section": "Langues disponibles",
+  "lang_switched_confirm": "Langue configurée en Français 🌸\n\nComment puis-je vous aider, vous et votre famille aujourd'hui ?",
+
+  "consent_header": "Étape 1 sur 3 : Consentement",
+  "consent_body": "Bonjour ! Je suis Dayli — votre compagnon santé pour vous et votre famille, attentif à la météo et aux fortes chaleurs où que vous soyez.\n\nAvant de commencer : pour vous donner des conseils adaptés, j'ai besoin de retenir qui j'accompagne et votre localisation approximative.\n\n• Vos données restent strictement privées et ne sont jamais vendues\n• Vous pouvez taper *stop* ou *opt out* à tout moment pour tout effacer\n• Je ne suis pas médecin et ne pose aucun diagnostic\n\nÊtes-vous d'accord pour commencer ?",
+  "consent_yes": "Oui, commençons",
+  "consent_no": "Refuser 🛑",
+  "consent_terms": "Confidentialité",
+  "consent_footer": "En cas d'urgence, appelez le 112 ou le 15",
+  "consent_terms_body": "Voici comment Dayli protège vos données :\n\n• *Stockage :* Chiffré et anonymisé\n• *Partage :* Zéro partage avec des tiers ou des publicitaires\n• *Suppression :* Envoyez *STOP* à tout moment pour effacer définitivement vos données\n• *Objectif :* Orientation de santé, météo locale et hôpitaux à proximité\n\nPrêt(e) à continuer ?",
+  "consent_declined_body": "Je comprends parfaitement. Votre choix est respecté et aucune donnée personnelle n'a été enregistrée.\n\nVous pouvez toujours poser des questions générales. Pour redémarrer, envoyez *START*.\n\n_En cas d'urgence médicale vitale, contactez immédiatement les secours._",
+  "stop_confirmation": "🛑 *Données supprimées & Désabonnement confirmé*\n\nVous êtes désabonné(e) et vos données personnelles ainsi que l'historique de conversation ont été définitivement effacés.\n\nPour redémarrer à tout moment, envoyez *START* ou *Bonjour*.",
+
+  "subject_header": "Étape 2 sur 3 : Profil",
+  "subject_body": "Pour qui demandez-vous des conseils ? Les règles de sécurité clinique changent pour chacun :",
+  "subject_btn": "Choisir",
+  "subject_section": "Pour qui",
+  "subj_infant_title": "Mon bébé (moins d'1 an)",
+  "subj_infant_desc": "Soins et sécurité des nourrissons",
+  "subj_child_title": "Mon enfant (1 à 12 ans)",
+  "subj_child_desc": "Santé pédiatrique",
+  "subj_pregnant_title": "Je suis enceinte",
+  "subj_pregnant_desc": "Santé maternelle et alertes chaleur",
+  "subj_postpartum_title": "Accouchement récent",
+  "subj_postpartum_desc": "Soins post-partum (0–6 mois)",
+  "subj_adult_title": "Pour moi-même",
+  "subj_adult_desc": "Santé adulte générale",
+  "subj_unknown_title": "Préfère ne pas préciser",
+  "subj_unknown_desc": "Je préciserai lors de mes questions",
+
+  "age_header": "Âge du bébé",
+  "age_body": "Quel âge a votre bébé ? Les recommandations médicales varient fortement sous 6 mois :",
+  "age_btn": "Sélectionner l'âge",
+  "age_under3m": "Moins de 3 mois",
+  "age_3to6m": "3 à 6 mois",
+  "age_6to12m": "6 à 12 mois",
+
+  "preg_header": "Stade de grossesse",
+  "preg_body": "À quel trimestre de grossesse êtes-vous actuellement ?",
+  "preg_btn": "Sélectionner le trimestre",
+  "preg_tri1": "1er Trimestre (1–12 sem)",
+  "preg_tri2": "2ème Trimestre (13–27 sem)",
+  "preg_tri3": "3ème Trimestre (28 sem+)",
+
+  "loc_header": "Étape 3 sur 3 : Localisation",
+  "loc_body": "Pour vous fournir des prévisions météo précises, alertes canicule et maternités ou pharmacies proches, partagez votre ville ou envoyez votre position WhatsApp.\n\nVous pouvez aussi ignorer cette étape.",
+  "loc_skip": "Ignorer pour le moment",
+
+  "welcome_header": "Tout est prêt ! 🌸",
+  "welcome_body": "Bonjour {userName} ! Je suis Dayli AI — votre compagnon de santé maternelle, infantile et climatique.\n\nVous pouvez me demander :\n1. ☀️ Prévisions météo et alertes de chaleur dans votre région\n2. 💧 Conseils d'hydratation sûre et soins des nourrissons\n3. 🏥 Maternités, salles de travail et pharmacies de garde proches\n4. 🌡️ Évaluation de la fièvre et symptômes de grossesse\n\nComment puis-je vous aider aujourd'hui ?",
+
+  "emergency_banner": "🚨 *Urgence médicale immédiate requise*",
+  "emergency_lead": "Les symptômes décrits peuvent rapidement engager le pronostic vital.",
+  "emergency_action_112": "Appelez les secours d'urgence immédiatement (112, 15 ou services d'urgence locaux) ou rendez-vous sans attendre aux urgences.",
+  "emergency_action_upright": "Gardez le bébé en position redressée et soutenue pour maintenir les voies respiratoires dégagées. Desserrez tout vêtement serré.",
+  "emergency_action_no_fluids": "Ne donnez aucun aliment, lait, eau ou solution tant que la respiration est difficile afin d'éviter toute fausse route vers les poumons.",
+  "emergency_maternal_102": "En cas d'urgence obstétricale, demandez une ambulance médicalisée prioritaire immédiatement.",
+
+  "fever_guidance": "🌡️ *Gestion clinique de la fièvre*\n\n• *Nourrissons de moins de 3 mois :* TOUTE fièvre est une urgence médicale — consultez un médecin le jour même.\n• Enveloppements à l'eau tiède uniquement. Jamais d'eau glacée, de packs de glace ou d'alcool.\n• Hydratation fréquente par petites gorgées ou tétées.\n⚠️ *Je ne peux pas prescrire de médicaments ni de dosages.* Consultez un médecin ou un pharmacien pour un antipyrétique adapté au poids.\n_En cas de convulsion ou de détresse, composez immédiatement le 112._",
+
+  "heat_hydration_infant": "💧 *Hydratation du nourrisson et fortes chaleurs (Protocole OMS)*\n\n• *Bébés de moins de 6 mois :* Allaitement maternel exclusif ou lait infantile uniquement. *STRICTEMENT AUCUNE EAU PURE* — l'eau pure peut provoquer une intoxication par l'eau et un déséquilibre électrolytique dangereux.\n• Proposez des tétées très fréquentes pendant les heures les plus chaudes.\n• Habillez le bébé d'une seule couche légère en coton aéré.\n• Surveillez les signes de déshydratation : fontanelle creuse, couches sèches (>6h), absence de larmes lors des pleurs.",
+
+  "disclaimer": "_Dayli donne des conseils généraux et ne remplace pas un avis médical. En cas d'urgence, composez le 112._"
+}

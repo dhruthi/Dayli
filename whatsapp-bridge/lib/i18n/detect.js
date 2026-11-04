@@ -13,7 +13,8 @@ const TAMIL_REGEX = /[\u0B80-\u0BFF]/;
 const MALAYALAM_REGEX = /[\u0D00-\u0D7F]/;
 const BENGALI_REGEX = /[\u0980-\u09FF]/;
 const DEVANAGARI_REGEX = /[\u0900-\u097F]/;
-const ARABIC_REGEX = /[\u0600-\u06FF]/;
+const ARABIC_REGEX = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/;
+const ETHIOPIC_REGEX = /[\u1200-\u137F\u1380-\u139F\u2D80-\u2DDF\uAB00-\uAB2F]/;
 
 // Marathi distinctive characters & vocabulary
 const MARATHI_EXCLUSIVE_CHARS = /[\u0933]/; // ळ (LLa)
@@ -127,6 +128,9 @@ export function detectLanguage(text = '', currentLocale = 'en') {
   }
   if (ARABIC_REGEX.test(raw)) {
     return { locale: 'ar', rawLang: 'ar', script: 'arabic' };
+  }
+  if (ETHIOPIC_REGEX.test(raw)) {
+    return { locale: 'am', rawLang: 'am', script: 'ethiopic' };
   }
 
   // 2. Latin script — check for Romanized Indic dialects
@@ -261,7 +265,37 @@ export function isLanguageCommand(text = '') {
     t === 'മലയാളം' ||
     t === 'বাংলা' ||
     t === 'hindi' ||
-    t === 'english'
+    t === 'english' ||
+    t === 'العربية' ||
+    t === 'عربي' ||
+    t === 'تغيير اللغة' ||
+    t === 'اللغة' ||
+    t === 'اختر اللغة' ||
+    t === 'français' ||
+    t === 'francais' ||
+    t === 'french' ||
+    t === 'changer de langue' ||
+    t === 'changer la langue' ||
+    t === 'langue' ||
+    t === 'kiswahili' ||
+    t === 'swahili' ||
+    t === 'badilisha lugha' ||
+    t === 'lugha' ||
+    t === 'hausa' ||
+    t === 'canza harshe' ||
+    t === 'harshe' ||
+    t === 'yoruba' ||
+    t === 'yi ede pada' ||
+    t === 'ede' ||
+    t === 'አማርኛ' ||
+    t === 'ቋንቋ ቀይር' ||
+    t === 'ቋንቋ' ||
+    t === 'zulu' ||
+    t === 'isizulu' ||
+    t === 'shintsha ulimi' ||
+    t === 'ulimi' ||
+    t === 'more languages' ||
+    t === 'other languages'
   );
 }
 
@@ -273,6 +307,8 @@ export function isLanguageCommand(text = '') {
  */
 export function parseLanguageSelection(replyId = '', text = '') {
   const rid = String(replyId || '').trim();
+  if (rid === 'lang_more') return 'more';
+  if (rid === 'lang_back') return 'back';
   if (rid.startsWith('lang_')) {
     const code = rid.replace('lang_', '');
     if (isSupportedLocale(code)) return code;
@@ -281,19 +317,33 @@ export function parseLanguageSelection(replyId = '', text = '') {
   const t = String(text || '').trim().toLowerCase();
   if (!t) return null;
 
-  // Numeric selection: 1 to 8 (supports "1", "1.", "option 1", and Indic numerals)
-  const numMatch = t.match(/^(?:option\s+|choice\s+)?([1-8१-८౧-౮௧-௮೧-೮൧-൮১-৮])(?:\.|\b|\s|$)/i);
+  if (t === 'more' || t === 'more languages' || t === 'other languages' || t === 'المزيد' || t === 'plus') {
+    return 'more';
+  }
+  if (t === 'back' || t === 'main menu' || t === 'رجوع' || t === 'retour') {
+    return 'back';
+  }
+
+  // Numeric selection: 1 to 15 (supports "1", "15", "option 1", Indic numerals, Arabic numerals, Ethiopic numerals)
+  const numMatch = t.match(/^(?:option\s+|choice\s+)?([1-9]|1[0-5]|[१-९]|१[०-५]|[౧-౯]|౧[०-౫]|[\u0661-\u0669]|\u0661[\u0660-\u0665]|[፩-፱]|፲[፩-፭]?)(?:\.|\b|\s|$)/i);
   if (numMatch) {
     const rawDigit = numMatch[1];
     const digitMap = {
-      '1': 'en', '१': 'en', '౧': 'en', '௧': 'en', '೧': 'en', '൧': 'en', '১': 'en',
-      '2': 'hi', '२': 'hi', '౨': 'hi', '௨': 'hi', '೨': 'hi', '൨': 'hi', '২': 'hi',
-      '3': 'te', '३': 'te', '౩': 'te', '௩': 'te', '೩': 'te', '൩': 'te', '৩': 'te',
-      '4': 'ta', '४': 'ta', '౪': 'ta', '௪': 'ta', '೪': 'ta', '൪': 'ta', '৪': 'ta',
-      '5': 'kn', '५': 'kn', '౫': 'kn', '௫': 'kn', '೫': 'kn', '൫': 'kn', '৫': 'kn',
-      '6': 'ml', '६': 'ml', '౬': 'ml', '௬': 'ml', '೬': 'ml', '൬': 'ml', '৬': 'ml',
-      '7': 'mr', '७': 'mr', '౭': 'mr', '௭': 'mr', '೭': 'mr', '൭': 'mr', '৭': 'mr',
-      '8': 'bn', '८': 'bn', '౮': 'bn', '௮': 'bn', '೮': 'bn', '൮': 'bn', '৮': 'bn',
+      '1': 'en', '१': 'en', '౧': 'en', '௧': 'en', '೧': 'en', '൧': 'en', '১': 'en', '١': 'en', '፩': 'en',
+      '2': 'hi', '२': 'hi', '౨': 'hi', '௨': 'hi', '೨': 'hi', '൨': 'hi', '২': 'hi', '٢': 'hi', '፪': 'hi',
+      '3': 'te', '३': 'te', '౩': 'te', '௩': 'te', '೩': 'te', '൩': 'te', '৩': 'te', '٣': 'te', '፫': 'te',
+      '4': 'ta', '४': 'ta', '౪': 'ta', '௪': 'ta', '೪': 'ta', '൪': 'ta', '৪': 'ta', '٤': 'ta', '፬': 'ta',
+      '5': 'kn', '५': 'kn', '౫': 'kn', '௫': 'kn', '೫': 'kn', '൫': 'kn', '৫': 'kn', '٥': 'kn', '፭': 'kn',
+      '6': 'ml', '६': 'ml', '౬': 'ml', '௬': 'ml', '೬': 'ml', '൬': 'ml', '৬': 'ml', '٦': 'ml', '፮': 'ml',
+      '7': 'mr', '७': 'mr', '౭': 'mr', '௭': 'mr', '೭': 'mr', '൭': 'mr', '৭': 'mr', '٧': 'mr', '፯': 'mr',
+      '8': 'bn', '८': 'bn', '౮': 'bn', '௮': 'bn', '೮': 'bn', '൮': 'bn', '৮': 'bn', '٨': 'bn', '፰': 'bn',
+      '9': 'ar', '९': 'ar', '౯': 'ar', '௯': 'ar', '೯': 'ar', '൯': 'ar', '৯': 'ar', '٩': 'ar', '፱': 'ar',
+      '10': 'fr', '१०': 'fr', '౧౦': 'fr', '١٠': 'fr', '፲': 'fr',
+      '11': 'sw', '११': 'sw', '౧౧': 'sw', '١١': 'sw', '፲፩': 'sw',
+      '12': 'ha', '१२': 'ha', '౧౨': 'ha', '١٢': 'ha', '፲፪': 'ha',
+      '13': 'yo', '१३': 'yo', '౧౩': 'yo', '١٣': 'yo', '፲፫': 'yo',
+      '14': 'am', '१४': 'am', '౧౪': 'am', '١٤': 'am', '፲፬': 'am',
+      '15': 'zu', '१५': 'zu', '౧౫': 'zu', '١٥': 'zu', '፲፭': 'zu',
     };
     if (digitMap[rawDigit]) return digitMap[rawDigit];
   }
@@ -384,6 +434,78 @@ export function parseLanguageSelection(replyId = '', text = '') {
     t === 'lang:bn'
   ) {
     return 'bn';
+  }
+
+  // Arabic
+  if (
+    t === 'arabic' ||
+    t === 'العربية' ||
+    t === 'عربي' ||
+    /\b(?:change|switch|set|talk|speak|convert|choose|select)?(?:\s+(?:the|my)?\s*language)?\s+(?:to|in)?\s*(?:arabic|العربية|عربي)\b/i.test(t) ||
+    t === 'lang:ar'
+  ) {
+    return 'ar';
+  }
+
+  // French
+  if (
+    t === 'french' ||
+    t === 'français' ||
+    t === 'francais' ||
+    /\b(?:change|switch|set|talk|speak|convert|choose|select)?(?:\s+(?:the|my)?\s*language)?\s+(?:to|in)?\s*(?:french|français|francais)\b/i.test(t) ||
+    t === 'lang:fr'
+  ) {
+    return 'fr';
+  }
+
+  // Swahili
+  if (
+    t === 'swahili' ||
+    t === 'kiswahili' ||
+    /\b(?:change|switch|set|talk|speak|convert|choose|select)?(?:\s+(?:the|my)?\s*language)?\s+(?:to|in)?\s*(?:swahili|kiswahili)\b/i.test(t) ||
+    t === 'lang:sw'
+  ) {
+    return 'sw';
+  }
+
+  // Hausa
+  if (
+    t === 'hausa' ||
+    t === 'harshen hausa' ||
+    /\b(?:change|switch|set|talk|speak|convert|choose|select)?(?:\s+(?:the|my)?\s*language)?\s+(?:to|in)?\s*(?:hausa|harshen hausa)\b/i.test(t) ||
+    t === 'lang:ha'
+  ) {
+    return 'ha';
+  }
+
+  // Yoruba
+  if (
+    t === 'yoruba' ||
+    t === 'yorùbá' ||
+    /\b(?:change|switch|set|talk|speak|convert|choose|select)?(?:\s+(?:the|my)?\s*language)?\s+(?:to|in)?\s*(?:yoruba|yorùbá)\b/i.test(t) ||
+    t === 'lang:yo'
+  ) {
+    return 'yo';
+  }
+
+  // Amharic
+  if (
+    t === 'amharic' ||
+    t === 'አማርኛ' ||
+    /\b(?:change|switch|set|talk|speak|convert|choose|select)?(?:\s+(?:the|my)?\s*language)?\s+(?:to|in)?\s*(?:amharic|አማርኛ)\b/i.test(t) ||
+    t === 'lang:am'
+  ) {
+    return 'am';
+  }
+
+  // Zulu
+  if (
+    t === 'zulu' ||
+    t === 'isizulu' ||
+    /\b(?:change|switch|set|talk|speak|convert|choose|select)?(?:\s+(?:the|my)?\s*language)?\s+(?:to|in)?\s*(?:zulu|isizulu)\b/i.test(t) ||
+    t === 'lang:zu'
+  ) {
+    return 'zu';
   }
 
   return null;
