@@ -61,10 +61,12 @@ export async function transcribeVoiceNote(audioBuffer, mimeType, locale = 'en') 
         parts: [
           {
             text:
-              `Transcribe this voice note exactly as spoken. The speaker is likely using ${langHint}, ` +
-              'but transcribe in whatever language is actually spoken (Telugu, Hindi, English or a mix), ' +
-              'writing Indian languages in their native script. Return only the spoken words — ' +
-              'no commentary, no translation, no formatting, no timestamps. ' +
+              `Listen to this voice message. The speaker is likely using ${langHint}, ` +
+              'but may use Telugu, Hindi, Arabic, English, or a mix. ' +
+              '1. Transcribe the exact words in the native script (writing Indian languages in their native script). ' +
+              '2. Translate the spoken message accurately into clear English for clinical health reasoning. ' +
+              '3. Detect the primary language code (e.g. "te", "hi", "ar", "en", "ta", "kn", "bn"). ' +
+              'Return JSON format: {"transcript": "...", "english": "...", "language": "..."}. ' +
               `If there is no intelligible speech, return exactly ${INAUDIBLE}.`,
           },
           {
@@ -77,8 +79,9 @@ export async function transcribeVoiceNote(audioBuffer, mimeType, locale = 'en') 
       },
     ],
     generationConfig: {
-      temperature: 0,      // Deterministic — transcription is not creative
+      temperature: 0,
       maxOutputTokens: 512,
+      responseMimeType: 'application/json',
     },
   };
 
@@ -101,13 +104,28 @@ export async function transcribeVoiceNote(audioBuffer, mimeType, locale = 'en') 
     }
 
     const data = await res.json();
-    const transcript = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
-    if (!transcript || transcript.includes(INAUDIBLE)) {
+    const rawContent = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
+    if (!rawContent || rawContent.includes(INAUDIBLE)) {
       console.warn('[ASR] no intelligible speech in voice note');
       return null;
     }
-    console.log(`[ASR] Transcribed (${locale}): ${transcript.length} chars`);
-    return transcript;
+
+    try {
+      const parsed = JSON.parse(rawContent);
+      if (parsed.transcript || parsed.english) {
+        console.log(`[ASR] Transcribed & translated (${parsed.language || locale}): ${parsed.transcript?.length || 0} chars`);
+        return {
+          text: parsed.transcript || parsed.english,
+          englishText: parsed.english || parsed.transcript,
+          lang: parsed.language || locale,
+        };
+      }
+    } catch {
+      // Return raw content as string if non-JSON
+    }
+
+    console.log(`[ASR] Transcribed (${locale}): ${rawContent.length} chars`);
+    return rawContent;
   } catch (err) {
     clearTimeout(timer);
     const timedOut = err?.name === 'AbortError';

@@ -203,10 +203,14 @@ async function runInference(taskType, lang, pipelineTask, inputData) {
 export function cleanTextForTTS(text) {
   if (!text) return '';
   return text
+    // Replace markdown links [label](url) with label
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
     // Remove URLs — read aloud they are noise
     .replace(/https?:\/\/\S+/gi, '')
-    // Remove markdown bold and italics (*text*, _text_)
-    .replace(/[*_~`]/g, '')
+    // Remove markdown headers
+    .replace(/^#+\s+/gm, '')
+    // Remove markdown bold, italics, code, hash (*text*, _text_)
+    .replace(/[*_~`#]/g, '')
     // Remove all emojis, symbols, and variation selectors
     .replace(/\p{Extended_Pictographic}/gu, '')
     .replace(/[\uFE00-\uFE0F\u200D]/gu, '')

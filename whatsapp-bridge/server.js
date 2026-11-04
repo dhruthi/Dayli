@@ -1445,22 +1445,27 @@ async function handleMessageEvent(event) {
         metric('asr.attempt');
         const { buffer, mimeType } = await cloudApi.downloadMedia(event.media.id);
 
-        // Model 1 (ASR): Bhashini IndicConformer first, Gemini fallback (lib/voice.js)
+        // Model 1 (ASR): Recognize voice in user's language + convert to English for clinical reasoning
         const asr = await transcribeVoice(buffer, mimeType, locale);
         const transcript = asr?.text || null;
+        const englishTranscript = asr?.englishText || transcript;
+        const detectedLang = asr?.lang || locale;
         if (asr) metric(`asr.${asr.provider}_success`);
 
         if (transcript) {
           metric('asr.success');
-          console.log(`[ASR] voice note transcribed for ${tag} via ${asr.provider}`);
-          event.text = transcript;
+          console.log(`[ASR] voice note transcribed (${detectedLang}) for ${tag} via ${asr.provider}: ${transcript.slice(0, 50)}...`);
+          event.text = englishTranscript; // English inquiry enables highest clinical accuracy and router precision
+          event.originalText = transcript;
           event.type = 'text';
           event.wasVoiceNote = true;
           event.voiceTranscript = transcript;
+          event.voiceEnglish = englishTranscript;
+          event.voiceLang = detectedLang;
           delete event.media;
 
-          // Re-resolve locale from the transcribed text
-          session.profile.locale = onboarding.resolveLocale(event.text, session.profile.locale);
+          // Re-resolve locale from the native transcribed text or detected language
+          session.profile.locale = detectedLang || onboarding.resolveLocale(transcript, session.profile.locale);
           const currentLocale = session.profile.locale;
 
           // Check if transcribed text is an opt-out
@@ -1905,10 +1910,9 @@ async function handleMessageEvent(event) {
 
   // Deliver AI reply. receivedAt makes this the one path we time: onboarding
   // replies are deterministic and fast, and would flatter the percentiles.
-  // For a voice note, show what we heard: a mis-transcribed symptom is then
-  // visible to the user instead of silently answered.
+  // For a voice note, show what we heard in original language and English translation:
   const heard = event.voiceTranscript
-    ? `🎙️ _"${event.voiceTranscript.replace(/[_*]/g, '').slice(0, 300)}"_\n\n`
+    ? `🎙️ _"${event.voiceTranscript.replace(/[_*]/g, '').slice(0, 300)}"_${event.voiceEnglish && event.voiceEnglish !== event.voiceTranscript ? `\n_(English: "${event.voiceEnglish.replace(/[_*]/g, '').slice(0, 300)}")_` : ''}\n\n`
     : '';
   await deliver(from, { kind: 'text', body: heard + replyText }, receivedAt);
 

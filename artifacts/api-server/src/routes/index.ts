@@ -4,6 +4,7 @@ import leadsRouter from "./leads";
 import geoRouter from "./geo";
 import conditionsRouter from "./conditions";
 import chatRouter from "./chat";
+import voiceRouter from "./voice";
 import adminRouter from "./admin";
 import whatsappRouter from "./whatsapp";
 
@@ -14,6 +15,7 @@ router.use(leadsRouter);
 router.use(geoRouter);
 router.use(conditionsRouter);
 router.use(chatRouter);
+router.use(voiceRouter);
 router.use(adminRouter);
 router.use(whatsappRouter);
 

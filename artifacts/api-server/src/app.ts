@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express, { type Express } from "express";
 import cors from "cors";
 import pinoHttp from "pino-http";
@@ -43,13 +44,13 @@ app.use(cors());
 // malicious body can never blow up memory.
 app.use(
   express.json({
-    limit: "256kb",
+    limit: "15mb",
     verify: (req, _res, buf) => {
       (req as express.Request & { rawBody?: Buffer }).rawBody = Buffer.from(buf);
     },
   }),
 );
-app.use(express.urlencoded({ extended: true, limit: "256kb" }));
+app.use(express.urlencoded({ extended: true, limit: "15mb" }));
 
 app.use("/api", router);
 

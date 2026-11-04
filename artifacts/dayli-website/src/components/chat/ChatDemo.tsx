@@ -1,11 +1,25 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { MapPin, Send, ThermometerSun, Wind, Loader2, AlertTriangle } from "lucide-react";
+import {
+  MapPin,
+  Send,
+  ThermometerSun,
+  Wind,
+  Loader2,
+  AlertTriangle,
+  Mic,
+  Square,
+  Trash2,
+  Volume2,
+  Sparkles,
+  Languages,
+} from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { apiUrl } from "@/lib/site";
 import { useLocale } from "@/hooks/use-locale";
+import { VoiceAudioPlayer } from "./VoiceAudioPlayer";
 
 interface MarkdownLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   href?: string;
@@ -74,6 +88,13 @@ function AssistantMarkdown({ text }: { text: string }) {
 interface ChatMessage {
   role: "user" | "assistant";
   content: string;
+  isVoice?: boolean;
+  audioUrl?: string;
+  originalTranscript?: string;
+  englishTranscript?: string;
+  detectedLanguage?: string;
+  languageName?: string;
+  ttsLoading?: boolean;
 }
 
 type HeatRisk = "low" | "moderate" | "high" | "very_high" | "extreme";
@@ -268,8 +289,16 @@ export function ChatDemo() {
   const [input, setInput] = useState<string>("");
   const [streaming, setStreaming] = useState<boolean>(false);
   const [streamingText, setStreamingText] = useState<string>("");
+  const [isRecording, setIsRecording] = useState<boolean>(false);
+  const [recordingSeconds, setRecordingSeconds] = useState<number>(0);
+  const [liveTranscript, setLiveTranscript] = useState<string>("");
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const sessionIdRef = useRef<string>("");
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
+  const speechRecognitionRef = useRef<any>(null);
+  const recordingTimerRef = useRef<any>(null);
+  const activeStreamRef = useRef<MediaStream | null>(null);
 
   if (sessionIdRef.current === "") {
     sessionIdRef.current = getSessionId();
@@ -400,6 +429,235 @@ export function ChatDemo() {
     }
   };
 
+  const startRecording = async () => {
+    if (streaming || isRecording || phase !== "ready") return;
+    try {
+      if (!navigator.mediaDevices?.getUserMedia) {
+        alert("Audio recording is not supported in this browser.");
+        return;
+      }
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      activeStreamRef.current = stream;
+
+      const mimeType = MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
+        ? "audio/webm;codecs=opus"
+        : MediaRecorder.isTypeSupported("audio/mp4")
+        ? "audio/mp4"
+        : "audio/wav";
+
+      const mr = new MediaRecorder(stream, { mimeType });
+      mediaRecorderRef.current = mr;
+      audioChunksRef.current = [];
+
+      mr.ondataavailable = (event) => {
+        if (event.data && event.data.size > 0) {
+          audioChunksRef.current.push(event.data);
+        }
+      };
+
+      mr.start(250);
+      setIsRecording(true);
+      setRecordingSeconds(0);
+      setLiveTranscript("");
+
+      recordingTimerRef.current = setInterval(() => {
+        setRecordingSeconds((prev) => prev + 1);
+      }, 1000);
+
+      // Web Speech API for live transcription preview in user's language
+      const SpeechRec = (window as unknown as { SpeechRecognition?: any; webkitSpeechRecognition?: any }).SpeechRecognition ||
+        (window as unknown as { webkitSpeechRecognition?: any }).webkitSpeechRecognition;
+      if (SpeechRec) {
+        try {
+          const rec = new SpeechRec();
+          rec.continuous = true;
+          rec.interimResults = true;
+          const langMap: Record<string, string> = {
+            te: "te-IN",
+            hi: "hi-IN",
+            ar: "ar-SA",
+            en: "en-IN",
+          };
+          rec.lang = langMap[locale] || "en-US";
+          rec.onresult = (ev: any) => {
+            let interim = "";
+            for (let i = ev.resultIndex; i < ev.results.length; ++i) {
+              interim += ev.results[i][0].transcript;
+            }
+            if (interim) setLiveTranscript(interim);
+          };
+          rec.onerror = () => {};
+          rec.start();
+          speechRecognitionRef.current = rec;
+        } catch {
+          // ignore
+        }
+      }
+    } catch (err) {
+      console.error("Microphone error:", err);
+      alert("Microphone permission denied or device not found.");
+    }
+  };
+
+  const stopRecording = (cancelled = false) => {
+    if (!isRecording) return;
+    setIsRecording(false);
+    clearInterval(recordingTimerRef.current);
+
+    if (speechRecognitionRef.current) {
+      try {
+        speechRecognitionRef.current.stop();
+      } catch {}
+      speechRecognitionRef.current = null;
+    }
+
+    const mr = mediaRecorderRef.current;
+    if (mr && mr.state !== "inactive") {
+      mr.onstop = () => {
+        if (!cancelled && audioChunksRef.current.length > 0) {
+          const mime = mr.mimeType || "audio/webm";
+          const blob = new Blob(audioChunksRef.current, { type: mime });
+          void sendVoice(blob, liveTranscript);
+        }
+        if (activeStreamRef.current) {
+          activeStreamRef.current.getTracks().forEach((track) => track.stop());
+          activeStreamRef.current = null;
+        }
+        audioChunksRef.current = [];
+      };
+      mr.stop();
+    } else if (activeStreamRef.current) {
+      activeStreamRef.current.getTracks().forEach((track) => track.stop());
+      activeStreamRef.current = null;
+    }
+  };
+
+  const sendVoice = async (audioBlob: Blob, transcript: string) => {
+    if (!conditions || !geoFix) return;
+
+    const audioUrl = URL.createObjectURL(audioBlob);
+    const tempUserMsg: ChatMessage = {
+      role: "user",
+      content: transcript || "🎙️ Voice message sent",
+      isVoice: true,
+      audioUrl,
+      originalTranscript: transcript,
+    };
+
+    setMessages((prev) => [...prev, tempUserMsg]);
+    setStreaming(true);
+    setStreamingText("🎙️ Processing voice note: recognizing language and translating to English for Copilot...");
+
+    try {
+      const reader = new FileReader();
+      const base64Promise = new Promise<string>((resolve, reject) => {
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.onerror = reject;
+      });
+      reader.readAsDataURL(audioBlob);
+      const audioBase64 = await base64Promise;
+
+      const res = await fetch(apiUrl("/chat/voice"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          audioBase64,
+          mimeType: audioBlob.type,
+          clientTranscript: transcript,
+          locale,
+          location: {
+            lat: geoFix.lat,
+            lon: geoFix.lon,
+            city: conditions.city ?? geoFix.city ?? null,
+            country: conditions.country ?? geoFix.country ?? null,
+          },
+          sessionId: sessionIdRef.current,
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error(`Voice processing error (${res.status})`);
+      }
+
+      const data = await res.json();
+
+      setMessages((prev) => {
+        const copy = [...prev];
+        const lastUserIdx = copy.findLastIndex((m) => m.role === "user");
+        if (lastUserIdx !== -1) {
+          copy[lastUserIdx] = {
+            ...copy[lastUserIdx],
+            content: data.originalTranscript || copy[lastUserIdx].content,
+            originalTranscript: data.originalTranscript,
+            englishTranscript: data.englishTranscript,
+            detectedLanguage: data.detectedLanguage,
+            languageName: data.languageName,
+          };
+        }
+        return [
+          ...copy,
+          {
+            role: "assistant",
+            content: data.replyText,
+            isVoice: Boolean(data.audioBase64),
+            audioUrl: data.audioBase64 || undefined,
+            detectedLanguage: data.detectedLanguage,
+            languageName: data.languageName,
+          },
+        ];
+      });
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content: `${c.errorBody} (${msg})`,
+        },
+      ]);
+    } finally {
+      setStreaming(false);
+      setStreamingText("");
+    }
+  };
+
+  const playTtsForMessage = async (idx: number, text: string) => {
+    try {
+      setMessages((prev) => {
+        const copy = [...prev];
+        copy[idx] = { ...copy[idx], ttsLoading: true };
+        return copy;
+      });
+
+      const res = await fetch(apiUrl("/voice/tts"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text, locale }),
+      });
+
+      if (!res.ok) throw new Error("TTS failed");
+      const data = await res.json();
+
+      setMessages((prev) => {
+        const copy = [...prev];
+        copy[idx] = {
+          ...copy[idx],
+          isVoice: true,
+          audioUrl: data.audioBase64,
+          ttsLoading: false,
+        };
+        return copy;
+      });
+    } catch (err) {
+      console.warn("TTS fetch error:", err);
+      setMessages((prev) => {
+        const copy = [...prev];
+        copy[idx] = { ...copy[idx], ttsLoading: false };
+        return copy;
+      });
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent): void => {
     e.preventDefault();
     void send(input);
@@ -522,11 +780,52 @@ export function ChatDemo() {
             className={cn(
               "max-w-[85%] rounded-2xl px-3.5 py-2 break-words",
               m.role === "user"
-                ? "bg-primary text-primary-foreground self-end ml-auto rounded-tr-sm text-sm whitespace-pre-wrap"
+                ? "bg-primary text-primary-foreground self-end ml-auto rounded-tr-sm text-sm"
                 : "bg-muted text-foreground self-start mr-auto rounded-tl-sm",
             )}
           >
-            {m.role === "assistant" ? <AssistantMarkdown text={m.content} /> : m.content}
+            {m.role === "user" ? (
+              <div className="space-y-1.5">
+                {m.isVoice && m.audioUrl && (
+                  <VoiceAudioPlayer
+                    audioUrl={m.audioUrl}
+                    isUser={true}
+                    languageName={m.languageName}
+                    englishTranscript={m.englishTranscript}
+                  />
+                )}
+                <div className="text-sm whitespace-pre-wrap">{m.content}</div>
+              </div>
+            ) : (
+              <div className="space-y-1.5">
+                {m.isVoice && m.audioUrl && (
+                  <VoiceAudioPlayer
+                    audioUrl={m.audioUrl}
+                    isUser={false}
+                    autoPlay={true}
+                    languageName={m.languageName}
+                  />
+                )}
+                <AssistantMarkdown text={m.content} />
+                {!m.audioUrl && (
+                  <div className="pt-1 flex items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => void playTtsForMessage(i, m.content)}
+                      disabled={m.ttsLoading}
+                      className="inline-flex items-center gap-1 text-[11px] font-medium text-primary hover:underline transition-opacity disabled:opacity-50"
+                    >
+                      {m.ttsLoading ? (
+                        <Loader2 size={12} className="animate-spin" />
+                      ) : (
+                        <Volume2 size={12} />
+                      )}
+                      <span>{m.ttsLoading ? "Generating voice..." : "Listen to voiceover"}</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         ))}
 
@@ -557,29 +856,82 @@ export function ChatDemo() {
         className="border-t border-border bg-card p-3 flex items-center gap-2"
         aria-label={c.formLabel}
       >
-        <label htmlFor="chat-demo-input" className="sr-only">
-          {c.inputPlaceholder}
-        </label>
-        <input
-          id="chat-demo-input"
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder={phase === "ready" ? c.inputPlaceholder : c.inputDisabledPlaceholder}
-          disabled={phase !== "ready" || streaming}
-          maxLength={4000}
-          aria-label={c.inputPlaceholder}
-          className="flex-1 h-10 px-3 rounded-full border border-input bg-background text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50"
-        />
-        <Button
-          type="submit"
-          size="icon"
-          disabled={phase !== "ready" || streaming || !input.trim()}
-          className="rounded-full h-10 w-10 shrink-0"
-          aria-label={c.sendLabel}
-        >
-          {streaming ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
-        </Button>
+        {isRecording ? (
+          <div className="flex-1 flex items-center justify-between px-3 h-10 rounded-full bg-destructive/10 border border-destructive/30 animate-pulse text-sm">
+            <div className="flex items-center gap-2 text-destructive font-medium min-w-0">
+              <span className="w-2.5 h-2.5 rounded-full bg-destructive animate-ping shrink-0" />
+              <span className="shrink-0 text-xs">
+                Recording {Math.floor(recordingSeconds / 60)}:
+                {recordingSeconds % 60 < 10 ? "0" : ""}
+                {recordingSeconds % 60}
+              </span>
+              {liveTranscript && (
+                <span className="text-xs text-muted-foreground truncate max-w-[200px] italic">
+                  &quot;{liveTranscript}&quot;
+                </span>
+              )}
+            </div>
+            <div className="flex items-center gap-1 shrink-0">
+              <Button
+                type="button"
+                size="icon"
+                variant="ghost"
+                onClick={() => stopRecording(true)}
+                className="h-8 w-8 text-destructive hover:bg-destructive/20 rounded-full"
+                title="Cancel voice note"
+              >
+                <Trash2 size={15} />
+              </Button>
+              <Button
+                type="button"
+                size="icon"
+                onClick={() => stopRecording(false)}
+                className="h-8 w-8 bg-destructive hover:bg-destructive/90 text-white rounded-full shadow-sm"
+                title="Send voice note"
+              >
+                <Send size={13} />
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <>
+            <label htmlFor="chat-demo-input" className="sr-only">
+              {c.inputPlaceholder}
+            </label>
+            <input
+              id="chat-demo-input"
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder={phase === "ready" ? c.inputPlaceholder : c.inputDisabledPlaceholder}
+              disabled={phase !== "ready" || streaming}
+              maxLength={4000}
+              aria-label={c.inputPlaceholder}
+              className="flex-1 h-10 px-3 rounded-full border border-input bg-background text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50"
+            />
+            <Button
+              type="button"
+              size="icon"
+              variant="outline"
+              onClick={() => void startRecording()}
+              disabled={phase !== "ready" || streaming}
+              className="rounded-full h-10 w-10 shrink-0 text-primary hover:text-primary hover:bg-primary/10 border-primary/30"
+              title="Record voice note"
+              aria-label="Record voice note"
+            >
+              <Mic size={18} />
+            </Button>
+            <Button
+              type="submit"
+              size="icon"
+              disabled={phase !== "ready" || streaming || !input.trim()}
+              className="rounded-full h-10 w-10 shrink-0"
+              aria-label={c.sendLabel}
+            >
+              {streaming ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
+            </Button>
+          </>
+        )}
       </form>
 
       {/* Disclaimer */}
