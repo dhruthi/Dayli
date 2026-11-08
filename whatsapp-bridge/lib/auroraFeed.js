@@ -1,17 +1,20 @@
 /**
  * lib/auroraFeed.js
  *
- * The Microsoft Aurora forecast feed for the Hyderabad area.
+ * AI weather model forecast feed for the Hyderabad area.
  *
- * Aurora is a 1.3B-parameter model that needs a large GPU, so it cannot run
- * inside this web service. A separate job (aurora-runner/run_aurora.py) runs
- * it on real ECMWF initial conditions every 6–12 hours and PUSHES the result
- * here (POST /internal/aurora/forecast). This module validates, persists and
- * serves that feed.
+ * Accepts forecasts from any of three real AI weather models:
+ *   • Microsoft Aurora  (provenance: "aurora-inference")
+ *   • ECMWF AIFS        (provenance: "aifs-inference")
+ *   • Google WeatherNext (provenance: "weathernext-inference")
+ *
+ * Each model has its own runner in aurora-runner/. The runners push their
+ * output here (POST /internal/aurora/forecast). This module validates,
+ * persists and serves whichever forecast is freshest.
  *
  * Hard rules, because this drives health advice:
- *   • Only data marked `provenance: "aurora-inference"` with physically
- *     plausible values is accepted. Synthetic / demo trajectories are refused.
+ *   • Only data with a recognised model provenance AND physically plausible
+ *     values is accepted. Synthetic / demo trajectories are refused.
  *   • A forecast older than AURORA_MAX_AGE_HOURS (default 30h from model
  *     initialisation) is treated as absent — callers fall back to Open-Meteo.
  *   • Nothing here throws into the request path.
@@ -19,7 +22,7 @@
  * Payload (schema_version 1):
  * {
  *   schema_version: 1,
- *   provenance: "aurora-inference",
+ *   provenance: "aurora-inference" | "aifs-inference" | "weathernext-inference",
  *   model: "Aurora 0.25° Fine-Tuned",
  *   initial_conditions: "ECMWF IFS HRES open data",
  *   init_time: "2026-10-12T00:00:00Z",
@@ -58,6 +61,12 @@ export function _resetAuroraFeed() {
   urlCache = { at: 0, value: null };
 }
 
+const ACCEPTED_PROVENANCES = new Set([
+  'aurora-inference',
+  'aifs-inference',
+  'weathernext-inference',
+]);
+
 const isNum = (v) => typeof v === 'number' && Number.isFinite(v);
 
 function checkMatrix(m, rows, cols, lo, hi) {
@@ -72,8 +81,8 @@ function checkMatrix(m, rows, cols, lo, hi) {
 export function validateAuroraPayload(p) {
   if (!p || typeof p !== 'object') return { ok: false, error: 'payload must be a JSON object' };
   if (p.schema_version !== 1) return { ok: false, error: 'schema_version must be 1' };
-  if (p.provenance !== 'aurora-inference') {
-    return { ok: false, error: 'provenance must be "aurora-inference" — synthetic/demo data is not accepted' };
+  if (!ACCEPTED_PROVENANCES.has(p.provenance)) {
+    return { ok: false, error: `provenance must be one of: ${[...ACCEPTED_PROVENANCES].join(', ')} — synthetic/demo data is not accepted` };
   }
   const init = Date.parse(p.init_time);
   if (!Number.isFinite(init)) return { ok: false, error: 'init_time must be an ISO timestamp' };
@@ -96,8 +105,11 @@ export function validateAuroraPayload(p) {
     const t = Date.parse(s?.valid_time);
     if (!Number.isFinite(t) || t <= prev) return { ok: false, error: `steps[${i}].valid_time invalid or not increasing` };
     prev = t;
-    // Plausible near-surface ranges for the Deccan plateau, with margin.
-    if (!checkMatrix(s.t2m_c, lats.length, lons.length, -5, 55)) {
+    // Plausible near-surface range. Wide enough for an all-India grid: at 0.25°
+    // the box reaches the Himalayas, where 2m temperatures legitimately fall far
+    // below the -5°C that a Deccan-only feed could assume. Still tight enough to
+    // catch unit errors (Kelvin would land near 300) and corrupt data.
+    if (!checkMatrix(s.t2m_c, lats.length, lons.length, -60, 60)) {
       return { ok: false, error: `steps[${i}].t2m_c missing, wrong shape, or implausible` };
     }
     if (!checkMatrix(s.wind10m_kph, lats.length, lons.length, 0, 250)) {
@@ -224,118 +236,5 @@ export async function auroraStatus({ now = Date.now() } = {}) {
     steps: f.steps.length,
     lastValidTime: f.steps[f.steps.length - 1].valid_time,
   };
-}
-
-/**
- * Generate a physically plausible Microsoft Aurora 0.25° regional forecast payload
- * for the Hyderabad bounding box, aligned with the latest 6-hourly ECMWF cycle (00/06/12/18 UTC).
- * @param {Date|number} [now]
- * @returns {object} Schema v1 Aurora forecast payload
- */
-export function generateHyderabadAuroraPayload(now = new Date()) {
-  const utcNow = new Date(now);
-  const hour = utcNow.getUTCHours();
-  const cycleHour = Math.floor(hour / 6) * 6;
-  const initDate = new Date(Date.UTC(
-    utcNow.getUTCFullYear(),
-    utcNow.getUTCMonth(),
-    utcNow.getUTCDate(),
-    cycleHour, 0, 0, 0
-  ));
-
-  const initTimeIso = initDate.toISOString();
-  const generatedAt = new Date(initDate.getTime() + 3.5 * 3600 * 1000).toISOString();
-
-  // Hyderabad 0.25° grid covering lat 16.75 - 18.25, lon 77.5 - 79.5
-  const lats = [18.25, 17.5, 16.75];
-  const lons = [77.5, 78.5, 79.5];
-
-  // 20 steps (5-day forecast at 6-hourly intervals: +6h, +12h, ..., +120h)
-  const steps = [];
-  const baseT = 31.0; // Climatological baseline temperature for Hyderabad
-  for (let s = 1; s <= 20; s++) {
-    const stepTime = new Date(initDate.getTime() + s * 6 * 3600 * 1000);
-    const stepIso = stepTime.toISOString();
-    const istHour = (stepTime.getUTCHours() + 5.5) % 24;
-
-    // Diurnal temperature cycle: peak around 14:00-15:00 IST, trough around 05:00 IST
-    const diurnal = Math.sin(((istHour - 8) / 24) * 2 * Math.PI) * 6.5;
-    const dayTrend = Math.sin(s / 6) * 1.5;
-
-    const t2m_c = lats.map((lat, r) =>
-      lons.map((lon, c) => {
-        const uhi = (r === 1 && c === 1) ? 1.0 : 0.0; // Central Hyderabad urban heat island
-        const elevationEffect = (lat - 17.385) * -0.5;
-        const val = baseT + diurnal + dayTrend + uhi + elevationEffect;
-        return Math.round(val * 10) / 10;
-      })
-    );
-
-    const wind10m_kph = lats.map((lat, r) =>
-      lons.map((lon, c) => {
-        const val = 14.0 + Math.sin(s * 1.1 + r) * 3.0 + (c * 0.5);
-        return Math.round(val * 10) / 10;
-      })
-    );
-
-    steps.push({
-      valid_time: stepIso,
-      t2m_c,
-      wind10m_kph,
-    });
-  }
-
-  return {
-    schema_version: 1,
-    provenance: 'aurora-inference',
-    model: 'Microsoft Aurora 0.25° Regional (Hyderabad)',
-    initial_conditions: 'ECMWF IFS HRES open data',
-    init_time: initTimeIso,
-    generated_at: generatedAt,
-    grid: { lats, lons },
-    steps,
-  };
-}
-
-/**
- * Ensures an active, fresh Microsoft Aurora regional forecast exists.
- * If the current feed is missing or older than 24h, automatically generates
- * and stores a fresh forecast run.
- * @param {{ force?: boolean }} [opts]
- */
-export async function ensureFreshAuroraFeed({ force = false } = {}) {
-  const current = await loadRaw();
-  const maxAge = maxAgeMs();
-  const now = Date.now();
-  const isFresh = current && (now - Date.parse(current.init_time) <= maxAge);
-
-  if (!force && isFresh) {
-    return { refreshed: false, payload: current };
-  }
-
-  const payload = generateHyderabadAuroraPayload(new Date(now));
-  const v = validateAuroraPayload(payload);
-  if (!v.ok) {
-    throw new Error(`Generated payload failed validation: ${v.error}`);
-  }
-
-  const file = process.env.AURORA_FORECAST_PATH || DEFAULT_FILE;
-  try {
-    fs.mkdirSync(path.dirname(file), { recursive: true });
-    fs.writeFileSync(file, JSON.stringify(payload, null, 2), 'utf-8');
-  } catch (err) {
-    console.warn(`[auroraFeed] could not write to ${file}: ${err.message}`);
-  }
-
-  latest = payload;
-  if (backend) {
-    try {
-      await backend.set(STORE_KEY, payload, STORE_TTL_S);
-    } catch (err) {
-      console.warn(`[auroraFeed] store backend write failed: ${err.message}`);
-    }
-  }
-
-  return { refreshed: true, payload };
 }
 

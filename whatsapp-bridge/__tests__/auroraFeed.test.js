@@ -6,8 +6,6 @@ import {
   sampleAuroraPoint,
   auroraStatus,
   _resetAuroraFeed,
-  generateHyderabadAuroraPayload,
-  ensureFreshAuroraFeed,
 } from '../lib/auroraFeed.js';
 
 describe('Aurora Feed (lib/auroraFeed.js)', () => {
@@ -102,7 +100,19 @@ describe('Aurora Feed (lib/auroraFeed.js)', () => {
       const bad = { ...validPayload, provenance: 'synthetic-generator' };
       const res = validateAuroraPayload(bad);
       expect(res.ok).toBe(false);
-      expect(res.error).toContain('provenance must be "aurora-inference"');
+      expect(res.error).toMatch(/provenance/);
+    });
+
+    it('accepts ECMWF AIFS provenance', () => {
+      const payload = { ...validPayload, provenance: 'aifs-inference', model: 'ECMWF AIFS 0.25° (via Open-Meteo)' };
+      const res = validateAuroraPayload(payload);
+      expect(res.ok).toBe(true);
+    });
+
+    it('accepts WeatherNext provenance', () => {
+      const payload = { ...validPayload, provenance: 'weathernext-inference', model: 'Google WeatherNext 2-mini' };
+      const res = validateAuroraPayload(payload);
+      expect(res.ok).toBe(true);
     });
 
     it('rejects a grid that does not cover the Hyderabad metropolitan area', () => {
@@ -177,25 +187,34 @@ describe('Aurora Feed (lib/auroraFeed.js)', () => {
       expect(s.ageHours).toBe(5);
     });
 
-    it('generates a valid physically plausible 20-step regional forecast for Hyderabad', () => {
-      const payload = generateHyderabadAuroraPayload(new Date('2026-10-14T08:00:00Z'));
-      const validation = validateAuroraPayload(payload);
-      expect(validation.ok).toBe(true);
-      expect(payload.steps).toHaveLength(20);
-      expect(payload.grid.lats).toEqual([18.25, 17.5, 16.75]);
-      expect(payload.grid.lons).toEqual([77.5, 78.5, 79.5]);
-      expect(payload.init_time).toBe('2026-10-14T06:00:00.000Z');
-      expect(payload.model).toContain('Microsoft Aurora');
+  });
+
+  // Regression guard. This module once shipped `generateHyderabadAuroraPayload`,
+  // a sine-wave generator that stamped itself `provenance: 'aurora-inference'` —
+  // the exact string validateAuroraPayload demands — and fed synthetic
+  // temperatures into maternal-health heat advice via forecast.js/forecast5d.js.
+  // The feed is push-only now. Data may only enter from a real model run.
+  describe('no synthetic data generation', () => {
+    it('exports no forecast-generating function', async () => {
+      const mod = await import('../lib/auroraFeed.js');
+      const generators = Object.keys(mod).filter((k) => /^(generate|ensureFresh|synth|fake|mock)/i.test(k));
+      expect(generators).toEqual([]);
     });
 
-    it('ensures fresh Aurora feed is available and fresh on demand', async () => {
-      const res = await ensureFreshAuroraFeed({ force: true });
-      expect(res.refreshed).toBe(true);
-      expect(res.payload.steps).toHaveLength(20);
+    it('returns null rather than inventing a forecast when nothing is loaded', async () => {
+      _resetAuroraFeed();
+      process.env.AURORA_FORECAST_PATH = '/nonexistent/aurora-feed.json';
+      delete process.env.AURORA_FORECAST_URL;
 
-      const f = await getAuroraForecast();
-      expect(f).not.toBeNull();
-      expect(f.model).toContain('Microsoft Aurora');
+      await expect(getAuroraForecast()).resolves.toBeNull();
+      await expect(auroraStatus()).resolves.toMatchObject({ loaded: false, fresh: false });
+    });
+
+    it('still refuses a payload that is not labelled as real inference', () => {
+      const synthetic = { ...validPayload, provenance: 'synthetic' };
+      const res = validateAuroraPayload(synthetic);
+      expect(res.ok).toBe(false);
+      expect(res.error).toMatch(/provenance/);
     });
   });
 });

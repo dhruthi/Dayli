@@ -71,7 +71,7 @@ import { fetchAuroraForecast } from './lib/forecast.js';
 import { generateAuroraRiskBrief } from './lib/auroraRiskBrief.js';
 import { getSimulatedWomenObservatory, SIMULATED_WOMEN_SCENARIOS } from './lib/simChats.js';
 import { fetch5DayForecast, isNearHyderabad } from './lib/forecast5d.js';
-import { initAuroraFeed, ingestAuroraForecast, auroraStatus, ensureFreshAuroraFeed } from './lib/auroraFeed.js';
+import { initAuroraFeed, ingestAuroraForecast, auroraStatus } from './lib/auroraFeed.js';
 import { compose5DayOutlook, composeSimpleWeatherAdvice, compose24HourWeatherChangeAdvice } from './lib/actionAdvisor.js';
 import { isWeatherMapQuery, getWeatherMapData, HYDERABAD_DEFAULT } from './lib/weatherMap.js';
 import {
@@ -116,6 +116,7 @@ app.use(
 );
 app.use(
   express.json({
+    limit: '25mb',
     verify: (req, res, buf) => {
       req.rawBody = buf;
     },
@@ -2470,18 +2471,25 @@ app.post('/ops/feedback-survey/trigger', opsAuth, async (req, res) => {
  * than public. The username is ignored — paste the key as the password.
  */
 function opsAuth(req, res, next) {
-  const expected = (process.env.DAYLI_INTERNAL_API_KEY || '').trim();
+  const stripQuotes = (s) => (s || '').trim().replace(/^["']+|["']+$/g, '').trim();
+  const expected = stripQuotes(process.env.DAYLI_INTERNAL_API_KEY);
   if (!expected) {
     return res.status(503).json({ error: 'DAYLI_INTERNAL_API_KEY is not configured; /ops is disabled.' });
   }
 
-  const header = req.headers.authorization || '';
-  const [scheme, encoded] = header.split(' ');
+  const header = (req.headers.authorization || '').trim();
+  const [scheme, encoded] = header.split(/\s+/);
   let provided = '';
-  if (scheme === 'Basic' && encoded) {
+  if (/^Basic$/i.test(scheme) && encoded) {
     const decoded = Buffer.from(encoded, 'base64').toString('utf8');
-    provided = decoded.slice(decoded.indexOf(':') + 1);
+    const colonIdx = decoded.indexOf(':');
+    provided = colonIdx >= 0 ? decoded.slice(colonIdx + 1) : decoded;
+  } else if (/^Bearer$/i.test(scheme) && encoded) {
+    provided = encoded;
+  } else if (req.headers['x-dayli-api-key']) {
+    provided = String(req.headers['x-dayli-api-key']);
   }
+  provided = stripQuotes(provided);
 
   const a = Buffer.from(provided);
   const b = Buffer.from(expected);
@@ -3190,23 +3198,20 @@ const server = app.listen(PORT, () => {
   startRiskPulseScheduler();
   startMetricsFlusher();
 
-  // Ensure Microsoft Aurora atmospheric model feed is active and fresh for Hyderabad
-  ensureFreshAuroraFeed().then((res) => {
-    if (res.refreshed) {
-      console.log(`[AURORA FEED] Initialized regional forecast run for Hyderabad (init: ${res.payload.init_time})`);
+  // Report whether a real Aurora run has been pushed in. The feed is push-only
+  // (POST /internal/aurora/forecast or AURORA_FORECAST_URL) — this server never
+  // generates forecast data. With no run loaded, callers fall back to Open-Meteo.
+  auroraStatus().then((s) => {
+    if (s.loaded && s.fresh) {
+      console.log(`[AURORA FEED] Live run loaded (init: ${s.initTime}, age: ${s.ageHours}h)`);
+    } else if (s.loaded) {
+      console.warn(`[AURORA FEED] Loaded run is STALE (age: ${s.ageHours}h) — falling back to Open-Meteo`);
     } else {
-      console.log(`[AURORA FEED] Active regional forecast loaded for Hyderabad (init: ${res.payload.init_time})`);
+      console.log('[AURORA FEED] No run loaded — using Open-Meteo only');
     }
   }).catch((err) => {
-    console.warn('[AURORA FEED] Initialization warning:', err.message);
+    console.warn('[AURORA FEED] Status check failed:', err.message);
   });
-
-  // Refresh Aurora regional feed every 6 hours (matching ECMWF cycle)
-  setInterval(() => {
-    ensureFreshAuroraFeed().catch((err) => {
-      console.warn('[AURORA FEED] Periodic refresh failed:', err.message);
-    });
-  }, 6 * 3600 * 1000).unref?.();
 
   // Optional self-ping if KEEP_ALIVE_URL is explicitly configured
   const selfUrl = process.env.KEEP_ALIVE_URL;

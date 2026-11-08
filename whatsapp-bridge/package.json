@@ -6,8 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "test": "vitest run --dir __tests__",
-    "bench:router": "node scripts/bench_router.js",
-    "aurora:refresh": "node ../aurora-runner/generate_aurora_hyderabad.js"
+    "bench:router": "node scripts/bench_router.js"
   },
   "dependencies": {
     "bullmq": "^5.8.0",

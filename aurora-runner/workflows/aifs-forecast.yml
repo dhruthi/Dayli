@@ -1,0 +1,39 @@
+name: Refresh AIFS forecast
+
+# ECMWF AIFS publishes a new cycle every 6 hours. We run ~1h after each cycle
+# lands so the data is available, and often enough that the feed never passes
+# AURORA_MAX_AGE_HOURS (default 30h) and falls back to Open-Meteo best-match.
+on:
+  schedule:
+    - cron: '20 7,13,19,1 * * *'
+  workflow_dispatch:
+
+jobs:
+  push-forecast:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # The runner uses only the Python standard library, so there is nothing
+      # to install.
+      - name: Fetch AIFS forecast and push to Dayli
+        env:
+          DAYLI_INTERNAL_API_KEY: ${{ secrets.DAYLI_INTERNAL_API_KEY }}
+          DAYLI_HOST: ${{ secrets.DAYLI_HOST }}
+        run: |
+          python aurora-runner/run_aifs_openmeteo.py \
+            --out aifs_latest.json \
+            --push "$DAYLI_HOST/internal/aurora/forecast"
+
+      - name: Upload forecast artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aifs-forecast
+          path: aifs_latest.json
+          retention-days: 7

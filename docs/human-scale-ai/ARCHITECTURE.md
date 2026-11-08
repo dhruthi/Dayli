@@ -69,7 +69,7 @@ flowchart TD
 ### 2.3 Operating Modes (`DAYLI_CORE_MODE`)
 - **`DAYLI_CORE_MODE=local` (Default):**
   - **Zero requests** to commercial frontier APIs (`api.openai.com`, `generativelanguage.googleapis.com`, `api.groq.com`, `api.x.ai`).
-  - Completely self-contained: all routing, urgency prioritization, clinical advice, 24-hour weather prediction (via Open-Meteo & local Aurora weights), and facility routing execute in-process.
+  - Completely self-contained: all routing, urgency prioritization, clinical advice, 24-hour weather prediction (via Open-Meteo), and facility routing execute in-process.
   - Verified by continuous integration tests asserting 0 network requests (`__tests__/frontierOff.test.js`).
 - **`DAYLI_CORE_MODE=hybrid`:**
   - Local router performs primary triage, routing, and urgency escalation.
