@@ -104,13 +104,13 @@ AIFS publishes every 6h, and `auroraFeed.js` treats a forecast older than
 repo secrets:
 
 - `DAYLI_INTERNAL_API_KEY` — the same value the server has
-- `DAYLI_HOST` — e.g. `https://your-service.onrender.com` (no trailing slash)
+- `DAYLI_HOST` — e.g. `https://129.159.19.84.sslip.io` (no trailing slash)
 
-Alternatively, a Render Cron Job running the same command, or local cron:
+Alternatively, local cron or an Oracle crontab running the same command:
 
 ```
 20 1,7,13,19 * * * cd /path/to/Dayli\ AI && DAYLI_INTERNAL_API_KEY=... \
-  python3 aurora-runner/run_aifs_openmeteo.py --push https://host/internal/aurora/forecast
+  python3 aurora-runner/run_aifs_openmeteo.py --push https://129.159.19.84.sslip.io/internal/aurora/forecast
 ```
 
 Check the feed any time with:

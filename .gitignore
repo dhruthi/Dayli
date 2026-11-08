@@ -68,6 +68,8 @@ whatsapp-bridge/.wwebjs_cache/
 
 # Deploy artifacts
 .vercel/
+dashboard-web/dist/
+dashboard-web/.vercel/
 artifacts/social-media-posts/
 
 # Python & ML

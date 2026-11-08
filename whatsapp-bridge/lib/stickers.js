@@ -38,7 +38,7 @@ const STICKERS = {
  * HTTPS origin — localhost will fail with a media download error.
  */
 export function stickerBaseUrl() {
-  const base = process.env.PUBLIC_BASE_URL || process.env.RENDER_EXTERNAL_URL || '';
+  const base = process.env.PUBLIC_BASE_URL || '';
   return base.replace(/\/+$/, '');
 }
 

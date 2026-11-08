@@ -136,10 +136,8 @@ Meta permits free-form text **only within 24 hours** of a user's last inbound me
    `POST /api/send-alert`:
 
    > [!NOTE]
-   > `api/send-alert.ts` is a **Vercel serverless function**. It is not part of
-   > the container image and is not served by the Docker or Render deployment.
-   > Deploy it separately on Vercel, or port it onto `whatsapp-bridge/server.js`
-   > as an authenticated route if you want a single deployment target.
+   > `POST /api/send-alert` is served by `whatsapp-bridge/server.js` on Oracle
+   > and authenticated via the `x-dayli-api-key` header (`DAYLI_INTERNAL_API_KEY`).
 
 
    ```bash
@@ -155,7 +153,7 @@ Meta permits free-form text **only within 24 hours** of a user's last inbound me
 
 1. Add your own number under WhatsApp → API Setup → *To* field (test numbers require this allowlisting).
 2. Send `hi` from your phone to the business number.
-3. Watch the service logs for the inbound POST (`docker compose logs -f app`, or the Render log stream).
+3. Watch the service logs for the inbound POST (`docker compose -f docker-compose.prod.yml logs -f app` on the Oracle VPS).
 4. You should receive an AI-generated reply.
 
 Test each path: plain text, a button reply, a shared GPS location, and a red-flag symptom phrase (confirm the clinical safety layer escalates to referral).

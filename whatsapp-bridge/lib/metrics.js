@@ -5,8 +5,8 @@
  *
  *   1. In-process counters — exact, free, and reset on every deploy. These
  *      answer "is it healthy right now".
- *   2. Per-day Redis rollups — survive restarts, which matters because Render
- *      redeploys wipe the process several times a week. These answer "is today
+ *   2. Per-day Redis rollups — survive restarts, which matters because container
+ *      restarts and redeploys wipe in-memory state. These answer "is today
  *      worse than yesterday".
  *
  * Redis writes are BATCHED. Incrementing on every event would cost 3-5 Upstash

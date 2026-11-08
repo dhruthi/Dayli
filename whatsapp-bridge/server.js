@@ -107,7 +107,7 @@ app.use(
   cors({
     origin: (origin, cb) => {
       if (!origin) return cb(null, true); // non-browser caller
-      if (origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:') || origin.endsWith('dayli.ai') || origin.endsWith('.onrender.com')) {
+      if (origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:') || origin.endsWith('dayli.ai')) {
         return cb(null, true);
       }
       return cb(null, ALLOWED_ORIGINS.includes(origin));
@@ -158,7 +158,7 @@ if (!VERIFY_TOKEN || !PHONE_NUMBER_ID || !ACCESS_TOKEN || (!isLocalOnly() && !GE
   if (!isLocalOnly() && !GEMINI_API_KEY && !AI_KEY_PRESENT) missing.push('OPENAI_API_KEY (or GEMINI_API_KEY) [bypass with DAYLI_CORE_MODE=local]');
   
   console.error(`❌ [STARTUP ERROR] Missing required environment variables: ${missing.join(', ')}`);
-  console.error('Please configure these in your Render dashboard or .env file before starting the application.');
+  console.error('Please configure these in the server .env file (/home/opc/dayli-ai-whatsapp/.env on Oracle) before starting the application.');
   process.exit(1);
 }
 
@@ -437,8 +437,8 @@ function curatedFor(cityKey) {
  *   2. OPENAI_API_KEY — only if it looks like a valid key (starts with sk-)
  *   3. GROK_API_KEY / XAI_API_KEY — xAI/Grok
  *
- * Previously OPENAI_API_KEY was checked first, which meant a stale/invalid
- * OpenAI key on Render silently hijacked the provider chain and caused
+ * Previously OPENAI_API_KEY was checked first, which meant a stray/invalid
+ * OpenAI key in the deployment env silently hijacked the provider chain and caused
  * every AI call to fail. The new order prevents this permanently.
  */
 function pickAiKey() {
@@ -2578,39 +2578,8 @@ app.get('/api/climate-health/raw-sessions', requireDashboardAuth, async (_req, r
   }
 });
 
-let _lastRemoteSyncAt = 0;
-async function syncRemoteWebhookStore(cookieHeader) {
-  if (process.env.RENDER || process.env.VITEST) return;
-  const now = Date.now();
-  if (now - _lastRemoteSyncAt < 8000) return;
-  _lastRemoteSyncAt = now;
-
-  const remoteBase = process.env.REMOTE_WEBHOOK_URL || 'https://dayli-ai-whatsapp.onrender.com';
-  try {
-    const resp = await fetch(`${remoteBase}/api/climate-health/raw-sessions`, {
-      headers: cookieHeader ? { Cookie: cookieHeader } : {},
-      signal: AbortSignal.timeout(2500),
-    });
-    if (!resp.ok) return;
-    const payload = await resp.json();
-    if (Array.isArray(payload?.sessions)) {
-      for (const rs of payload.sessions) {
-        if (!rs?.waId) continue;
-        const local = await store.getSession(rs.waId);
-        if (!local?.lastInboundAt || (rs.lastInboundAt && rs.lastInboundAt > local.lastInboundAt)) {
-          await store.saveSession(rs.waId, rs);
-          _clearClimateHealthCache();
-        }
-      }
-    }
-  } catch {
-    // Ignore remote sync timeouts silently
-  }
-}
-
 app.get('/api/climate-health/data', requireDashboardAuth, async (req, res) => {
   try {
-    await syncRemoteWebhookStore(req.headers.cookie);
     const data = await getClimateHealthSnapshot({ store, fetchClimateIntelligence });
     res.set('Cache-Control', 'no-store');
     return res.status(200).json(data);

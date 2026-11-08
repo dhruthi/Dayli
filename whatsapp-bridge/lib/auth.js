@@ -51,7 +51,7 @@ export function checkPasswordStrength(password) {
 }
 
 /**
- * Extracts client IP considering reverse proxies (Cloudflare, Render, Caddy).
+ * Extracts client IP considering reverse proxies (Cloudflare, Vercel, Caddy).
  * @param {object} req
  * @returns {string}
  */
@@ -349,7 +349,7 @@ export function handleLogout(req, res) {
 export function getLoginPageHtml(options = {}) {
   const isProduction =
     options.isProduction ??
-    (process.env.NODE_ENV === 'production' || Boolean(process.env.RENDER));
+    (process.env.NODE_ENV === 'production');
   const showDemo =
     process.env.ENABLE_DEMO_LOGIN_HELPER === 'true' ||
     (!isProduction && !process.env.DASHBOARD_PASSWORD && process.env.HIDE_DEMO_CREDENTIALS !== 'true');
@@ -360,7 +360,7 @@ export function getLoginPageHtml(options = {}) {
 
   // In production, strip out the demo credentials card and auto-fill script
   return LOGIN_PAGE_HTML
-    .replace(/\s*<div class="cred-card">[\s\S]*?<\/div>\s*<\/div>/, '\n  </div>')
+    .replace(/\s*<div class="cred-card">[\s\S]*?<\/div>\s*(?=\s*<\/div>)/, '')
     .replace(/function fillDemo\(\) \{[\s\S]*?\}/, '');
 }
 

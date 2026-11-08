@@ -52,6 +52,6 @@ expiry. `cloudApi.uploadMedia()` exists if you ever need the ID route for
 one-off or user-supplied media.
 
 Meta fetches the link server-to-server, so it must be a public HTTPS origin —
-`PUBLIC_BASE_URL`, or `RENDER_EXTERNAL_URL` which Render sets for you. With
-neither set (local dev), `stickerFor()` returns `null` and the sticker is
+`PUBLIC_BASE_URL` (e.g. `https://129.159.19.84.sslip.io`). With
+it not set (local dev), `stickerFor()` returns `null` and the sticker is
 skipped rather than sending a broken link.

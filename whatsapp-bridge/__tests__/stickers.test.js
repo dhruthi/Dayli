@@ -15,16 +15,15 @@ describe('Sticker registry', () => {
     });
   });
 
-  it('falls back to the Render-provided url', () => {
+  it('ignores RENDER_EXTERNAL_URL and only uses PUBLIC_BASE_URL', () => {
     delete process.env.PUBLIC_BASE_URL;
     process.env.RENDER_EXTERNAL_URL = 'https://dayli.onrender.com';
-    expect(stickerBaseUrl()).toBe('https://dayli.onrender.com');
-    expect(stickerFor('care').link).toContain('/stickers/care.webp');
+    expect(stickerBaseUrl()).toBe('');
+    expect(stickerFor('care')).toBeNull();
   });
 
   it('returns null rather than a broken link when no url is configured', () => {
     delete process.env.PUBLIC_BASE_URL;
-    delete process.env.RENDER_EXTERNAL_URL;
     expect(stickerFor('bloom')).toBeNull();
   });
 

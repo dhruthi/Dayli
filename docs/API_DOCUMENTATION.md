@@ -4,11 +4,8 @@ The service exposes a small surface: Meta's webhook, two status endpoints, and
 one authenticated outbound endpoint. There is no public chat API — all
 conversation happens over WhatsApp.
 
-The webhook routes are served by `whatsapp-bridge/server.js`.
-`POST /api/send-alert` is a **Vercel serverless function** (`api/send-alert.ts`).
-It is not bundled into the container image, so the Docker and Render deployments
-do not serve it — deploy it on Vercel, or port it onto the Express app as an
-authenticated route.
+The webhook routes and authenticated APIs are served by `whatsapp-bridge/server.js`
+running inside Docker on the Oracle Cloud VPS.
 
 ---
 
@@ -68,7 +65,7 @@ Subscribe to these webhook fields in the Meta App Dashboard:
 }
 ```
 
-Used by the container healthcheck and by Render's `healthCheckPath`.
+Used by the container healthcheck and uptime monitors.
 
 ---
 
