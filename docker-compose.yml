@@ -19,6 +19,24 @@ services:
     networks:
       - dayli_net
 
+  # ─── Ops Dashboard (Standalone) ─────────────────────────────────────────────
+  dashboard:
+    build:
+      context: ./ops-dashboard
+      dockerfile: Dockerfile
+    container_name: dayli_dashboard
+    restart: unless-stopped
+    ports:
+      - "5001:5001"
+    environment:
+      - DASH_PORT=5001
+      - DAYLI_BACKEND_URL=http://app:3000
+      - DAYLI_BACKEND_KEY=${DAYLI_INTERNAL_API_KEY:-}
+    depends_on:
+      - app
+    networks:
+      - dayli_net
+
   # ─── dayli.ai WhatsApp Climate Health Copilot App ────────────────────────────
   app:
     build:

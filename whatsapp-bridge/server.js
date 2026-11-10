@@ -72,7 +72,7 @@ import { generateAuroraRiskBrief } from './lib/auroraRiskBrief.js';
 import { getSimulatedWomenObservatory, SIMULATED_WOMEN_SCENARIOS } from './lib/simChats.js';
 import { fetch5DayForecast, isNearHyderabad } from './lib/forecast5d.js';
 import { initAuroraFeed, ingestAuroraForecast, auroraStatus } from './lib/auroraFeed.js';
-import { compose5DayOutlook, composeSimpleWeatherAdvice, compose24HourWeatherChangeAdvice } from './lib/actionAdvisor.js';
+import { compose5DayOutlook, composeSimpleWeatherAdvice, compose24HourWeatherChangeAdvice, composeAppointmentWeatherAdvice } from './lib/actionAdvisor.js';
 import { isWeatherMapQuery, getWeatherMapData, HYDERABAD_DEFAULT } from './lib/weatherMap.js';
 import {
   SURVEY_IDS,
@@ -248,6 +248,91 @@ function pseudonymize(value) {
 const COMMON_CITIES = ['hyderabad', 'bangalore', 'bengaluru', 'mumbai', 'delhi', 'chennai', 'kolkata', 'pune', 'jaipur', 'ahmedabad', 'lucknow', 'chandigarh', 'kochi', 'visakhapatnam', 'vijayawada', 'noida', 'gurgaon', 'patna', 'bhopal', 'indore', 'surat', 'nagpur'];
 
 
+
+// ── APPOINTMENT KEYWORD DETECTION ────────────────────────────────────────
+function isAppointmentCommand(text) {
+  if (!text || typeof text !== 'string') return false;
+  const q = text.toLowerCase().trim();
+  return (
+    q.includes('set appointment') || q.includes('add appointment') ||
+    q.includes('doctor appointment') || q.includes('schedule checkup') ||
+    q.includes('schedule appointment') || q.includes('book appointment') ||
+    q.includes('డాక్టర్ అపాయింట్మెంట్') || q.includes('చెకప్ తేదీ') ||
+    q.includes('अपॉइंटमेंट') || q.includes('चेकअप तारीख') ||
+    q.includes('डॉक्टर अपॉइंटमेंट')
+  );
+}
+
+function isAppointmentQuery(text) {
+  if (!text || typeof text !== 'string') return false;
+  const q = text.toLowerCase().trim();
+  return (
+    q.includes('my appointment') || q.includes('next appointment') ||
+    q.includes('next checkup') || q.includes('when is my') ||
+    q.includes('నా అపాయింట్మెంట్') || q.includes('मेरी अपॉइंटमेंट')
+  );
+}
+
+function parseAppointmentDate(text) {
+  if (!text || typeof text !== 'string') return null;
+  const q = text.trim();
+  const todayIST = new Date(Date.now() + 5.5 * 60 * 60 * 1000);
+  const todayStr = todayIST.toISOString().slice(0, 10);
+
+  if (/^tomorrow$/i.test(q) || /^कल$/i.test(q) || /^రేపు$/i.test(q)) {
+    const d = new Date(todayIST);
+    d.setDate(d.getDate() + 1);
+    return d.toISOString().slice(0, 10);
+  }
+
+  const nextMatch = q.match(/^next\s+(monday|tuesday|wednesday|thursday|friday|saturday|sunday)$/i);
+  if (nextMatch) {
+    const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    const target = days.indexOf(nextMatch[1].toLowerCase());
+    const current = todayIST.getDay();
+    let diff = target - current;
+    if (diff <= 0) diff += 7;
+    const d = new Date(todayIST);
+    d.setDate(d.getDate() + diff);
+    return d.toISOString().slice(0, 10);
+  }
+
+  const ddmmMatch = q.match(/^(\d{1,2})[\/\-](\d{1,2})(?:[\/\-](\d{2,4}))?$/);
+  if (ddmmMatch) {
+    const day = parseInt(ddmmMatch[1], 10);
+    const month = parseInt(ddmmMatch[2], 10);
+    let year = ddmmMatch[3] ? parseInt(ddmmMatch[3], 10) : todayIST.getFullYear();
+    if (year < 100) year += 2000;
+    const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    if (dateStr < todayStr) return 'past';
+    return dateStr;
+  }
+
+  const months = {
+    january: 1, february: 2, march: 3, april: 4, may: 5, june: 6,
+    july: 7, august: 8, september: 9, october: 10, november: 11, december: 12,
+    jan: 1, feb: 2, mar: 3, apr: 4, jun: 6, jul: 7, aug: 8, sep: 9, oct: 10, nov: 11, dec: 12,
+  };
+  const namedMatch = q.match(/^(\w+)\s+(\d{1,2})(?:\s*,?\s*(\d{4}))?$/i)
+    || q.match(/^(\d{1,2})\s+(\w+)(?:\s*,?\s*(\d{4}))?$/i);
+  if (namedMatch) {
+    let monthStr, dayStr, yearStr;
+    if (/^\d/.test(namedMatch[1])) {
+      dayStr = namedMatch[1]; monthStr = namedMatch[2]; yearStr = namedMatch[3];
+    } else {
+      monthStr = namedMatch[1]; dayStr = namedMatch[2]; yearStr = namedMatch[3];
+    }
+    const m = months[monthStr.toLowerCase()];
+    if (m) {
+      const year = yearStr ? parseInt(yearStr, 10) : todayIST.getFullYear();
+      const dateStr = `${year}-${String(m).padStart(2, '0')}-${String(parseInt(dayStr, 10)).padStart(2, '0')}`;
+      if (dateStr < todayStr) return 'past';
+      return dateStr;
+    }
+  }
+
+  return null;
+}
 
 // Geocode city name to lat/lon via Open-Meteo Geocoding API
 async function geocodeLocation(cityName) {
@@ -1836,6 +1921,92 @@ async function handleMessageEvent(event) {
     return;
   }
 
+  // ── APPOINTMENT CAPTURE FLOW ───────────────────────────────────────────
+  if (session.appointmentSetupStep) {
+    const step = session.appointmentSetupStep;
+
+    if (step === 'date') {
+      const parsed = parseAppointmentDate(event.text);
+      if (parsed === 'past') {
+        await deliver(from, t('appt_past_date', locale));
+        return;
+      }
+      if (!parsed) {
+        await deliver(from, t('appt_invalid_date', locale));
+        return;
+      }
+      session.appointmentDraft = { date: parsed };
+      session.appointmentSetupStep = 'time';
+      await store.saveSession(from, session);
+      await deliver(from, {
+        kind: 'buttons',
+        body: t('appt_ask_time', locale),
+        buttons: [
+          { id: 'appt_time_morning', title: t('appt_time_morning', locale).slice(0, 20) },
+          { id: 'appt_time_afternoon', title: t('appt_time_afternoon', locale).slice(0, 20) },
+          { id: 'appt_time_skip', title: t('appt_time_skip', locale).slice(0, 20) },
+        ],
+      });
+      return;
+    }
+
+    if (step === 'time') {
+      let time = null;
+      const rid = event.replyId || '';
+      const txt = (event.text || '').toLowerCase();
+      if (rid === 'appt_time_morning' || txt.includes('morning')) {
+        time = '09:00';
+      } else if (rid === 'appt_time_afternoon' || txt.includes('afternoon')) {
+        time = '14:00';
+      }
+      const draft = session.appointmentDraft || {};
+      await store.addAppointment(from, {
+        date: draft.date,
+        time,
+        label: 'Doctor visit',
+      });
+      delete session.appointmentSetupStep;
+      delete session.appointmentDraft;
+      await store.saveSession(from, session);
+      await deliver(from, t('appt_confirm', locale, { date: draft.date }));
+      return;
+    }
+  }
+
+  if (isAppointmentCommand(event.text)) {
+    session.appointmentSetupStep = 'date';
+    await store.saveSession(from, session);
+    await deliver(from, t('appt_ask_date', locale));
+    return;
+  }
+
+  if (isAppointmentQuery(event.text)) {
+    const appts = await store.getUpcomingAppointments(from);
+    if (!appts.length) {
+      await deliver(from, t('appt_none', locale));
+      return;
+    }
+    const next = appts[0];
+    const todayStr = new Date(Date.now() + 5.5 * 60 * 60 * 1000).toISOString().slice(0, 10);
+    const isToday = next.date === todayStr;
+    let msg = isToday
+      ? t('appt_today', locale, { label: next.label })
+      : t('appt_next', locale, { label: next.label, date: next.date });
+
+    const loc = session.profile?.location;
+    if (loc?.latitude) {
+      try {
+        const climate = await fetchClimateIntelligence(loc.latitude, loc.longitude, loc.name || '');
+        if (climate?.forecast) {
+          const { i18nKey } = composeAppointmentWeatherAdvice(climate.forecast, next, locale);
+          msg += '\n\n' + t(i18nKey, locale);
+        }
+      } catch (_) { /* weather enrichment is best-effort */ }
+    }
+    await deliver(from, msg);
+    return;
+  }
+
   // ── WEATHER & RADAR MAP DIRECTORY ───────────────────────────────────────
   if (isWeatherMapQuery(event.text)) {
     const qLower = (event.text || '').toLowerCase();
@@ -2543,6 +2714,43 @@ app.get('/ops/climate', opsAuth, (_req, res) => {
   res.send(CLIMATE_HEALTH_DASHBOARD_HTML);
 });
 
+app.get('/ops/climate-health/data', opsAuth, async (_req, res) => {
+  try {
+    const data = await getClimateHealthSnapshot({ store, fetchClimateIntelligence });
+    res.set('Cache-Control', 'no-store');
+    return res.status(200).json(data);
+  } catch (err) {
+    console.error('[ops] climate-health data failed:', err.message);
+    return res.status(500).json({ error: 'data_unavailable' });
+  }
+});
+
+app.get('/ops/climate-health/sessions', opsAuth, async (_req, res) => {
+  try {
+    const allIds = (await store?.getAllUsers?.()) || (await store?.getActiveUsers?.()) || [];
+    const sessions = [];
+    for (const uid of allIds.slice(0, 200)) {
+      const s = await store.getSession(uid);
+      if (!s) continue;
+      const subjectType = s.profile?.subjectType || 'unknown';
+      const safeId = `wa_${assignUniqueDayliId(uid, subjectType)}`;
+      sessions.push({
+        waId: safeId,
+        profile: { ...s.profile, name: '' },
+        consent: s.consent,
+        onboardingStep: s.onboardingStep,
+        lastInboundAt: s.lastInboundAt,
+        createdAt: s.createdAt,
+        updatedAt: s.updatedAt,
+      });
+    }
+    res.set('Cache-Control', 'no-store');
+    return res.status(200).json({ ok: true, sessions });
+  } catch (err) {
+    return res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
 app.get('/api/climate-health/raw-sessions', requireDashboardAuth, async (_req, res) => {
   try {
     const allIds = (await store?.getAllUsers?.()) || (await store?.getActiveUsers?.()) || [];
@@ -3142,6 +3350,103 @@ async function runRiskPulse() {
   }
 }
 
+// ── APPOINTMENT REMINDER SCHEDULER ──────────────────────────────────────
+let _appointmentReminderInterval = null;
+
+function startAppointmentReminderScheduler() {
+  if (_appointmentReminderInterval) return;
+  _appointmentReminderInterval = setInterval(runAppointmentReminders, 30 * 60 * 1000);
+  _appointmentReminderInterval.unref?.();
+  console.log('[appt-reminder] Appointment reminder scheduler started (30 min interval)');
+}
+
+function stopAppointmentReminderScheduler() {
+  if (_appointmentReminderInterval) {
+    clearInterval(_appointmentReminderInterval);
+    _appointmentReminderInterval = null;
+  }
+}
+
+async function runAppointmentReminders() {
+  try {
+    const nowIST = new Date(Date.now() + 5.5 * 60 * 60 * 1000);
+    const istHour = nowIST.getUTCHours();
+    const todayStr = nowIST.toISOString().slice(0, 10);
+    const tomorrowDate = new Date(nowIST);
+    tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+    const tomorrowStr = tomorrowDate.toISOString().slice(0, 10);
+
+    const isDayBeforeWindow = istHour >= 18 && istHour < 19;
+    const isMorningOfWindow = istHour >= 6 && istHour < 8;
+
+    if (!isDayBeforeWindow && !isMorningOfWindow) return;
+
+    if (isDayBeforeWindow) {
+      const users = await store.getUsersWithAppointmentsOn(tomorrowStr);
+      for (const { waId, session, appointments } of users) {
+        for (const appt of appointments) {
+          if (appt.reminderDayBeforeSent) continue;
+          const locale = session.profile?.locale || 'en';
+          let weatherAdvice = t('appt_weather_safe', locale);
+          const loc = session.profile?.location;
+          if (loc?.latitude) {
+            try {
+              const climate = await fetchClimateIntelligence(loc.latitude, loc.longitude, loc.name || '');
+              if (climate?.forecast) {
+                const { i18nKey } = composeAppointmentWeatherAdvice(climate.forecast, appt, locale);
+                weatherAdvice = t(i18nKey, locale);
+              }
+            } catch (_) {}
+          }
+          const msg = t('appt_reminder_daybefore', locale, {
+            label: appt.label, date: appt.date, weatherAdvice,
+          });
+          const result = await deliver(waId, msg);
+          if (result && result.ok !== false) {
+            appt.reminderDayBeforeSent = true;
+            await store.saveSession(waId, session);
+            metric('appt.reminder.day_before');
+            console.log(`[appt-reminder] Day-before reminder sent to ${pseudonymize(waId)}`);
+          }
+        }
+      }
+    }
+
+    if (isMorningOfWindow) {
+      const users = await store.getUsersWithAppointmentsOn(todayStr);
+      for (const { waId, session, appointments } of users) {
+        for (const appt of appointments) {
+          if (appt.reminderMorningSent) continue;
+          const locale = session.profile?.locale || 'en';
+          let weatherAdvice = t('appt_weather_safe', locale);
+          const loc = session.profile?.location;
+          if (loc?.latitude) {
+            try {
+              const climate = await fetchClimateIntelligence(loc.latitude, loc.longitude, loc.name || '');
+              if (climate?.forecast) {
+                const { i18nKey } = composeAppointmentWeatherAdvice(climate.forecast, appt, locale);
+                weatherAdvice = t(i18nKey, locale);
+              }
+            } catch (_) {}
+          }
+          const msg = t('appt_reminder_morning', locale, {
+            label: appt.label, weatherAdvice,
+          });
+          const result = await deliver(waId, msg);
+          if (result && result.ok !== false) {
+            appt.reminderMorningSent = true;
+            await store.saveSession(waId, session);
+            metric('appt.reminder.morning');
+            console.log(`[appt-reminder] Morning-of reminder sent to ${pseudonymize(waId)}`);
+          }
+        }
+      }
+    }
+  } catch (err) {
+    console.warn('[appt-reminder] error:', err.message);
+  }
+}
+
 const server = app.listen(PORT, () => {
   console.log('=================================================================');
   console.log(`🚀 dayli.ai WhatsApp Business API server on port ${PORT}`);
@@ -3165,6 +3470,7 @@ const server = app.listen(PORT, () => {
   startMorningBriefScheduler({ store, cloudApi, fetchClimateIntelligence });
   startFollowUpScheduler();
   startRiskPulseScheduler();
+  startAppointmentReminderScheduler();
   startMetricsFlusher();
 
   // Report whether a real Aurora run has been pushed in. The feed is push-only
@@ -3198,6 +3504,7 @@ async function gracefulShutdown(signal) {
     stopMorningBriefScheduler();
     stopFollowUpScheduler();
     stopRiskPulseScheduler();
+    stopAppointmentReminderScheduler();
     await stopMetricsFlusher();
     await closeWorkers();
     await closeQueues();

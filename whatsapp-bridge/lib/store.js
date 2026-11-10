@@ -767,6 +767,58 @@ export class Store {
     return session;
   }
 
+  // ── Appointments ──────────────────────────────────────────────────────
+
+  static MAX_APPOINTMENTS = 5;
+
+  async addAppointment(waId, { date, time = null, label = 'Doctor visit' }) {
+    return this.updateSession(waId, (s) => {
+      const appts = (s.profile.appointments || []).filter(
+        (a) => a.date >= new Date().toISOString().slice(0, 10),
+      );
+      const entry = {
+        id: `apt_${Date.now()}`,
+        date,
+        time,
+        label,
+        reminderDayBeforeSent: false,
+        reminderMorningSent: false,
+      };
+      appts.push(entry);
+      appts.sort((a, b) => a.date.localeCompare(b.date));
+      s.profile.appointments = appts.slice(0, Store.MAX_APPOINTMENTS);
+      return s;
+    });
+  }
+
+  async removeAppointment(waId, appointmentId) {
+    return this.updateSession(waId, (s) => {
+      s.profile.appointments = (s.profile.appointments || []).filter(
+        (a) => a.id !== appointmentId,
+      );
+      return s;
+    });
+  }
+
+  async getUpcomingAppointments(waId) {
+    const session = await this.getSession(waId);
+    const today = new Date().toISOString().slice(0, 10);
+    return (session.profile.appointments || []).filter((a) => a.date >= today);
+  }
+
+  async getUsersWithAppointmentsOn(dateStr) {
+    const users = await this.getActiveUsers();
+    const results = [];
+    for (const waId of users) {
+      const session = await this.getSession(waId);
+      const appts = (session.profile?.appointments || []).filter(
+        (a) => a.date === dateStr,
+      );
+      if (appts.length) results.push({ waId, session, appointments: appts });
+    }
+    return results;
+  }
+
   // ── De-identified Live WhatsApp Clinical Event Feed ────────────────────
 
   async recordClinicalEvent(evt) {

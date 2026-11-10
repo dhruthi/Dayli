@@ -95,5 +95,23 @@
 
   "daily_brief_subscribe": "☀️ *Dayli 7:00 AM Morning Climate Brief*\n\nYou are subscribed to receive daily morning heat wave, temperature, and AQI forecasts tailored to your family.\n\nTo update your location, share a WhatsApp location pin anytime.\nTo stop receiving daily briefs, reply with *UNSUBSCRIBE*.",
 
+  "appt_ask_date": "When is your doctor appointment? Please type the date (e.g. \"November 15\" or \"next Monday\").",
+  "appt_ask_time": "What time is your appointment?",
+  "appt_time_morning": "Morning (before 11 AM)",
+  "appt_time_afternoon": "Afternoon",
+  "appt_time_skip": "Not sure",
+  "appt_confirm": "Appointment set for {date}. I will send you a weather-aware reminder the evening before and the morning of your visit.",
+  "appt_none": "You don't have any upcoming appointments saved. Would you like to set one? Just say \"set appointment\".",
+  "appt_next": "Your next appointment: {label} on {date}.",
+  "appt_today": "You have an appointment today: {label}.",
+  "appt_weather_safe": "Weather looks comfortable for travel today. Stay hydrated and have a safe trip.",
+  "appt_weather_caution": "Moderate heat expected. Travel early morning if possible and carry fluids. If your doctor asked you to come, please go.",
+  "appt_weather_danger": "High heat predicted during travel hours. Travel before 9 AM if possible, carry ORS and water, and avoid walking in direct sun. If your doctor asked you to come, please go — just travel during the coolest hours.",
+  "appt_reminder_daybefore": "Reminder: You have {label} tomorrow ({date}). {weatherAdvice}",
+  "appt_reminder_morning": "Today is your {label}. {weatherAdvice} Take care!",
+  "appt_removed": "Appointment on {date} has been removed.",
+  "appt_past_date": "That date is in the past. Please enter an upcoming date.",
+  "appt_invalid_date": "I could not understand that date. Please try again (e.g. \"November 15\" or \"next Monday\").",
+
   "disclaimer": "_dayli gives general guidance, not a diagnosis. For emergencies call 112._"
 }

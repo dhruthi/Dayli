@@ -11,7 +11,8 @@
 
 import { Store } from './store.js';
 import { logger } from './logger.js';
-import { compose24HourWeatherChangeAdvice } from './actionAdvisor.js';
+import { compose24HourWeatherChangeAdvice, composeAppointmentWeatherAdvice } from './actionAdvisor.js';
+import { t } from './i18n/index.js';
 
 let _schedulerInterval = null;
 
@@ -364,6 +365,21 @@ export function composeFirstTip(session, climate) {
  * @returns {string}
  */
 export function composeMorningBrief(session, climate) {
+  const brief = _composeBriefBody(session, climate);
+  const profile = session.profile || {};
+  const locale = profile.locale || 'en';
+  const today = new Date(Date.now() + 5.5 * 60 * 60 * 1000).toISOString().slice(0, 10);
+  const appts = (profile.appointments || []).filter(a => a.date === today);
+  if (appts.length > 0) {
+    const appt = appts[0];
+    const { i18nKey } = composeAppointmentWeatherAdvice(climate?.forecast || null, appt, locale);
+    const weatherAdvice = t(i18nKey, locale);
+    return brief + '\n\n' + t('appt_reminder_morning', locale, { label: appt.label, weatherAdvice });
+  }
+  return brief;
+}
+
+function _composeBriefBody(session, climate) {
   const profile = session.profile || {};
   const locale = profile.locale || 'en';
   const name = profile.name ? profile.name : '';

@@ -51,6 +51,27 @@ services:
     networks:
       - dayli_internal_net
 
+  dashboard:
+    build:
+      context: ./ops-dashboard
+      dockerfile: Dockerfile
+    container_name: dayli_dashboard_prod
+    restart: always
+    expose:
+      - "5001"
+    ports:
+      - "127.0.0.1:5001:5001"
+    environment:
+      - NODE_ENV=production
+      - DASH_PORT=5001
+      - DAYLI_BACKEND_URL=http://app:3000
+      - DAYLI_BACKEND_KEY=${DAYLI_INTERNAL_API_KEY:-}
+      - DASH_ACCESS_KEY=${DASH_ACCESS_KEY:-}
+    depends_on:
+      - app
+    networks:
+      - dayli_internal_net
+
   app:
     build:
       context: .

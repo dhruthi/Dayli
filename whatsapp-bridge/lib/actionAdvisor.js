@@ -513,4 +513,35 @@ export function compose24HourWeatherChangeAdvice(forecast24h, profile = {}, user
   return `${shiftSummary}\n\n${actionTitle}\n` + actions.slice(0, 4).map((a) => `• ${a}`).join('\n') + `\n\n${disclaimer}`;
 }
 
+/**
+ * Compose weather-aware travel advice for a scheduled appointment.
+ *
+ * @param {object} forecast24h - from analyzeRolling24HourChanges (the .shifts object)
+ * @param {{ date: string, time: string|null, label: string }} appointment
+ * @param {'en'|'te'|'hi'} locale
+ * @returns {{ riskLevel: string, adviceText: string }}
+ */
+export function composeAppointmentWeatherAdvice(forecast24h, appointment, locale = 'en') {
+  let riskLevel = 'normal';
+
+  if (forecast24h?.peakHeatWindow?.hasPeakHeat) {
+    const peakFeels = forecast24h.peakHeatWindow.peakFeels;
+    const wb = forecast24h.peakWetBulb ?? null;
+    if ((typeof wb === 'number' && wb >= 33) || (typeof peakFeels === 'number' && peakFeels >= 45)) {
+      riskLevel = 'extreme';
+    } else if ((typeof wb === 'number' && wb >= 28) || (typeof peakFeels === 'number' && peakFeels >= 38)) {
+      riskLevel = 'high';
+    } else if (typeof peakFeels === 'number' && peakFeels >= 33) {
+      riskLevel = 'moderate';
+    }
+  }
+
+  const i18nKey = riskLevel === 'extreme' || riskLevel === 'high'
+    ? 'appt_weather_danger'
+    : riskLevel === 'moderate'
+    ? 'appt_weather_caution'
+    : 'appt_weather_safe';
+
+  return { riskLevel, i18nKey };
+}
 

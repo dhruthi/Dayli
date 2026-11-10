@@ -13,7 +13,7 @@
  *   - DPDP Act zero-PHI: No logging or echoing of sensitive patient identifiers.
  */
 
-import { compose5DayOutlook, composeSimpleWeatherAdvice, compose24HourWeatherChangeAdvice } from './actionAdvisor.js';
+import { compose5DayOutlook, composeSimpleWeatherAdvice, compose24HourWeatherChangeAdvice, composeAppointmentWeatherAdvice } from './actionAdvisor.js';
 import { formatLabourRoomWhatsAppBlock, findNearestReadyLabourRoom } from './labourRooms.js';
 import { composeSafeResponse } from '../../shared/safetyCore.js';
 import { t, normalizeLocale } from './i18n/index.js';
@@ -155,6 +155,28 @@ export function composeDeterministicResponse({
 
     case 'daily_brief_subscribe': {
       return t('daily_brief_subscribe', locale);
+    }
+
+    case 'appointment_query': {
+      const appts = (profile.appointments || []).filter(
+        (a) => a.date >= new Date().toISOString().slice(0, 10),
+      );
+      if (!appts.length) {
+        return t('appt_none', locale);
+      }
+      const next = appts[0];
+      const today = new Date().toISOString().slice(0, 10);
+      const isToday = next.date === today;
+
+      let msg = isToday
+        ? t('appt_today', locale, { label: next.label })
+        : t('appt_next', locale, { label: next.label, date: next.date });
+
+      if (climateData?.forecast) {
+        const { i18nKey } = composeAppointmentWeatherAdvice(climateData.forecast, next, locale);
+        msg += '\n\n' + t(i18nKey, locale);
+      }
+      return msg;
     }
 
     default: {

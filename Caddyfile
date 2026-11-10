@@ -17,3 +17,19 @@
         format console
     }
 }
+
+dash.{$DOMAIN_NAME:localhost} {
+    reverse_proxy dashboard:5001 {
+        header_up Host {host}
+        header_up X-Real-IP {remote}
+        header_up X-Forwarded-For {remote}
+        header_up X-Forwarded-Proto {scheme}
+    }
+
+    encode gzip zstd
+
+    log {
+        output stdout
+        format console
+    }
+}
