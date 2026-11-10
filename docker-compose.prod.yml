@@ -60,7 +60,7 @@ services:
     expose:
       - "5001"
     ports:
-      - "127.0.0.1:5001:5001"
+      - "127.0.0.1:5002:5001"
     environment:
       - NODE_ENV=production
       - DASH_PORT=5001
