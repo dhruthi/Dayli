@@ -589,7 +589,7 @@ function _composeBriefBody(session, climate) {
 /**
  * Send morning brief to a single user.
  */
-export async function sendMorningBriefToUser({ waId, store, cloudApi, fetchClimateIntelligence }) {
+export async function sendMorningBriefToUser({ waId, store, cloudApi, fetchClimateIntelligence, force = false }) {
   try {
     const session = await store.getSession(waId);
     if (!session?.consent?.granted) return false;
@@ -597,9 +597,9 @@ export async function sendMorningBriefToUser({ waId, store, cloudApi, fetchClima
     // Check if user has explicitly opted out of daily forecast
     if (session.profile?.dailyForecastOptIn === false) return false;
 
-    // Check if already sent today (IST date YYYY-MM-DD)
+    // Check if already sent today (IST date YYYY-MM-DD), unless force is specified
     const todayIST = new Date(Date.now() + 5.5 * 60 * 60 * 1000).toISOString().slice(0, 10);
-    if (session.lastMorningBriefDate === todayIST) return false;
+    if (!force && session.lastMorningBriefDate === todayIST) return false;
 
     let lat = session.profile?.location?.latitude;
     let lon = session.profile?.location?.longitude;
@@ -655,7 +655,7 @@ export async function runMorningBriefs({ store, cloudApi, fetchClimateIntelligen
     const activeUsers = await store.getActiveUsers();
     let sentCount = 0;
     for (const waId of activeUsers) {
-      const sent = await sendMorningBriefToUser({ waId, store, cloudApi, fetchClimateIntelligence });
+      const sent = await sendMorningBriefToUser({ waId, store, cloudApi, fetchClimateIntelligence, force });
       if (sent) sentCount++;
     }
     return { ran: true, totalUsers: activeUsers.length, sentCount };

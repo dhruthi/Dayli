@@ -2605,7 +2605,7 @@ app.post('/ops/daily-forecast/trigger', opsAuth, async (req, res) => {
   try {
     const { waId, force = true } = req.body || {};
     if (waId) {
-      const sent = await sendMorningBriefToUser({ waId, store, cloudApi, fetchClimateIntelligence });
+      const sent = await sendMorningBriefToUser({ waId, store, cloudApi, fetchClimateIntelligence, force });
       return res.status(200).json({ success: true, waId, sent });
     }
     const result = await runMorningBriefs({ store, cloudApi, fetchClimateIntelligence, force });
