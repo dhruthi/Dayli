@@ -5,7 +5,7 @@ one authenticated outbound endpoint. There is no public chat API — all
 conversation happens over WhatsApp.
 
 The webhook routes and authenticated APIs are served by `whatsapp-bridge/server.js`
-running inside Docker on the Oracle Cloud VPS.
+running inside Docker (`docker-compose.prod.yml`).
 
 ---
 

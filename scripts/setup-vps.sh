@@ -117,6 +117,6 @@ fi
 echo "✅ VPS Server Provisioning Complete!"
 echo "Next steps:"
 echo "  1. Exit and re-login SSH (to refresh docker group permissions)."
-echo "  2. Clone your repository: git clone https://github.com/YashwanthRathod/dayli-ai-whatsapp.git"
-echo "  3. Configure .env with your credentials and DOMAIN_NAME."
+echo "  2. Clone your repository: git clone https://github.com/dhruthi/Dayli.git"
+echo "  3. Configure .env with your credentials and DOMAIN_NAME (cp .env.example .env)."
 echo "  4. Run: ./scripts/deploy.sh"

@@ -136,7 +136,7 @@ Meta permits free-form text **only within 24 hours** of a user's last inbound me
    `POST /api/send-alert`:
 
    > [!NOTE]
-   > `POST /api/send-alert` is served by `whatsapp-bridge/server.js` on Oracle
+   > `POST /api/send-alert` is served by `whatsapp-bridge/server.js`
    > and authenticated via the `x-dayli-api-key` header (`DAYLI_INTERNAL_API_KEY`).
 
 
@@ -153,7 +153,7 @@ Meta permits free-form text **only within 24 hours** of a user's last inbound me
 
 1. Add your own number under WhatsApp → API Setup → *To* field (test numbers require this allowlisting).
 2. Send `hi` from your phone to the business number.
-3. Watch the service logs for the inbound POST (`docker compose -f docker-compose.prod.yml logs -f app` on the Oracle VPS).
+3. Watch the service logs for the inbound POST (`docker compose -f docker-compose.prod.yml logs -f app`).
 4. You should receive an AI-generated reply.
 
 Test each path: plain text, a button reply, a shared GPS location, and a red-flag symptom phrase (confirm the clinical safety layer escalates to referral).

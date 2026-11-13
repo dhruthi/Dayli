@@ -1,19 +1,19 @@
 # Dayli AI — Clinical Climate & Maternal Health Dashboard (Vercel)
 
-Static dashboard deployment for clinicians and health officials, connected directly to the production Oracle Cloud VPS backend (`https://129.159.19.84.sslip.io`).
+Static dashboard deployment for clinicians and health officials, connected directly to the production backend (`https://api.dayli.ai`).
 
 ## Architecture
 
 ```mermaid
 flowchart LR
   U["Clinician Browser"] -->|"/dashboard, /login"| V["Vercel Static Edge (dashboard-web)"]
-  V -->|"Rewrites /api/* (Same-Origin Proxy)"| O["Oracle Cloud VPS (129.159.19.84.sslip.io)"]
+  V -->|"Rewrites /api/* (Same-Origin Proxy)"| O["Cloud VPS Backend (api.dayli.ai)"]
   O -->|"Caddy Reverse Proxy"| A["dayli_app_prod (Node.js/Express)"]
   A --> R[("Redis: Sessions & Events")]
 ```
 
 ### Why Vercel Rewrites?
-Because all API requests (`/api/auth/login`, `/api/climate-health/data`, `/api/climate-health/simulate-chat`, etc.) are proxied by Vercel directly to the Oracle backend under the same origin (`/api/*`), browser cookies (`dayli_session` with `SameSite=Lax; HttpOnly; Secure`) remain first-party cookies. Authentication, rate-limiting, and maternal surveillance telemetry work seamlessly without CORS complications or third-party cookie restrictions.
+Because all API requests (`/api/auth/login`, `/api/climate-health/data`, `/api/climate-health/simulate-chat`, etc.) are proxied by Vercel directly to the backend under the same origin (`/api/*`), browser cookies (`dayli_session` with `SameSite=Lax; HttpOnly; Secure`) remain first-party cookies. Authentication, rate-limiting, and maternal surveillance telemetry work seamlessly without CORS complications or third-party cookie restrictions.
 
 ## Deploying to Vercel
 
@@ -34,7 +34,7 @@ vercel --prod
 ```
 
 ## Changing the Backend Host
-If you change your Oracle VPS IP or assign a custom domain (e.g. `api.dayli.ai`), update the `destination` URL in `dashboard-web/vercel.json`:
+When deploying to your company's VPS or custom domain (e.g. `api.dayli.ai`), ensure the `destination` URL in `dashboard-web/vercel.json` points to your backend host:
 ```json
 "rewrites": [
   {

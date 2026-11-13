@@ -8,6 +8,10 @@ Health guidance is educational and is not a substitute for medical care.
 
 ## Architecture
 
+- `whatsapp-bridge`: Production WhatsApp Business Cloud API copilot, clinical safety pipeline, multilingual voice (Bhashini / ElevenLabs / Gemini), climate intelligence, and `/dashboard` clinical portal.
+- `ops-dashboard`: Standalone operational telemetry and action service (`dash.<domain>`).
+- `dashboard-web`: Static edge build of the Clinical & Maternal Health Dashboard (Vercel-ready).
+- `aurora-runner`: ECMWF AIFS, Google DeepMind WeatherNext, and Microsoft Aurora forecast runners.
 - `artifacts/dayli-website`: React, Vite, and Tailwind website with English,
   Hindi, Telugu, and Arabic pages, plus prerendered SEO content.
 - `artifacts/api-server`: Express API for chat, local conditions, enquiries,
@@ -16,6 +20,11 @@ Health guidance is educational and is not a substitute for medical care.
 - `lib/api-client-react` and `lib/api-zod`: generated client and validation.
 - `lib/db`: PostgreSQL schema managed with Drizzle.
 - `artifacts/mockup-sandbox`: development-only component previews.
+
+## Deployment & Configuration
+
+- **[`.env.example`](.env.example)** — Complete environment variable template (`cp .env.example .env`).
+- **[WhatsApp Production Runbook](docs/WHATSAPP_DEPLOYMENT_RUNBOOK.md)** — Detailed Docker Compose (`./scripts/deploy.sh`) and Meta webhook setup.
 
 ## Requirements
 

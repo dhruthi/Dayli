@@ -10,13 +10,13 @@ secrets set, the public "Start on WhatsApp" links still open Dayli's live
 WhatsApp Business account, while webhook automation remains disabled.
 Adding the secrets below turns automated replies on.
 
-## Required secrets (paste into Replit Secrets)
+## Required secrets (configure in `.env` or environment secrets)
 
 | Secret | What it is | Where to find it |
 | --- | --- | --- |
 | `META_WHATSAPP_TOKEN` | Permanent system-user access token with `whatsapp_business_messaging` and `whatsapp_business_management` scopes. | Meta Business Manager → Business settings → Users → System users → Generate token. |
 | `META_WHATSAPP_PHONE_NUMBER_ID` | Numeric phone-number ID of the WhatsApp number you claimed (NOT the dialable phone number itself). | Meta App → WhatsApp → API setup → "Phone number ID". |
-| `META_WHATSAPP_VERIFY_TOKEN` | Any random string YOU pick. Meta will echo it back during the webhook handshake to prove the URL belongs to you. | Generate it yourself (`openssl rand -hex 32` is fine). Paste the same value into Meta's webhook config and into Replit Secrets. |
+| `META_WHATSAPP_VERIFY_TOKEN` | Any random string YOU pick. Meta will echo it back during the webhook handshake to prove the URL belongs to you. | Generate it yourself (`openssl rand -hex 32` is fine). Paste the same value into Meta's webhook config and into your server environment. |
 | `META_WHATSAPP_APP_SECRET` | App secret of the Meta App that owns the WhatsApp product. Used to verify every incoming webhook POST via HMAC-SHA256. | Meta App → Settings → Basic → "App secret" → Show. |
 | `META_WHATSAPP_HASH_SALT` | Random salt used to HMAC-SHA256 every user's phone number before persisting it to our DB. We never store raw E.164 numbers. | Generate it yourself (`openssl rand -hex 32`). DO NOT rotate casually — rotating it orphans every existing conversation row. |
 | `WHATSAPP_DISPLAY_NUMBER` | Optional override for the public dialable WhatsApp number (international form, **digits only, no `+`**). The website defaults to Dayli's live number, `918431061497`. | Only set this when intentionally replacing the live Dayli number. |
@@ -74,24 +74,23 @@ Generate a permanent system-user token instead:
 ### 5. Configure the webhook
 
 1. Inside the WhatsApp product → "Configuration" (or "Webhooks").
-2. Callback URL: `https://<your-deployment>.replit.app/api/whatsapp/webhook`
-   (or whatever your custom domain is — must be HTTPS and publicly
-   reachable; the local dev server is not).
+2. Callback URL: `https://<your-deployment-domain>/api/whatsapp/webhook`
+   (must be HTTPS and publicly reachable; the local dev server is not).
 3. Verify token: paste the same random string you saved as
    `META_WHATSAPP_VERIFY_TOKEN`.
 4. Click "Verify and save". Meta will GET the URL with a `hub.challenge`;
    our handler echoes it back if the verify token matches. If verification
-   fails, double-check that the secret in Replit matches the one you
+   fails, double-check that the secret in your environment matches the one you
    typed into Meta exactly (no trailing whitespace).
 5. Subscribe to the **`messages`** field under "WhatsApp Business Account".
 
 ### 6. App secret + hash salt
 
 1. Meta App → Settings → Basic → "App secret" → "Show" → copy. Paste as
-   `META_WHATSAPP_APP_SECRET` in Replit Secrets. Without this, every
+   `META_WHATSAPP_APP_SECRET` in your environment. Without this, every
    webhook POST will be rejected with 401 (we verify HMAC).
 2. Generate `META_WHATSAPP_HASH_SALT` yourself (e.g.
-   `openssl rand -hex 32`) and paste it in Replit Secrets. Treat it like
+   `openssl rand -hex 32`) and set it in your environment. Treat it like
    a database key — losing it does not break anything immediately, but
    rotating it orphans existing conversation rows because the new salt
    produces different hashes.
@@ -137,8 +136,8 @@ optional overrides and, when used, must be set together:
 
 | Variable | Where | Purpose |
 |---|---|---|
-| `WHATSAPP_DISPLAY_NUMBER` | api-server (Replit Secrets) | Optional international-number override, **digits only, no `+`**. |
-| `VITE_WHATSAPP_NUMBER` | dayli-website (Replit Secrets, prefix `VITE_`) | Optional matching build-time override. |
+| `WHATSAPP_DISPLAY_NUMBER` | api-server environment | Optional international-number override, **digits only, no `+`**. |
+| `VITE_WHATSAPP_NUMBER` | dayli-website environment (prefix `VITE_`) | Optional matching build-time override. |
 
 The CTA enabled state is **driven by the api-server**, not by the
 build-time env var. It is enabled whenever the runtime number is valid;
@@ -146,7 +145,7 @@ the five Meta secrets above control automated webhook replies separately.
 
 ## Verifying the integration end-to-end
 
-After all five secrets are in Replit and the workflow has restarted:
+After all five secrets are configured and the service has restarted:
 
 1. **Webhook verification**:
    ```

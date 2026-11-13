@@ -54,7 +54,7 @@ export async function getRedis() {
     if (err?.message?.includes('max requests limit exceeded') || err?.message?.includes('quota')) {
       _redisAvailable = false;
     }
-    // Avoid spamming logs for transient socket dropouts on serverless Upstash
+    // Avoid spamming logs for transient socket dropouts
     if (_redis && !err?.message?.includes('read ETIMEDOUT') && !err?.message?.includes('ECONNRESET')) {
       console.error('[REDIS ERROR]:', err.message);
     }

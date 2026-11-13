@@ -7,19 +7,19 @@
  * told a health service.
  *
  * Results are cached briefly because the dashboard polls: without it, every
- * refresh would fan out one Upstash read per active user.
+ * refresh would fan out one Redis read per active user.
  */
 
 import { Store, SERVICE_WINDOW_MS } from './store.js';
 import { logger } from './logger.js';
 
-/** Dashboard polls every ~15s; a 60s cache keeps Upstash reads bounded. */
+/** Dashboard polls every ~15s; a 60s cache keeps Redis reads bounded. */
 const CACHE_TTL_MS = 60000;
 
 /**
  * Upper bound on sessions read per refresh. A pilot will never hit this; if it
- * ever does, the dashboard reports a sample rather than silently melting the
- * Upstash quota.
+ * ever does, the dashboard reports a sample rather than silently overloading
+ * Redis.
  */
 const MAX_SESSIONS_SAMPLED = 500;
 

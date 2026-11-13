@@ -7,7 +7,7 @@ const ROOT_DIR = path.resolve(import.meta.dirname, '../..');
 const DASHBOARD_WEB_DIR = path.join(ROOT_DIR, 'dashboard-web');
 
 describe('Dashboard Web Vercel Deployment', () => {
-  it('has valid vercel.json configuration with Oracle proxy rewrites', () => {
+  it('has valid vercel.json configuration with backend proxy rewrites', () => {
     const configPath = path.join(DASHBOARD_WEB_DIR, 'vercel.json');
     expect(fs.existsSync(configPath)).toBe(true);
 
@@ -17,7 +17,7 @@ describe('Dashboard Web Vercel Deployment', () => {
 
     const apiRewrite = (config.rewrites || []).find((r) => r.source === '/api/:path*');
     expect(apiRewrite).toBeDefined();
-    expect(apiRewrite.destination).toBe('https://129.159.19.84.sslip.io/api/:path*');
+    expect(apiRewrite.destination).toBe('https://api.dayli.ai/api/:path*');
   });
 
   it('build.mjs generates static distribution matching server templates', () => {

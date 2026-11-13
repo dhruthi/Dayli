@@ -1,9 +1,9 @@
 #!/bin/bash
 # Persistent SSH reverse tunnel for MedGemma (port 11434)
-# Forwards Oracle Cloud VPS 0.0.0.0:11434 -> Local Mac 127.0.0.1:11434
+# Forwards Cloud VPS 0.0.0.0:11434 -> Local Machine 127.0.0.1:11434
 
-KEY="/tmp/oracle.key"
-REMOTE="opc@129.159.19.84"
+KEY="${SSH_KEY_PATH:-$HOME/.ssh/id_rsa}"
+REMOTE="${SSH_REMOTE:-ubuntu@api.dayli.ai}"
 
 while true; do
   echo "[$(date -u)] Starting SSH reverse tunnel to ${REMOTE}..."

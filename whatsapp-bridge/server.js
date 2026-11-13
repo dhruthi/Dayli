@@ -158,7 +158,7 @@ if (!VERIFY_TOKEN || !PHONE_NUMBER_ID || !ACCESS_TOKEN || (!isLocalOnly() && !GE
   if (!isLocalOnly() && !GEMINI_API_KEY && !AI_KEY_PRESENT) missing.push('OPENAI_API_KEY (or GEMINI_API_KEY) [bypass with DAYLI_CORE_MODE=local]');
   
   console.error(`❌ [STARTUP ERROR] Missing required environment variables: ${missing.join(', ')}`);
-  console.error('Please configure these in the server .env file (/home/opc/dayli-ai-whatsapp/.env on Oracle) before starting the application.');
+  console.error('Please configure these in your .env file (see .env.example) before starting the application.');
   process.exit(1);
 }
 
@@ -3487,14 +3487,6 @@ const server = app.listen(PORT, () => {
   }).catch((err) => {
     console.warn('[AURORA FEED] Status check failed:', err.message);
   });
-
-  // Optional self-ping if KEEP_ALIVE_URL is explicitly configured
-  const selfUrl = process.env.KEEP_ALIVE_URL;
-  if (selfUrl && process.env.ENABLE_KEEPALIVE !== 'false') {
-    setInterval(() => {
-      fetch(`${selfUrl}/health`).catch(() => {});
-    }, 4 * 60 * 1000).unref?.();
-  }
 });
 
 // Graceful shutdown so in-flight replies finish and connections close cleanly

@@ -9,7 +9,7 @@
  *      restarts and redeploys wipe in-memory state. These answer "is today
  *      worse than yesterday".
  *
- * Redis writes are BATCHED. Incrementing on every event would cost 3-5 Upstash
+ * Redis writes are BATCHED. Incrementing on every event would cost 3-5 Redis
  * commands per message; instead events accumulate in memory and flush as a
  * single pipeline every 15s. A pilot doing a few hundred messages a day then
  * costs a few hundred commands, not a few thousand.
@@ -104,7 +104,7 @@ export function snapshot() {
 /**
  * Write the pending batch as one pipeline.
  *
- * On failure the batch is put back so nothing is lost to a transient Upstash
+ * On failure the batch is put back so nothing is lost to a transient Redis
  * blip — a later flush picks it up.
  */
 export async function flushNow() {

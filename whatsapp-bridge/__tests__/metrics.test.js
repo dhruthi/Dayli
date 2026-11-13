@@ -144,12 +144,12 @@ describe('user activity snapshot', () => {
   it('survives a store that throws instead of taking the dashboard down', async () => {
     const broken = {
       getActiveUsers: async () => {
-        throw new Error('upstash unreachable');
+        throw new Error('redis store unreachable');
       },
       getSession: async () => null,
     };
     const snap = await userActivitySnapshot(broken, { force: true });
-    expect(snap.error).toContain('upstash unreachable');
+    expect(snap.error).toContain('redis store unreachable');
     expect(snap.consentedUsers).toBe(0);
   });
 
