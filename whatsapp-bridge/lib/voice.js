@@ -26,6 +26,60 @@ function getIndianVoicePriority() {
 
 const GEMINI_TTS_SAMPLE_RATE = 24000; // Gemini TTS returns 16-bit mono PCM @ 24 kHz
 
+// ── OpenAI TTS ───────────────────────────────────────────────────────────
+
+/**
+ * OpenAI TTS. Returns MP3 buffer (WhatsApp-playable without ffmpeg) or null.
+ */
+export async function synthesizeOpenAI(text) {
+  if (!allowFrontier()) return null;
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) return null;
+  const clean = trimForSpeech(cleanTextForTTS(text), 4096);
+  if (!clean || clean.length < 2) return null;
+
+  const model = process.env.OPENAI_TTS_MODEL || 'tts-1';
+  const voice = process.env.OPENAI_TTS_VOICE || 'nova';
+  const controller = new AbortController();
+  const timer = setTimeout(
+    () => controller.abort(),
+    parseInt(process.env.OPENAI_TTS_TIMEOUT_MS || '15000', 10),
+  );
+
+  try {
+    const res = await fetch('https://api.openai.com/v1/audio/speech', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model,
+        voice,
+        input: clean,
+        response_format: 'mp3',
+      }),
+      signal: controller.signal,
+    });
+    clearTimeout(timer);
+
+    if (!res.ok) {
+      const errText = await res.text().catch(() => '');
+      console.warn(`[OpenAI TTS] HTTP ${res.status}: ${errText.slice(0, 150)}`);
+      return null;
+    }
+
+    const arrayBuf = await res.arrayBuffer();
+    const buf = Buffer.from(arrayBuf);
+    console.log(`[OpenAI TTS] synthesized ${clean.length} chars (${buf.length} bytes)`);
+    return buf;
+  } catch (err) {
+    clearTimeout(timer);
+    console.warn(`[OpenAI TTS] ${err?.name === 'AbortError' ? 'timeout' : 'error'}: ${err.message}`);
+    return null;
+  }
+}
+
 /** Voice replies can be switched off without a deploy. */
 export function isVoiceReplyEnabled() {
   return String(process.env.VOICE_REPLY_ENABLED ?? 'true').toLowerCase() !== 'false';
@@ -335,14 +389,21 @@ export async function buildVoiceReply(text, locale = 'en') {
   const lang = detectSpeechLanguage(text, locale);
   const ffmpeg = await hasFfmpeg();
 
-  // 1. ElevenLabs Multilingual v2 (Warm, expressive natural voice)
+  // 1. OpenAI TTS (primary — multilingual, returns MP3 directly)
+  if (process.env.OPENAI_API_KEY) {
+    const audio = await synthesizeOpenAI(text);
+    const out = audio && (await toWhatsAppAudio(audio));
+    if (out) return { ...out, provider: 'openai', lang };
+  }
+
+  // 2. ElevenLabs Multilingual v2 (fallback premium voice)
   if (process.env.ELEVENLABS_API_KEY) {
     const audio = await synthesizeElevenLabs(text);
     const out = audio && (await toWhatsAppAudio(audio));
     if (out) return { ...out, provider: 'elevenlabs', lang };
   }
 
-  // 2. Indian voice providers in priority order
+  // 3. Indian voice providers in priority order
   for (const p of getIndianVoicePriority()) {
     if (p === 'bhashini' && isBhashiniConfigured() && isBhashiniLanguage(lang)) {
       const audio = await synthesizeBhashini(text, lang, null, { audioFormat: ffmpeg ? 'wav' : 'mp3' });
@@ -356,7 +417,7 @@ export async function buildVoiceReply(text, locale = 'en') {
     }
   }
 
-  // 3. Gemini TTS — PCM output, so it needs ffmpeg to become playable.
+  // 4. Gemini TTS — PCM output, so it needs ffmpeg to become playable.
   if (ffmpeg && process.env.GEMINI_API_KEY && process.env.GEMINI_TTS_ENABLED !== 'false') {
     const pcm = await synthesizeGemini(text);
     const out = pcm && (await toWhatsAppAudio(pcm, { rawPcmSampleRate: GEMINI_TTS_SAMPLE_RATE }));

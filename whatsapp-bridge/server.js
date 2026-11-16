@@ -3463,9 +3463,8 @@ const server = app.listen(PORT, () => {
     const indianProviders = [isBhashiniConfigured() && 'Bhashini', isSarvamConfigured() && 'Sarvam'].filter(Boolean);
     const asrChain = [...indianProviders, GEMINI_API_KEY && 'Gemini'].filter(Boolean);
     const asr = asrChain.length ? asrChain.join(' → ') : 'DISABLED (no keys)';
-    const tts = !ff
-      ? 'DISABLED — ffmpeg not found (WhatsApp cannot play WAV/PCM)'
-      : asrChain.length ? asrChain.join(' → ') + ' TTS' : 'DISABLED (no keys)';
+    const ttsProviders = [process.env.OPENAI_API_KEY && 'OpenAI', ...indianProviders, GEMINI_API_KEY && 'Gemini'].filter(Boolean);
+    const tts = ttsProviders.length ? ttsProviders.join(' → ') + ' TTS' : 'DISABLED (no keys)';
     console.log(`Voice ASR     : ${asr}`);
     console.log(`Voice replies : ${tts}`);
   });

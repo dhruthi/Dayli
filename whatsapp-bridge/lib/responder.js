@@ -33,6 +33,11 @@ import { t, normalizeLocale } from './i18n/index.js';
  * @param {string|null} params.clinicsStatus Status of facility lookup
  * @returns {string} Fully composed WhatsApp message
  */
+const LOW_CONFIDENCE_SYMPTOM_THRESHOLD = 0.50;
+const NARROW_SYMPTOM_INTENTS = new Set([
+  'symptom_fever', 'symptom_pregnancy', 'symptom_infant_child', 'symptom_general_adult',
+]);
+
 export function composeDeterministicResponse({
   routed,
   userMessage,
@@ -47,8 +52,12 @@ export function composeDeterministicResponse({
   const profile = session?.profile || {};
   const rawLocale = profile.locale || routed.language || routed.lang || 'en';
   const locale = normalizeLocale(rawLocale);
-  const intent = routed.intent;
+  let intent = routed.intent;
   const isEmergency = safety?.riskLevel === 'emergency' || routed.urgency === 'emergency_signal';
+
+  if (NARROW_SYMPTOM_INTENTS.has(intent) && (routed.confidence || 0) < LOW_CONFIDENCE_SYMPTOM_THRESHOLD) {
+    intent = 'symptom_general_open';
+  }
 
   // 1. Critical Emergency Short-Circuit (Zero delay, deterministic safeguard)
   // If the user is asking where to find a hospital/clinic/pharmacy, never suppress the facility directory
@@ -71,6 +80,9 @@ export function composeDeterministicResponse({
   switch (intent) {
     case 'symptom_general_adult': {
       return t('adult_symptom_guidance', locale);
+    }
+    case 'symptom_general_open': {
+      return t('general_symptom_open', locale, { userName });
     }
     case 'weather_now_24h': {
       if (climateData?.forecast) {
