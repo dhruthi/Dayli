@@ -54,9 +54,31 @@ describe('voice orchestration (lib/voice.js)', () => {
     delete process.env.BHASHINI_API_KEY;
     delete process.env.BHASHINI_USER_ID;
     delete process.env.BHASHINI_INFERENCE_API_KEY;
+    delete process.env.SARVAM_API_KEY;
     process.env.GEMINI_API_KEY = 'k';
     global.fetch = vi.fn();
     expect(await buildVoiceReply('Keep the baby cool', 'en')).toBeNull();
     expect(global.fetch).not.toHaveBeenCalled(); // Gemini TTS skipped: PCM is unplayable without ffmpeg
+  });
+
+  it('skips Sarvam TTS when ffmpeg is unavailable (WAV cannot be converted)', async () => {
+    delete process.env.BHASHINI_API_KEY;
+    delete process.env.BHASHINI_USER_ID;
+    delete process.env.ELEVENLABS_API_KEY;
+    process.env.SARVAM_API_KEY = 'test-key';
+    global.fetch = vi.fn();
+    const result = await buildVoiceReply('హలో బేబీ', 'te');
+    expect(result).toBeNull();
+    expect(global.fetch).not.toHaveBeenCalled();
+  });
+
+  it('does not crash with INDIAN_VOICE_PRIORITY set', async () => {
+    process.env.INDIAN_VOICE_PRIORITY = 'sarvam,bhashini';
+    delete process.env.ELEVENLABS_API_KEY;
+    delete process.env.SARVAM_API_KEY;
+    delete process.env.BHASHINI_API_KEY;
+    delete process.env.BHASHINI_USER_ID;
+    const result = await buildVoiceReply('hello world test', 'en');
+    expect(result).toBeNull();
   });
 });

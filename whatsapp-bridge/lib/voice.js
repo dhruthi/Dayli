@@ -14,9 +14,15 @@
  */
 
 import { transcribeBhashini, synthesizeBhashini, isBhashiniConfigured, isBhashiniLanguage, cleanTextForTTS, trimForSpeech } from './bhashini.js';
+import { transcribeSarvam, synthesizeSarvam, isSarvamConfigured, isSarvamLanguage } from './sarvam.js';
 import { transcribeVoiceNote } from './asr.js';
 import { hasFfmpeg, detectAudioFormat, toWav16kMono, toOggOpus } from './audioConvert.js';
 import { allowFrontier } from './coreMode.js';
+
+function getIndianVoicePriority() {
+  return (process.env.INDIAN_VOICE_PRIORITY || 'bhashini,sarvam')
+    .split(',').map(s => s.trim().toLowerCase());
+}
 
 const GEMINI_TTS_SAMPLE_RATE = 24000; // Gemini TTS returns 16-bit mono PCM @ 24 kHz
 
@@ -112,7 +118,7 @@ export async function translateTextToEnglish(text, sourceLang = 'en') {
  * @param {Buffer} buffer - Voice note bytes from Meta (OGG/Opus)
  * @param {string} mimeType
  * @param {string} locale - profile language, used as a hint
- * @returns {Promise<{ text: string, englishText: string, lang: string, provider: 'bhashini'|'gemini' } | null>}
+ * @returns {Promise<{ text: string, englishText: string, lang: string, provider: 'bhashini'|'sarvam'|'gemini' } | null>}
  */
 export async function transcribeVoice(buffer, mimeType, locale = 'en') {
   if (!buffer?.length) return null;
@@ -122,27 +128,31 @@ export async function transcribeVoice(buffer, mimeType, locale = 'en') {
   let detectedLang = locale;
   let provider = 'gemini';
 
-  if (isBhashiniConfigured() && isBhashiniLanguage(locale)) {
-    let audio = buffer;
-    let audioFormat = detectAudioFormat(buffer) === 'wav' ? 'wav' : 'ogg';
-    let samplingRate = 16000;
-    // Bhashini's conformer models are trained on 16 kHz PCM; Opus is 48 kHz.
-    if (audioFormat !== 'wav' && (await hasFfmpeg())) {
-      try {
-        audio = await toWav16kMono(buffer);
-        audioFormat = 'wav';
-      } catch (err) {
-        console.warn(`[voice] ASR wav conversion failed, sending original: ${err.message}`);
+  for (const p of getIndianVoicePriority()) {
+    if (nativeText) break;
+
+    if (p === 'bhashini' && isBhashiniConfigured() && isBhashiniLanguage(locale)) {
+      let audio = buffer;
+      let audioFormat = detectAudioFormat(buffer) === 'wav' ? 'wav' : 'ogg';
+      let samplingRate = 16000;
+      if (audioFormat !== 'wav' && (await hasFfmpeg())) {
+        try {
+          audio = await toWav16kMono(buffer);
+          audioFormat = 'wav';
+        } catch (err) {
+          console.warn(`[voice] ASR wav conversion failed, sending original: ${err.message}`);
+          samplingRate = 48000;
+        }
+      } else if (audioFormat !== 'wav') {
         samplingRate = 48000;
       }
-    } else if (audioFormat !== 'wav') {
-      samplingRate = 48000;
+      const t = await transcribeBhashini(audio, locale, { audioFormat, samplingRate });
+      if (t) { nativeText = t; provider = 'bhashini'; detectedLang = locale; }
     }
-    const t = await transcribeBhashini(audio, locale, { audioFormat, samplingRate });
-    if (t) {
-      nativeText = t;
-      provider = 'bhashini';
-      detectedLang = locale;
+
+    if (p === 'sarvam' && !nativeText && isSarvamConfigured() && isSarvamLanguage(locale)) {
+      const t = await transcribeSarvam(buffer, locale);
+      if (t) { nativeText = t; provider = 'sarvam'; detectedLang = locale; }
     }
   }
 
@@ -332,13 +342,18 @@ export async function buildVoiceReply(text, locale = 'en') {
     if (out) return { ...out, provider: 'elevenlabs', lang };
   }
 
-  // 2. Bhashini IndicTTS (Indian voices)
-  if (isBhashiniConfigured() && isBhashiniLanguage(lang)) {
-    // With ffmpeg take WAV (lossless, then one Opus encode); without it ask
-    // for MP3, the only Bhashini output WhatsApp can play unconverted.
-    const audio = await synthesizeBhashini(text, lang, null, { audioFormat: ffmpeg ? 'wav' : 'mp3' });
-    const out = audio && (await toWhatsAppAudio(audio));
-    if (out) return { ...out, provider: 'bhashini', lang };
+  // 2. Indian voice providers in priority order
+  for (const p of getIndianVoicePriority()) {
+    if (p === 'bhashini' && isBhashiniConfigured() && isBhashiniLanguage(lang)) {
+      const audio = await synthesizeBhashini(text, lang, null, { audioFormat: ffmpeg ? 'wav' : 'mp3' });
+      const out = audio && (await toWhatsAppAudio(audio));
+      if (out) return { ...out, provider: 'bhashini', lang };
+    }
+    if (p === 'sarvam' && isSarvamConfigured() && isSarvamLanguage(lang) && ffmpeg) {
+      const wav = await synthesizeSarvam(text, lang);
+      const out = wav && (await toWhatsAppAudio(wav));
+      if (out) return { ...out, provider: 'sarvam', lang };
+    }
   }
 
   // 3. Gemini TTS — PCM output, so it needs ffmpeg to become playable.

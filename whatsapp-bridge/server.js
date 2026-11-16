@@ -67,6 +67,7 @@ import { logger } from './lib/logger.js';
 import { transcribeVoice, buildVoiceReply } from './lib/voice.js';
 import { hasFfmpeg } from './lib/audioConvert.js';
 import { isBhashiniConfigured } from './lib/bhashini.js';
+import { isSarvamConfigured } from './lib/sarvam.js';
 import { fetchAuroraForecast } from './lib/forecast.js';
 import { generateAuroraRiskBrief } from './lib/auroraRiskBrief.js';
 import { getSimulatedWomenObservatory, SIMULATED_WOMEN_SCENARIOS } from './lib/simChats.js';
@@ -3458,10 +3459,12 @@ const server = app.listen(PORT, () => {
   console.log('=================================================================');
 
   hasFfmpeg().then((ff) => {
-    const asr = isBhashiniConfigured() ? 'Bhashini → Gemini' : GEMINI_API_KEY ? 'Gemini' : 'DISABLED (no keys)';
+    const indianProviders = [isBhashiniConfigured() && 'Bhashini', isSarvamConfigured() && 'Sarvam'].filter(Boolean);
+    const asrChain = [...indianProviders, GEMINI_API_KEY && 'Gemini'].filter(Boolean);
+    const asr = asrChain.length ? asrChain.join(' → ') : 'DISABLED (no keys)';
     const tts = !ff
       ? 'DISABLED — ffmpeg not found (WhatsApp cannot play WAV/PCM)'
-      : isBhashiniConfigured() ? 'Bhashini → Gemini TTS' : GEMINI_API_KEY ? 'Gemini TTS' : 'DISABLED (no keys)';
+      : asrChain.length ? asrChain.join(' → ') + ' TTS' : 'DISABLED (no keys)';
     console.log(`Voice ASR     : ${asr}`);
     console.log(`Voice replies : ${tts}`);
   });
