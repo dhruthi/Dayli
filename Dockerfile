@@ -5,9 +5,9 @@
 FROM node:20-alpine AS build
 WORKDIR /app
 
-# Install dependencies with exact lockfile for reproducible builds
+# Install dependencies
 COPY package*.json ./
-RUN npm ci --ignore-scripts
+RUN npm install --omit=dev --ignore-scripts
 
 # Copy application sources
 COPY . .
