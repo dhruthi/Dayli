@@ -12,9 +12,6 @@ RUN npm install --omit=dev --ignore-scripts
 # Copy application sources
 COPY . .
 
-# Prune devDependencies to keep production image minimal
-RUN npm prune --omit=dev
-
 # Stage 2: Minimal runtime image
 FROM node:20-alpine AS runtime
 WORKDIR /app
