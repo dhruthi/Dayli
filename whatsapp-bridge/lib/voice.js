@@ -20,7 +20,7 @@ import { hasFfmpeg, detectAudioFormat, toWav16kMono, toOggOpus } from './audioCo
 import { allowFrontier } from './coreMode.js';
 
 function getIndianVoicePriority() {
-  return (process.env.INDIAN_VOICE_PRIORITY || 'bhashini,sarvam')
+  return (process.env.INDIAN_VOICE_PRIORITY || 'sarvam,bhashini')
     .split(',').map(s => s.trim().toLowerCase());
 }
 
@@ -389,32 +389,32 @@ export async function buildVoiceReply(text, locale = 'en') {
   const lang = detectSpeechLanguage(text, locale);
   const ffmpeg = await hasFfmpeg();
 
-  // 1. OpenAI TTS (primary — multilingual, returns MP3 directly)
+  // 1. Indian voice providers (Sarvam primary)
+  for (const p of getIndianVoicePriority()) {
+    if (p === 'sarvam' && isSarvamConfigured() && isSarvamLanguage(lang) && ffmpeg) {
+      const wav = await synthesizeSarvam(text, lang);
+      const out = wav && (await toWhatsAppAudio(wav));
+      if (out) return { ...out, provider: 'sarvam', lang };
+    }
+    if (p === 'bhashini' && isBhashiniConfigured() && isBhashiniLanguage(lang)) {
+      const audio = await synthesizeBhashini(text, lang, null, { audioFormat: ffmpeg ? 'wav' : 'mp3' });
+      const out = audio && (await toWhatsAppAudio(audio));
+      if (out) return { ...out, provider: 'bhashini', lang };
+    }
+  }
+
+  // 2. OpenAI TTS (multilingual fallback, returns MP3 directly)
   if (process.env.OPENAI_API_KEY) {
     const audio = await synthesizeOpenAI(text);
     const out = audio && (await toWhatsAppAudio(audio));
     if (out) return { ...out, provider: 'openai', lang };
   }
 
-  // 2. ElevenLabs Multilingual v2 (fallback premium voice)
+  // 3. ElevenLabs Multilingual v2 (fallback premium voice)
   if (process.env.ELEVENLABS_API_KEY) {
     const audio = await synthesizeElevenLabs(text);
     const out = audio && (await toWhatsAppAudio(audio));
     if (out) return { ...out, provider: 'elevenlabs', lang };
-  }
-
-  // 3. Indian voice providers in priority order
-  for (const p of getIndianVoicePriority()) {
-    if (p === 'bhashini' && isBhashiniConfigured() && isBhashiniLanguage(lang)) {
-      const audio = await synthesizeBhashini(text, lang, null, { audioFormat: ffmpeg ? 'wav' : 'mp3' });
-      const out = audio && (await toWhatsAppAudio(audio));
-      if (out) return { ...out, provider: 'bhashini', lang };
-    }
-    if (p === 'sarvam' && isSarvamConfigured() && isSarvamLanguage(lang) && ffmpeg) {
-      const wav = await synthesizeSarvam(text, lang);
-      const out = wav && (await toWhatsAppAudio(wav));
-      if (out) return { ...out, provider: 'sarvam', lang };
-    }
   }
 
   // 4. Gemini TTS — PCM output, so it needs ffmpeg to become playable.

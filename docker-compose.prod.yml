@@ -88,7 +88,7 @@ services:
       - PORT=3000
       - SESSION_STORE_URL=redis://redis:6379
       - SESSION_TTL_SECONDS=2592000
-      - DAYLI_CORE_MODE=${DAYLI_CORE_MODE:-local}
+      - DAYLI_CORE_MODE=${DAYLI_CORE_MODE:-hybrid}
       - DAYLI_LOCAL_LLM=${DAYLI_LOCAL_LLM:-on}
       - DAYLI_LOCAL_MODEL=${DAYLI_LOCAL_MODEL:-medgemma:latest}
       - DAYLI_OLLAMA_URL=${DAYLI_OLLAMA_URL:-http://ollama:11434}
